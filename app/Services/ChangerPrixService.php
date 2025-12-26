@@ -1,4 +1,6 @@
 <?php
+
+namespace App\Services;
 use App\Models\PrixVarietee;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;

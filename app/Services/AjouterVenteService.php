@@ -1,5 +1,6 @@
 <?php
 
+namespace App\Services;
 use App\Models\Varietee;
 use App\Models\Vente;
 use Illuminate\Support\Carbon;
