@@ -23,16 +23,16 @@
     
     @stack('styles')
 </head>
-<body class="bg-gray-100 font-sans">
+<body class="bg-gray-100 font-sans h-screen overflow-hidden flex flex-col">
     <!-- Navigation -->
     @include('partials.header')
 
-    <div class="flex h-screen">
+    <div class="flex flex-1 overflow-hidden">
     <!-- Sidebar -->
     @include('partials.sidebar')
 
         <!-- Main Content -->
-        <div class="flex-1 overflow-auto p-6">
+        <div class="flex-1 overflow-auto p-1">
             @if(session('success'))
                 <div class="mb-4 p-4 bg-green-100 text-green-700 rounded-lg border border-green-300 flex justify-between items-center">
                     {{ session('success') }}
@@ -53,7 +53,5 @@
     <!-- Footer -->
     @include('partials.footer')
 
-
     @stack('scripts')
 </body>
-</html>
