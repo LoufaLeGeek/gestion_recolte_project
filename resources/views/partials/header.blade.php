@@ -1,4 +1,4 @@
-<nav class="relative bg-gradient-to-r from-emerald-600 via-teal-500 to-cyan-600 shadow-xl overflow-hidden">
+<nav class="navbar relative bg-gradient-to-r from-emerald-600 via-teal-500 to-cyan-600 shadow-xl overflow-hidden">
     <!-- Fond animé -->
     <div class="absolute inset-0 opacity-20">
         <div class="absolute top-0 left-0 w-96 h-96 bg-emerald-300 rounded-full blur-3xl animate-pulse"></div>
@@ -6,28 +6,46 @@
         <div class="absolute top-1/2 left-1/2 w-72 h-72 bg-teal-400 rounded-full blur-3xl opacity-50 animate-pulse"></div>
     </div>
 
-    <div class="relative flex-1 px-6 py-4 flex justify-between items-center backdrop-blur-md bg-black bg-opacity-20">
+    <div class="navbar-start relative backdrop-blur-md bg-black bg-opacity-20 px-6 py-4">
         <!-- Logo avec animation -->
-        <a href="#" class="text-white font-bold text-2xl flex items-center group cursor-pointer transition-all duration-300">
-            <i class="fas fa-seedling me-3 text-emerald-200 text-2xl group-hover:scale-125 group-hover:rotate-12 transition-transform duration-300"></i>
-            <span class="bg-gradient-to-r from-emerald-200 via-cyan-100 to-teal-100 bg-clip-text text-transparent font-black tracking-wide">
+        <a href="#" class="btn btn-ghost normal-case text-white font-bold text-2xl flex items-center group transition-all duration-300 px-0">
+            <div class="avatar placeholder">
+                <div class="bg-emerald-200 text-emerald-800 rounded-full w-10 h-10 flex items-center justify-center group-hover:scale-125 group-hover:rotate-12 transition-transform duration-300">
+                    <i class="fas fa-seedling"></i>
+                </div>
+            </div>
+            <span class="bg-gradient-to-r from-emerald-200 via-cyan-100 to-teal-100 bg-clip-text text-transparent font-black tracking-wide ml-3">
                 Gestion Production Agricole
             </span>
         </a>
+    </div>
 
+    <div class="navbar-end relative backdrop-blur-md bg-black bg-opacity-20 px-6 py-4">
         <!-- Section utilisateur -->
         <div class="flex items-center text-white gap-6">
-            <span class="text-sm font-semibold tracking-wide opacity-90 hover:opacity-100 transition-opacity">
-                {{ auth()->user()->name ?? 'Administrateur' }}
-            </span>
-            <a href="#" class="relative group px-4 py-2 rounded-lg text-sm font-semibold overflow-hidden transition-all duration-300 hover:scale-105">
-                <!-- Fond avec effet -->
-                <div class="absolute inset-0 bg-gradient-to-r from-emerald-300 to-cyan-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div class="relative flex items-center gap-2">
-                    <i class="fas fa-sign-out-alt text-emerald-200 group-hover:text-emerald-900 transition-colors"></i>
-                    <span class="hidden sm:inline">Déconnexion</span>
+            <div class="dropdown dropdown-end">
+                <div tabindex="0" role="button" class="btn btn-ghost hover:bg-transparent text-white flex items-center gap-2">
+                    <div class="avatar placeholder">
+                        <div class="bg-emerald-300 text-emerald-800 rounded-full w-8 h-8">
+                            <span class="text-xs">{{ substr(auth()->user()->name ?? 'A', 0, 1) }}</span>
+                        </div>
+                    </div>
+                    <span class="text-sm font-semibold tracking-wide opacity-90 hidden md:inline">
+                        {{ auth()->user()->name ?? 'Administrateur' }}
+                    </span>
+                    <i class="fas fa-chevron-down text-xs opacity-70"></i>
                 </div>
-            </a>
+                <ul tabindex="0" class="dropdown-content menu p-2 shadow-lg bg-base-100 rounded-box w-52 mt-2 z-50">
+                    <li><a><i class="fas fa-user me-2"></i>Mon profil</a></li>
+                    <li><a><i class="fas fa-cog me-2"></i>Paramètres</a></li>
+                    <div class="divider my-1"></div>
+                    <li>
+                        <a href="#" class="text-red-600 hover:text-red-700 hover:bg-red-50">
+                            <i class="fas fa-sign-out-alt me-2"></i>Déconnexion
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </nav>
