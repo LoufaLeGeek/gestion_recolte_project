@@ -6,7 +6,7 @@
         <ul class="menu space-y-2 p-0">
             <li>
                 <a class="group flex items-center px-5 py-3 border-l-4 border-transparent hover:bg-gradient-to-r hover:from-green-50 hover:to-transparent hover:border-black transition duration-300 ease-out transform hover:translate-x-1 {{ request()->routeIs('dashboard') ? 'bg-gradient-to-r from-green-100 to-transparent border-green-700 font-semibold shadow-md active' : 'text-gray-600' }}"
-                    href="{{ route('dashboard') }}">
+                    href="#">
                     <i class="fas fa-tachometer-alt me-3 text-black group-hover:scale-110 transition"></i>
                     <span class="font-medium">Dashboard</span>
                 </a>
