@@ -1,42 +1,11 @@
-# Gestion de récolte
+Personnalisation des couleurs et thème
 
-## Description
-Projet Laravel utilisant Livewire, Tailwind CSS, DaisyUI, Shadcn UI et Oracle (Yajra).
+Le projet utilise DaisyUI, un plugin Tailwind CSS, pour gérer les composants et la thématisation.
 
-## Prérequis
-- PHP 8.2+
-- Composer
-- Node.js / npm
-- Oracle XE 21c
-- Oracle Instant Client 21 (Basic et SDK)
+Les couleurs et styles sont directement configurables via DaisyUI.
 
-## Workflow Git et branches
+Le thème utilisé est Abys, appliqué globalement via le fichier app.css.
 
-- `main` : branche stable (ne pas utiliser pour le développement)
-- `dev` : branche de développement principale
-- `feature/*` : branches pour chaque nouvelle fonctionnalité
+Tous les composants DaisyUI héritent automatiquement de ce thème, ce qui permet une personnalisation rapide sans toucher au CSS de base.
 
-⚠️ **Après le clonage du projet, basculer obligatoirement sur la branche `dev`** :
-
-```bash
-git clone <repo>
-cd <repo>
-git checkout dev
-git pull origin dev
-
-# Configuration de l'environnement
-cp .env.example .env
-
-# Installation des dépendances
-composer install
-npm install
-
-# Génération de la clé Laravel
-php artisan key:generate
-
-# Compilation des assets
-npm run dev
-
-# Lancement du serveur local
-npm run dev
-php artisan serve
+L’intégration des dépendances nécessaires (Tailwind CSS et DaisyUI) a déjà été faite et est fonctionnelle.
