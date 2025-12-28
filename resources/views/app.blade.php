@@ -10,18 +10,18 @@
     <title>@yield('title')</title>
 </head>
 
-<body>
+<body class="bg-base-200">
     <div class="drawer lg:drawer-open">
         <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
         <div class="drawer-content">
             <!-- Navbar -->
-            <nav class="navbar w-full bg-base-300 fixed">
+            <nav class="navbar w-full bg-base-100 sticky top-0 border-b border-base-300">
                 <label for="my-drawer-4" aria-label="open sidebar" class="btn btn-square btn-ghost">
                     <i class="fa-solid fa-list"></i>
                 </label>
                 <div class="px-10 flex items-center justify-center space-x-4">
                     <i class="fas fa-seedling text-xl"></i>
-                    <h4 class="tracking-wider" style="word-spacing: 4px">Gestion  des  récoltes</h4>
+                    <h4 class="tracking-wider" style="word-spacing: 4px">Gestion des récoltes</h4>
                 </div>
             </nav>
 
@@ -33,16 +33,19 @@
 
         <div class="drawer-side is-drawer-close:overflow-visible">
             <label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"></label>
-            <div class="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-14 is-drawer-open:w-64">
+            <div
+                class="flex min-h-full flex-col items-start
+            bg-base-100 border-r border-base-300  is-drawer-close:w-14 is-drawer-open:w-64">
                 <!-- Sidebar content here -->
                 <ul class="menu w-full grow gap-1">
-                    {{-- List item : Pour ajouter une route dans le href on met -> :href="{{ route('name_route') }}"  --}}
+                    {{-- List item : Pour ajouter une route dans le href on met -> :href="route('name_route')"  --}}
                     <x-menu-item href="" class_icon="fas fa-tachometer-alt" content="Dashboard" />
                     <x-menu-item href="" class_icon="fas fa-carrot" content="Produit & Variété" />
                     <x-menu-item href="" class_icon="fas fa-seedling" content="Récoltes" />
                     <x-menu-item href="" class_icon="fas fa-shopping-cart" content="Ventes" />
                     <x-menu-item href="" class_icon="fa-solid fa-box" content="Stocks" />
-                    <x-menu-item href="" class_icon="fa-solid fa-chart-column" content="Rapports & statistique" />
+                    <x-menu-item href="" class_icon="fa-solid fa-chart-column"
+                        content="Rapports & statistique" />
                     <x-menu-item href="" class_icon="fas fa-search" content="Recherche paramétrée" />
                     <x-menu-item href="" class_icon="fas fa-exclamation-triangle" content="Perte et Invendue" />
 
