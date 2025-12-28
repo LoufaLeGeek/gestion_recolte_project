@@ -15,13 +15,14 @@
         <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
         <div class="drawer-content">
             <!-- Navbar -->
-            <nav class="navbar w-full bg-base-300 fixed">
-                <label for="my-drawer-4" aria-label="open sidebar" class="btn btn-square btn-ghost">
+            <nav class="navbar w-full bg-white fixed border-b border-border">
+                <label for="my-drawer-4" aria-label="open sidebar"
+                    class="btn btn-square btn-ghost hover:bg-violet hover:text-violet-content border-none">
                     <i class="fa-solid fa-list"></i>
                 </label>
                 <div class="px-10 flex items-center justify-center space-x-4">
-                    <i class="fas fa-seedling text-xl"></i>
-                    <h4 class="tracking-wider" style="word-spacing: 4px">Gestion  des  récoltes</h4>
+                    <i class="fas fa-seedling text-h2"></i>
+                    <h2 class="tracking-wider" style="word-spacing: 4px">Gestion des récoltes</h2>
                 </div>
             </nav>
 
@@ -31,18 +32,19 @@
             </div>
         </div>
 
-        <div class="drawer-side is-drawer-close:overflow-visible">
+        <div class="drawer-side is-drawer-close:overflow-visible ">
             <label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"></label>
-            <div class="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-14 is-drawer-open:w-64">
+            <div class="flex min-h-full flex-col items-start bg-white is-drawer-close:w-14 is-drawer-open:w-64">
                 <!-- Sidebar content here -->
-                <ul class="menu w-full grow gap-1">
+                <ul class="menu w-full grow gap-1 border-r border-border">
                     {{-- List item : Pour ajouter une route dans le href on met -> :href="{{ route('name_route') }}"  --}}
                     <x-menu-item href="" class_icon="fas fa-tachometer-alt" content="Dashboard" />
                     <x-menu-item href="" class_icon="fas fa-carrot" content="Produit & Variété" />
                     <x-menu-item href="" class_icon="fas fa-seedling" content="Récoltes" />
                     <x-menu-item href="" class_icon="fas fa-shopping-cart" content="Ventes" />
                     <x-menu-item href="" class_icon="fa-solid fa-box" content="Stocks" />
-                    <x-menu-item href="" class_icon="fa-solid fa-chart-column" content="Rapports & statistique" />
+                    <x-menu-item href="" class_icon="fa-solid fa-chart-column"
+                        content="Rapports & statistique" />
                     <x-menu-item href="" class_icon="fas fa-search" content="Recherche paramétrée" />
                     <x-menu-item href="" class_icon="fas fa-exclamation-triangle" content="Perte et Invendue" />
 
@@ -50,7 +52,8 @@
                     <div class="flex-none absolute bottom-2">
                         <a href="">
                             <li>
-                                <button class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                                <button
+                                    class="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-violet hover:text-violet-content border-none"
                                     data-tip="Ma profile">
                                     <i class="fas fa-user"></i>
                                     <span class="is-drawer-close:hidden">Ma profile</span>
@@ -59,7 +62,8 @@
                         </a>
                         <a href="">
                             <li>
-                                <button class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                                <button
+                                    class="is-drawer-close:tooltip is-drawer-close:tooltip-right hover:bg-violet hover:text-violet-content border-none"
                                     data-tip="Se déconnecter">
                                     <i class="fas fa-sign-out-alt"></i>
                                     <span class="is-drawer-close:hidden">Se déconnecter</span>
