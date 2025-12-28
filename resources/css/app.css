@@ -2,40 +2,42 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
+
 @plugin "daisyui/theme" {
-    name: "gestion_recolte_theme";
-    default: true;
-    prefersdark: true;
-    color-scheme: "dark";
-    --color-base-100: oklch(20% 0.08 209);
-    --color-base-200: oklch(15% 0.08 209);
-    --color-base-300: oklch(10% 0.08 209);
-    --color-base-content: oklch(90% 0.076 70.697);
-    --color-primary: oklch(92% 0.2653 125);
-    --color-primary-content: oklch(50% 0.2653 125);
-    --color-secondary: oklch(83.27% 0.0764 298.3);
-    --color-secondary-content: oklch(43.27% 0.0764 298.3);
-    --color-accent: oklch(43% 0 0);
-    --color-accent-content: oklch(98% 0 0);
-    --color-neutral: oklch(30% 0.08 209);
-    --color-neutral-content: oklch(90% 0.076 70.697);
-    --color-info: oklch(74% 0.16 232.661);
-    --color-info-content: oklch(29% 0.066 243.157);
-    --color-success: oklch(79% 0.209 151.711);
-    --color-success-content: oklch(26% 0.065 152.934);
-    --color-warning: oklch(84.8% 0.1962 84.62);
-    --color-warning-content: oklch(44.8% 0.1962 84.62);
-    --color-error: oklch(65% 0.1985 24.22);
-    --color-error-content: oklch(27% 0.1985 24.22);
-    --radius-selector: 0.25rem;
-    --radius-field: 0.25rem;
-    --radius-box: 0.5rem;
-    --size-selector: 0.25rem;
-    --size-field: 0.25rem;
-    --border: 1px;
-    --depth: 1;
-    --noise: 1;
+  name: "winter";
+  default: true;
+  prefersdark: true;
+  color-scheme: "dark";
+  --color-base-100: oklch(100% 0 0);
+  --color-base-200: oklch(97.466% 0.011 259.822);
+  --color-base-300: oklch(93.268% 0.016 262.751);
+  --color-base-content: oklch(41.886% 0.053 255.824);
+  --color-primary: oklch(56.86% 0.255 257.57);
+  --color-primary-content: oklch(91.372% 0.051 257.57);
+  --color-secondary: oklch(42.551% 0.161 282.339);
+  --color-secondary-content: oklch(88.51% 0.032 282.339);
+  --color-accent: oklch(59.939% 0.191 335.171);
+  --color-accent-content: oklch(11.988% 0.038 335.171);
+  --color-neutral: oklch(19.616% 0.063 257.651);
+  --color-neutral-content: oklch(83.923% 0.012 257.651);
+  --color-info: oklch(88.127% 0.085 214.515);
+  --color-info-content: oklch(17.625% 0.017 214.515);
+  --color-success: oklch(80.494% 0.077 197.823);
+  --color-success-content: oklch(16.098% 0.015 197.823);
+  --color-warning: oklch(89.172% 0.045 71.47);
+  --color-warning-content: oklch(17.834% 0.009 71.47);
+  --color-error: oklch(73.092% 0.11 20.076);
+  --color-error-content: oklch(14.618% 0.022 20.076);
+  --radius-selector: 0.25rem;
+  --radius-field: 0.25rem;
+  --radius-box: 0.25rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 1;
 }
+
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
