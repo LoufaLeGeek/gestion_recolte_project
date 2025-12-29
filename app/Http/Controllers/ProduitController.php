@@ -12,7 +12,7 @@ class ProduitController extends Controller
      */
     public function index()
     {
-       $produits = Produit::orderBy('created_at', 'desc')->paginate(3);
+       $produits = Produit::withCount('varietees')->orderBy('produit_id', 'desc')->paginate(10);
         return view('produits.index', compact('produits'));
     }
 

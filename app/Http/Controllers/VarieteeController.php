@@ -13,7 +13,7 @@ class VarieteeController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Varietee::with('produit');
+        $query = Varietee::with(['produit', 'prix_actuelle']);
 
         // Filtre par produit
         if ($request->filled('produit_id')) {
@@ -43,6 +43,7 @@ class VarieteeController extends Controller
 
         return view('varietees.index', compact('varietees', 'produits'));
     }
+
 
     /**
      * Afficher le formulaire de création d'une variété.
@@ -96,19 +97,50 @@ class VarieteeController extends Controller
     /**
      * Mettre à jour une variété.
      */
-    public function update(Request $request, Varietee $varietee)
-    {
-        $request->validate([
-            'nom_varietee' => 'required|string|max:255',
-            'caracteristique_varietee' => 'required|string|min:10',
-            'produit_id' => 'required|exists:produits,id',
+public function update(Request $request, Varietee $varietee)
+{
+    $validated = $request->validate([
+        'nom_varietee' => 'required|string|max:255',
+        'caracteristique_varietee' => 'required|string',
+        'produit_id' => 'required|exists:produits,id',
+        'nouveau_prix' => 'nullable|numeric|min:0',
+        'date_effet' => 'nullable|date',
+    ]);
+
+    // Mise à jour de la variété
+    $varietee->update([
+        'nom_varietee' => $validated['nom_varietee'],
+        'caracteristique_varietee' => $validated['caracteristique_varietee'],
+        'produit_id' => $validated['produit_id'],
+    ]);
+
+    // Gestion du prix si fourni
+    if ($request->has('changer_prix') && $request->filled('nouveau_prix')) {
+        $nouveauPrix = $request->input('nouveau_prix');
+        $dateEffet = $request->input('date_effet', now()->toDateString());
+
+        // 1. Mettre à jour la date_fin de l'ancien prix s'il existe
+        if ($varietee->prix_actuelle) {
+            $varietee->prix_actuelle->update([
+                'date_fin' => $dateEffet
+            ]);
+        }
+
+        // 2. Créer le nouveau prix
+        $varietee->prix_varietees()->create([
+            'prix' => $nouveauPrix,
+            'date_debut' => $dateEffet,
+            'date_fin' => null // Prix actuel
         ]);
 
-        $varietee->update($request->all());
-
-        return redirect()->route('varietees.index')
-            ->with('success', 'Variété mise à jour avec succès.');
+        // Message de succès spécifique
+        return redirect()->route('varietees.index', $varietee)
+            ->with('success', 'Variété et prix mis à jour avec succès!');
     }
+
+    return redirect()->route('varietees.index', $varietee)
+        ->with('success', 'Variété mise à jour avec succès!');
+}
 
     /**
      * Supprimer une variété.
@@ -121,15 +153,4 @@ class VarieteeController extends Controller
             ->with('success', 'Variété supprimée avec succès.');
     }
 
-    /**
-     * Afficher les variétés d'un produit spécifique.
-     */
-    public function parProduit(Produit $produit)
-    {
-        $varietees = Varietee::where('produit_id', $produit->id)
-            ->orderBy('nom_varietee')
-            ->paginate(10);
-
-        return view('varietees.par-produit', compact('varietees', 'produit'));
-    }
 }
