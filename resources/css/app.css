@@ -1,6 +1,41 @@
-@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
 @import "tailwindcss";
 @plugin "daisyui";
+
+@plugin "daisyui/theme" {
+  name: "winter";
+  default: true;
+  prefersdark: true;
+  color-scheme: "dark";
+  --color-base-100: oklch(100% 0 0);
+  --color-base-200: oklch(97.466% 0.011 259.822);
+  --color-base-300: oklch(93.268% 0.016 262.751);
+  --color-base-content: oklch(41.886% 0.053 255.824);
+  --color-primary: oklch(56.86% 0.255 257.57);
+  --color-primary-content: oklch(91.372% 0.051 257.57);
+  --color-secondary: oklch(42.551% 0.161 282.339);
+  --color-secondary-content: oklch(88.51% 0.032 282.339);
+  --color-accent: oklch(59.939% 0.191 335.171);
+  --color-accent-content: oklch(11.988% 0.038 335.171);
+  --color-neutral: oklch(19.616% 0.063 257.651);
+  --color-neutral-content: oklch(83.923% 0.012 257.651);
+  --color-info: oklch(88.127% 0.085 214.515);
+  --color-info-content: oklch(17.625% 0.017 214.515);
+  --color-success: oklch(80.494% 0.077 197.823);
+  --color-success-content: oklch(16.098% 0.015 197.823);
+  --color-warning: oklch(89.172% 0.045 71.47);
+  --color-warning-content: oklch(17.834% 0.009 71.47);
+  --color-error: oklch(73.092% 0.11 20.076);
+  --color-error-content: oklch(14.618% 0.022 20.076);
+  --radius-selector: 0.25rem;
+  --radius-field: 0.25rem;
+  --radius-box: 0.25rem;
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 1;
+}
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -11,50 +46,26 @@
     --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif,
         "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
         "Noto Color Emoji";
-
-    --color-white : #FFFFFF;
-    --color-bg: #F4F2F9;
-    --color-black-1: #000000;
-    --color-black-2: #3C3C3C;
-    --color-black-3: #BABABA;
-    --color-violet: #F8F5FF;
-    --color-violet-content: #8147E7;
-    --color-red: #FFECEC;
-    --color-red-content : #F93333;
-    --color-green : #ECFFEE;
-    --color-green-content: #40997E;
-    --color-orange: #FFF4EC;
-    --color-orange-content : #E2A925;
-    --color-blue: #2188E7;
-    --color-danger: #CC1313;
-    --color-border: #E9E9E9;
-    --color-border-accent: #D2D0E2;
-    --text-base: 20px;
-    --text-sm: 16px;
-    --text-h1: 32px;
-    --text-h2: 24px;
 }
 
 @layer base {
+  h1 {
+    @apply text-4xl font-bold;
+  }
 
-    body{
-        @apply bg-bg text-black-1;
-    }
+  h2 {
+    @apply text-3xl font-semibold;
+  }
 
+  h3 {
+    @apply text-2xl font-semibold;
+  }
 
-    h1 {
-        @apply text-h1 font-bold;
-    }
+  h4 {
+    @apply text-xl font-medium;
+  }
 
-    h2 {
-        @apply text-h2 font-semibold;
-    }
-
-    p {
-        @apply text-base font-normal leading-relaxed;
-    }
-
-    span{
-        @apply text-sm;
-    }
+  p {
+    @apply text-base font-normal leading-relaxed;
+  }
 }
