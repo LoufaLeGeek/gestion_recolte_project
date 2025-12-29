@@ -1,10 +1,10 @@
 @extends('app')
 
-@section('title', 'Modifier le produit')
+@section('title', 'Modifier la variété')
 @section('breadcrumb')
     <li><i class="fas fa-carrot me-2 text-sm"></i> <span class="text-sm">Produits & Variétés</span></li>
-    <li><a href="{{ route('produits.index') }}"><i class="fas fa-list me-2 text-sm"></i> <span class="text-sm">Liste des produits</span></a></li>
-    <li><i class="fas fa-edit me-2 text-sm"></i> <span class="text-sm">Modifier {{ $produit->nom_produit }}</span></li>
+    <li><a href="{{ route('varietees.index') }}"><i class="fas fa-leaf me-2 text-sm"></i> <span class="text-sm">Liste des variétés</span></a></li>
+    <li><i class="fas fa-edit me-2 text-sm"></i> <span class="text-sm">Modifier {{ $varietee->nom_varietee }}</span></li>
 @endsection
 
 @section('content')
@@ -12,39 +12,39 @@
     <!-- En-tête avec icône -->
     <div class="mb-6 flex items-center gap-3">
         <div class="avatar placeholder">
-            <div class="bg-orange-100 text-orange-600 rounded-full w-10 h-10">
-                <i class="fas fa-carrot text-base"></i>
+            <div class="bg-green-100 text-green-600 rounded-full w-10 h-10">
+                <i class="fas fa-leaf text-base"></i>
             </div>
         </div>
         <div>
-            <h1 class="text-xl sm:text-2xl font-bold text-gray-800">Modifier le produit</h1>
-            <p class="text-gray-600 text-sm mt-1">Mettez à jour les informations de {{ $produit->nom_produit }}</p>
+            <h1 class="text-xl sm:text-2xl font-bold text-gray-800">Modifier la variété</h1>
+            <p class="text-gray-600 text-sm mt-1">Mettez à jour les informations de {{ $varietee->nom_varietee }}</p>
         </div>
     </div>
 
     <!-- Carte du formulaire -->
     <div class="card bg-base-100 shadow-md">
         <div class="card-body p-3 sm:p-4">
-            <form action="{{ route('produits.update', $produit) }}" method="POST" class="space-y-4">
+            <form action="{{ route('varietees.update', $varietee) }}" method="POST" class="space-y-4">
                 @csrf
                 @method('PUT')
 
-                <!-- Nom du produit -->
+                <!-- Nom de la variété -->
                 <div class="form-control">
                     <label class="label py-1">
                         <span class="label-text font-semibold text-sm">
-                            <i class="fas fa-tag me-2 text-orange-500 text-xs"></i>
-                            Nom du produit
+                            <i class="fas fa-tag me-2 text-green-500 text-xs"></i>
+                            Nom de la variété
                         </span>
                         <span class="label-text-alt text-error text-xs">* Requis</span>
                     </label>
                     <input type="text"
-                           name="nom_produit"
-                           value="{{ old('nom_produit', $produit->nom_produit) }}"
-                           class="input input-bordered input-sm sm:input-md w-full @error('nom_produit') input-error @enderror"
-                           placeholder="Ex: Tomate cerise, Pomme de terre..."
+                           name="nom_varietee"
+                           value="{{ old('nom_varietee', $varietee->nom_varietee) }}"
+                           class="input input-bordered input-sm sm:input-md w-full @error('nom_varietee') input-error @enderror"
+                           placeholder="Ex: Golden Delicious, Roma, Hass..."
                            required>
-                    @error('nom_produit')
+                    @error('nom_varietee')
                         <label class="label py-1">
                             <span class="label-text-alt text-error text-xs">
                                 <i class="fas fa-exclamation-circle me-1"></i>
@@ -54,20 +54,50 @@
                     @enderror
                 </div>
 
-                <!-- Description -->
+                <!-- Sélection du produit -->
                 <div class="form-control">
                     <label class="label py-1">
                         <span class="label-text font-semibold text-sm">
-                            <i class="fas fa-align-left me-2 text-green-500 text-xs"></i>
-                            Description
+                            <i class="fas fa-carrot me-2 text-orange-500 text-xs"></i>
+                            Produit associé
                         </span>
                         <span class="label-text-alt text-error text-xs">* Requis</span>
                     </label>
-                    <textarea name="description_produit"
-                              class="textarea textarea-bordered textarea-sm sm:textarea-md h-32 sm:h-40 @error('description_produit') textarea-error @enderror"
-                              placeholder="Décrivez le produit, ses caractéristiques, ses variétés..."
-                              required>{{ old('description_produit', $produit->description_produit) }}</textarea>
-                    @error('description_produit')
+                    <select name="produit_id"
+                            class="select select-bordered select-sm sm:select-md w-full @error('produit_id') select-error @enderror"
+                            required>
+                        <option value="">Sélectionnez un produit</option>
+                        @foreach($produits as $produit)
+                            <option value="{{ $produit->id }}"
+                                    {{ old('produit_id', $varietee->produit_id) == $produit->id ? 'selected' : '' }}>
+                                {{ $produit->nom_produit }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('produit_id')
+                        <label class="label py-1">
+                            <span class="label-text-alt text-error text-xs">
+                                <i class="fas fa-exclamation-circle me-1"></i>
+                                {{ $message }}
+                            </span>
+                        </label>
+                    @enderror
+                </div>
+
+                <!-- Caractéristiques -->
+                <div class="form-control">
+                    <label class="label py-1">
+                        <span class="label-text font-semibold text-sm">
+                            <i class="fas fa-align-left me-2 text-blue-500 text-xs"></i>
+                            Caractéristiques
+                        </span>
+                        <span class="label-text-alt text-error text-xs">* Requis</span>
+                    </label>
+                    <textarea name="caracteristique_varietee"
+                              class="textarea textarea-bordered textarea-sm sm:textarea-md h-32 sm:h-40 @error('caracteristique_varietee') textarea-error @enderror"
+                              placeholder="Décrivez les caractéristiques spécifiques de cette variété..."
+                              required>{{ old('caracteristique_varietee', $varietee->caracteristique_varietee) }}</textarea>
+                    @error('caracteristique_varietee')
                         <label class="label py-1">
                             <span class="label-text-alt text-error text-xs">
                                 <i class="fas fa-exclamation-circle me-1"></i>
@@ -84,14 +114,14 @@
                             <i class="fas fa-calendar-plus text-blue-500 text-xs"></i>
                             <span class="font-medium">Créé le</span>
                         </div>
-                        <div class="text-gray-700">{{ $produit->created_at->format('d/m/Y à H:i') }}</div>
+                        <div class="text-gray-700">{{ $varietee->created_at->format('d/m/Y à H:i') }}</div>
                     </div>
                     <div class="bg-base-200 rounded p-3">
                         <div class="flex items-center gap-2 mb-1">
                             <i class="fas fa-calendar-check text-green-500 text-xs"></i>
                             <span class="font-medium">Dernière modification</span>
                         </div>
-                        <div class="text-gray-700">{{ $produit->updated_at->format('d/m/Y à H:i') }}</div>
+                        <div class="text-gray-700">{{ $varietee->updated_at->format('d/m/Y à H:i') }}</div>
                     </div>
                 </div>
 
@@ -102,11 +132,11 @@
                             <i class="fas fa-save text-xs sm:text-sm"></i>
                             <span class="text-xs sm:text-sm">Mettre à jour</span>
                         </button>
-                        <a href="{{ route('produits.show', $produit) }}" class="btn btn-info btn-sm sm:btn-md flex-1 gap-1">
+                        <a href="{{ route('varietees.show', $varietee) }}" class="btn btn-info btn-sm sm:btn-md flex-1 gap-1">
                             <i class="fas fa-eye text-xs sm:text-sm"></i>
                             <span class="text-xs sm:text-sm">Voir détails</span>
                         </a>
-                        <a href="{{ route('produits.index') }}" class="btn btn-ghost btn-sm sm:btn-md flex-1 gap-1">
+                        <a href="{{ route('varietees.index') }}" class="btn btn-ghost btn-sm sm:btn-md flex-1 gap-1">
                             <i class="fas fa-times text-xs sm:text-sm"></i>
                             <span class="text-xs sm:text-sm">Annuler</span>
                         </a>
@@ -125,16 +155,16 @@
                     <h3 class="font-bold text-error text-sm">Zone de danger</h3>
                 </div>
                 <p class="text-xs text-gray-700 mb-3">
-                    La suppression est définitive. Toutes les données associées seront perdues.
+                    La suppression est définitive. Cette variété sera retirée de tous les enregistrements associés.
                 </p>
-                <form action="{{ route('produits.destroy', $produit) }}"
+                <form action="{{ route('varietees.destroy', $varietee) }}"
                       method="POST"
-                      onsubmit="return confirm('Êtes-vous vraiment sûr de vouloir supprimer ce produit ? Cette action est irréversible.')">
+                      onsubmit="return confirm('Êtes-vous vraiment sûr de vouloir supprimer cette variété ? Cette action est irréversible.')">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-error btn-outline btn-sm gap-1">
                         <i class="fas fa-trash text-xs"></i>
-                        <span class="text-xs">Supprimer ce produit</span>
+                        <span class="text-xs">Supprimer cette variété</span>
                     </button>
                 </form>
             </div>

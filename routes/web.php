@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 
 use App\Http\Controllers\ProduitController;
+use App\Http\Controllers\VarieteeController;
 
 Route::get('/', function () {
     return view('app');
@@ -12,3 +13,7 @@ Route::get('/', function () {
 
 // Routes pour les produits (CRUD complet)
 Route::resource('produits', ProduitController::class);
+
+
+// Routes CRUD pour les variétés
+Route::resource('varietees', VarieteeController::class);

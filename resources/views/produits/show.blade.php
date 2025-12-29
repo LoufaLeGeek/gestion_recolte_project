@@ -2,191 +2,197 @@
 
 @section('title', $produit->nom_produit)
 @section('breadcrumb')
-    <li><i class="fas fa-carrot me-2"></i> <span>Produits & Variétés</span></li>
-    <li><a href="{{ route('produits.index') }}"><i class="fas fa-list me-2"></i> <span>Liste des produits</span></a></li>
-    <li><i class="fas fa-eye me-2"></i> <span>{{ $produit->nom_produit }}</span></li>
+    <li><i class="fas fa-carrot me-2 text-sm"></i> <span class="text-sm">Produits & Variétés</span></li>
+    <li><a href="{{ route('produits.index') }}"><i class="fas fa-list me-2 text-sm"></i> <span class="text-sm">Liste des
+                produits</span></a></li>
+    <li><i class="fas fa-eye me-2 text-sm"></i> <span class="text-sm">{{ $produit->nom_produit }}</span></li>
 @endsection
 
 @section('content')
-<div class="max-w-4xl mx-auto">
-    <!-- En-tête détaillée -->
-    <div class="mb-8">
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div class="flex items-center gap-4">
-                <div class="avatar placeholder">
-                    <div class="bg-orange-100 text-orange-600 rounded-full w-14 h-14">
-                        <i class="fas fa-carrot text-2xl"></i>
-                    </div>
-                </div>
-                <div>
-                    <h1 class="text-3xl font-bold text-gray-800">{{ $produit->nom_produit }}</h1>
-                    <div class="flex items-center gap-2 mt-1">
-                        <span class="badge badge-success">Produit actif</span>
-                        <span class="text-gray-500 text-sm">ID: #{{ $produit->id }}</span>
-                    </div>
-                </div>
-            </div>
-            <div class="flex gap-2">
-                <a href="{{ route('produits.edit', $produit) }}" class="btn btn-warning gap-2">
-                    <i class="fas fa-edit"></i>
-                    Modifier
-                </a>
-                <a href="{{ route('produits.index') }}" class="btn btn-ghost gap-2">
-                    <i class="fas fa-arrow-left"></i>
-                    Retour
-                </a>
-            </div>
+
+
+    <div class="max-w-5xl mx-auto px-2 sm:px-4">
+        <!-- Dans la section des variétés du produit -->
+        <div class="mt-4 mb-10 flex gap-2">
+            <a href="{{ route('varietees.index') }}?produit_id={{ $produit->id }}"
+                class="btn btn-outline btn-sm flex-1 gap-1">
+                <i class="fas fa-filter text-xs"></i>
+                <span class="text-xs">Voir uniquement ces variétés</span>
+            </a>
+            <a href="{{ route('varietees.create') }}?produit_id={{ $produit->id }}" class="btn btn-success btn-sm gap-1">
+                <i class="fas fa-plus text-xs"></i>
+                <span class="text-xs">Ajouter</span>
+            </a>
         </div>
-    </div>
-
-    <!-- Grille d'informations -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <!-- Colonne principale -->
-        <div class="lg:col-span-2 space-y-6">
-            <!-- Description -->
-            <div class="card bg-base-100 shadow-xl">
-                <div class="card-body">
-                    <h2 class="card-title">
-                        <i class="fas fa-align-left text-green-500"></i>
-                        Description
-                    </h2>
-                    <div class="prose max-w-none">
-                        <p class="text-gray-700 whitespace-pre-line">{{ $produit->description_produit }}</p>
+        <!-- En-tête détaillée -->
+        <div class="mb-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                    <div class="avatar placeholder">
+                        <div class="bg-orange-100 text-orange-600 rounded-full w-12 h-12">
+                            <i class="fas fa-carrot text-lg"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h1 class="text-xl sm:text-2xl font-bold text-gray-800">{{ $produit->nom_produit }}</h1>
+                        <div class="flex items-center gap-2 mt-1">
+                            <span class="badge badge-success badge-sm">Produit actif</span>
+                            <span class="text-gray-500 text-xs">ID: #{{ $produit->id }}</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Informations générales -->
-            <div class="card bg-base-100 shadow-xl">
-                <div class="card-body">
-                    <h2 class="card-title">
-                        <i class="fas fa-info-circle text-blue-500"></i>
-                        Informations générales
-                    </h2>
-                    <div class="space-y-4">
-                        <div class="flex justify-between items-center py-3 border-b border-base-200">
-                            <span class="font-medium">Identifiant</span>
-                            <span class="badge badge-outline">#{{ $produit->id }}</span>
-                        </div>
-                        <div class="flex justify-between items-center py-3 border-b border-base-200">
-                            <span class="font-medium">Statut</span>
-                            <span class="badge badge-success">Actif</span>
-                        </div>
-                        <div class="flex justify-between items-center py-3 border-b border-base-200">
-                            <span class="font-medium">Longueur de la description</span>
-                            <span class="font-mono">{{ strlen($produit->description_produit) }} caractères</span>
-                        </div>
-                    </div>
+                <div class="flex gap-2 mt-2 md:mt-0">
+                    <a href="{{ route('produits.edit', $produit) }}" class="btn btn-warning btn-sm gap-1">
+                        <i class="fas fa-edit text-xs"></i>
+                        <span class="text-xs">Modifier</span>
+                    </a>
+                    <a href="{{ route('produits.index') }}" class="btn btn-ghost btn-sm gap-1">
+                        <i class="fas fa-arrow-left text-xs"></i>
+                        <span class="text-xs">Retour</span>
+                    </a>
                 </div>
             </div>
         </div>
 
-        <!-- Colonne latérale -->
-        <div class="space-y-6">
-            <!-- Dates -->
-            <div class="card bg-base-100 shadow-xl">
-                <div class="card-body">
-                    <h2 class="card-title">
-                        <i class="fas fa-history text-purple-500"></i>
-                        Historique
-                    </h2>
-                    <div class="space-y-4">
-                        <div>
-                            <div class="flex items-center gap-2 mb-1">
-                                <i class="fas fa-calendar-plus text-blue-500"></i>
-                                <span class="font-medium">Création</span>
-                            </div>
-                            <div class="text-gray-700">{{ $produit->created_at->format('d/m/Y') }}</div>
-                            <div class="text-gray-500 text-sm">{{ $produit->created_at->format('H:i:s') }}</div>
+        <!-- Grille d'informations -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <!-- Colonne principale -->
+            <div class="lg:col-span-2 space-y-4">
+                <!-- Description -->
+                <div class="card bg-base-100 shadow-md">
+                    <div class="card-body p-3 sm:p-4">
+                        <h2 class="card-title text-base">
+                            <i class="fas fa-align-left text-green-500 text-sm"></i>
+                            Description
+                        </h2>
+                        <div class="mt-2">
+                            <p class="text-gray-700 text-sm whitespace-pre-line">{{ $produit->description_produit }}</p>
                         </div>
-                        <div>
-                            <div class="flex items-center gap-2 mb-1">
-                                <i class="fas fa-calendar-check text-green-500"></i>
-                                <span class="font-medium">Dernière modification</span>
+                    </div>
+                </div>
+
+                <!-- Informations générales -->
+                <div class="card bg-base-100 shadow-md">
+                    <div class="card-body p-3 sm:p-4">
+                        <h2 class="card-title text-base">
+                            <i class="fas fa-info-circle text-blue-500 text-sm"></i>
+                            Informations générales
+                        </h2>
+                        <div class="space-y-3 mt-2">
+                            <div class="flex justify-between items-center py-2 border-b border-base-200">
+                                <span class="font-medium text-sm">Identifiant</span>
+                                <span class="badge badge-outline badge-sm">#{{ $produit->id }}</span>
                             </div>
-                            <div class="text-gray-700">{{ $produit->updated_at->format('d/m/Y') }}</div>
-                            <div class="text-gray-500 text-sm">{{ $produit->updated_at->format('H:i:s') }}</div>
-                        </div>
-                        <div class="text-center mt-4">
-                            <div class="stat-desc">
-                                Créé il y a {{ $produit->created_at->diffForHumans() }}
+                            <div class="flex justify-between items-center py-2 border-b border-base-200">
+                                <span class="font-medium text-sm">Statut</span>
+                                <span class="badge badge-success badge-sm">Actif</span>
+                            </div>
+                            <div class="flex justify-between items-center py-2">
+                                <span class="font-medium text-sm">Longueur description</span>
+                                <span class="font-mono text-xs">{{ strlen($produit->description_produit) }}
+                                    caractères</span>
                             </div>
                         </div>
+                    </div>
+                </div>
+                                <!-- Statistiques -->
+                <div class="stats stats-vertical shadow w-full text-xs">
+                    <div class="stat">
+                        <div class="stat-figure text-primary">
+                            <i class="fas fa-carrot text-lg"></i>
+                        </div>
+                        <div class="stat-title">Type</div>
+                        <div class="stat-value text-primary text-lg">Produit</div>
+                        <div class="stat-desc">Agriculture</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Actions rapides -->
-            <div class="card bg-base-100 shadow-xl">
-                <div class="card-body">
-                    <h2 class="card-title">
-                        <i class="fas fa-bolt text-yellow-500"></i>
-                        Actions rapides
-                    </h2>
-                    <div class="space-y-3">
-                        <a href="{{ route('produits.edit', $produit) }}" class="btn btn-warning btn-outline w-full justify-start gap-2">
-                            <i class="fas fa-edit"></i>
-                            Modifier ce produit
-                        </a>
-                        <a href="{{ route('produits.create') }}" class="btn btn-success btn-outline w-full justify-start gap-2">
-                            <i class="fas fa-plus"></i>
-                            Créer un nouveau
-                        </a>
-                        <a href="{{ route('produits.index') }}" class="btn btn-ghost w-full justify-start gap-2">
-                            <i class="fas fa-list"></i>
-                            Voir tous les produits
-                        </a>
+            <!-- Colonne latérale -->
+            <div class="space-y-4">
+                <!-- Dates -->
+                <div class="card bg-base-100 shadow-md">
+                    <div class="card-body p-3 sm:p-4">
+                        <h2 class="card-title text-base">
+                            <i class="fas fa-history text-purple-500 text-sm"></i>
+                            Historique
+                        </h2>
+                        <div class="space-y-3 mt-2">
+                            <div>
+                                <div class="flex items-center gap-2 mb-1">
+                                    <i class="fas fa-calendar-plus text-blue-500 text-xs"></i>
+                                    <span class="font-medium text-sm">Création</span>
+                                </div>
+                                <div class="text-gray-700 text-sm">{{ $produit->created_at->format('d/m/Y') }}</div>
+                                <div class="text-gray-500 text-xs">{{ $produit->created_at->format('H:i:s') }}</div>
+                            </div>
+                            <div>
+                                <div class="flex items-center gap-2 mb-1">
+                                    <i class="fas fa-calendar-check text-green-500 text-xs"></i>
+                                    <span class="font-medium text-sm">Dernière modification</span>
+                                </div>
+                                <div class="text-gray-700 text-sm">{{ $produit->updated_at->format('d/m/Y') }}</div>
+                                <div class="text-gray-500 text-xs">{{ $produit->updated_at->format('H:i:s') }}</div>
+                            </div>
+                            <div class="text-center mt-2">
+                                <div class="stat-desc text-xs">
+                                    Créé il y a {{ $produit->created_at->diffForHumans() }}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Statistiques -->
-            <div class="stats stats-vertical shadow w-full">
-                <div class="stat">
-                    <div class="stat-figure text-primary">
-                        <i class="fas fa-carrot text-2xl"></i>
+                <!-- Actions rapides -->
+                <div class="card bg-base-100 shadow-md">
+                    <div class="card-body p-3 sm:p-4">
+                        <h2 class="card-title text-base">
+                            <i class="fas fa-bolt text-yellow-500 text-sm"></i>
+                            Actions rapides
+                        </h2>
+                        <div class="space-y-2 mt-2">
+                            <a href="{{ route('produits.edit', $produit) }}"
+                                class="btn btn-warning btn-outline btn-sm w-full justify-start gap-1">
+                                <i class="fas fa-edit text-xs"></i>
+                                <span class="text-xs">Modifier ce produit</span>
+                            </a>
+                            <a href="{{ route('produits.create') }}"
+                                class="btn btn-success btn-outline btn-sm w-full justify-start gap-1">
+                                <i class="fas fa-plus text-xs"></i>
+                                <span class="text-xs">Créer un nouveau</span>
+                            </a>
+                            <a href="{{ route('produits.index') }}"
+                                class="btn btn-ghost btn-sm w-full justify-start gap-1">
+                                <i class="fas fa-list text-xs"></i>
+                                <span class="text-xs">Voir tous les produits</span>
+                            </a>
+                        </div>
                     </div>
-                    <div class="stat-title">Type</div>
-                    <div class="stat-value text-primary">Produit</div>
-                    <div class="stat-desc">Agriculture</div>
                 </div>
+
+
             </div>
         </div>
-    </div>
 
-    <!-- Actions -->
-    <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
-        <a href="{{ route('produits.edit', $produit) }}" class="btn btn-warning gap-2 flex-1">
-            <i class="fas fa-edit"></i>
-            Modifier
-        </a>
-        <form action="{{ route('produits.destroy', $produit) }}"
-              method="POST"
-              class="flex-1"
-              onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')">
-            @csrf
-            @method('DELETE')
-            <button type="submit" class="btn btn-error gap-2 w-full">
-                <i class="fas fa-trash"></i>
-                Supprimer
-            </button>
-        </form>
-        <a href="{{ route('produits.index') }}" class="btn btn-ghost gap-2 flex-1">
-            <i class="fas fa-arrow-left"></i>
-            Retour à la liste
-        </a>
+        <!-- Actions -->
+        <div class="mt-6 flex flex-col sm:flex-row gap-2 justify-center">
+            <a href="{{ route('produits.edit', $produit) }}" class="btn btn-warning btn-sm gap-1 flex-1">
+                <i class="fas fa-edit text-xs"></i>
+                <span class="text-xs">Modifier</span>
+            </a>
+            <form action="{{ route('produits.destroy', $produit) }}" method="POST" class="flex-1"
+                onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-error btn-sm gap-1 w-full">
+                    <i class="fas fa-trash text-xs"></i>
+                    <span class="text-xs">Supprimer</span>
+                </button>
+            </form>
+            <a href="{{ route('produits.index') }}" class="btn btn-ghost btn-sm gap-1 flex-1">
+                <i class="fas fa-arrow-left text-xs"></i>
+                <span class="text-xs">Retour à la liste</span>
+            </a>
+        </div>
     </div>
-</div>
 @endsection
-
-@push('styles')
-<style>
-    .prose {
-        color: #374151;
-    }
-    .prose p {
-        margin-top: 0.5em;
-        margin-bottom: 0.5em;
-    }
-</style>
-@endpush
