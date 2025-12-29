@@ -40,12 +40,11 @@
                 <ul class="menu w-full grow gap-1">
                     {{-- List item : Pour ajouter une route dans le href on met -> :href="route('name_route')"  --}}
                     <x-menu-item href="" class_icon="fas fa-tachometer-alt" content="Dashboard" />
-                    <x-menu-item :href="route('produit-variete.index')" class_icon="fas fa-carrot" content="Produit & Variété" />
+                    <x-menu-item :href=" route('produit-varietee.index') " class_icon="fas fa-carrot" content="Produit & Variété" />
                     <x-menu-item href="" class_icon="fas fa-seedling" content="Récoltes" />
                     <x-menu-item href="" class_icon="fas fa-shopping-cart" content="Ventes" />
                     <x-menu-item href="" class_icon="fa-solid fa-box" content="Stocks" />
-                    <x-menu-item href="" class_icon="fa-solid fa-chart-column"
-                        content="Rapports & statistique" />
+                    <x-menu-item href="" class_icon="fa-solid fa-chart-column"content="Rapports & statistique" />
                     <x-menu-item href="" class_icon="fas fa-search" content="Recherche paramétrée" />
                     <x-menu-item href="" class_icon="fas fa-exclamation-triangle" content="Perte et Invendue" />
 

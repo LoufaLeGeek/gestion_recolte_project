@@ -4,42 +4,35 @@ namespace App\Http\Controllers;
 
 use App\Models\Varietee;
 use App\Models\Produit;
-
 use Illuminate\Http\Request;
 
 class VarieteeProduitController extends Controller
 {
-    /* PAGE PRINCIPALE*/
+    /* PAGE PRINCIPALE */
     public function index()
     {
         $produits = Produit::with('varietees')->get();
         return view('produit-varietee.index', compact('produits'));
     }
 
-    /*CREATION DES VARIETEES ET PRODUITS */
-
+    /* CREATION PRODUIT OU VARIETE */
     public function store(Request $request)
     {
-        //CREATION PRODUIT
-
-        if($request->type === 'produit'){
+        if ($request->type === 'produit') {
             $request->validate([
                 'nom_produit' => 'required|string',
+                'description_produit' => 'required|string',
             ]);
 
             Produit::create([
                 'nom_produit' => $request->nom_produit,
-                'caracteristique_vaietee'=> $request->caracteristique_vaietee,
-                'produit_id'=> $request
+                'description_produit' => $request->description_produit,
             ]);
 
             return redirect()->back()->with('success', 'Produit créé avec succès.');
         }
 
-
-        //CREATION VARIETEE
-
-        if($request->type === 'varietee'){
+        if ($request->type === 'varietee') {
             $request->validate([
                 'nom_varietee' => 'required|string',
                 'produit_id' => 'required|exists:produits,id',
@@ -47,38 +40,48 @@ class VarieteeProduitController extends Controller
 
             Varietee::create([
                 'nom_varietee' => $request->nom_varietee,
-                'caracteristique_varietee'=> $request->caracteristique_varietee,
-                'produit_id'=> $request->produit_id
+                'caracteristique_varietee' => $request->caracteristique_varietee,
+                'produit_id' => $request->produit_id,
             ]);
 
             return redirect()->back()->with('success', 'Variété créée avec succès.');
         }
-
     }
 
-    //MODIFICATION DES VARIETEES ET PRODUITS
+    /* EDITION PRODUIT OU VARIETE */
+    public function edit(Request $request, $id)
+    {
+        if ($request->type === 'produit') {
+            $produit = Produit::findOrFail($id);
+            return view('produit-varietee.index', compact('produit'));
+        }
 
+        if ($request->type === 'varietee') {
+            $varietee = Varietee::findOrFail($id);
+            $produits = Produit::all(); // pour choisir le produit associé
+            return view('produit-varietee.index', compact('varietee', 'produits'));
+        }
+    }
+
+    /* MODIFICATION PRODUIT OU VARIETE */
     public function update(Request $request, $id)
     {
-        //MODIFICATION PRODUIT
-
-        if($request->type === 'produit'){
+        if ($request->type === 'produit') {
             $request->validate([
                 'nom_produit' => 'required|string',
+                'description_produit' => 'required|string',
             ]);
 
             $produit = Produit::findOrFail($id);
             $produit->update([
                 'nom_produit' => $request->nom_produit,
-                'description_produit'=> $request->description_produit,
+                'description_produit' => $request->description_produit,
             ]);
 
-            return redirect()->back()->with('success', 'Produit modifié avec succès.');
+            return redirect()->route('produit-varietee.index')->with('success', 'Produit modifié avec succès.');
         }
 
-        //MODIFICATION VARIETEE
-
-        if($request->type === 'varietee'){
+        if ($request->type === 'varietee') {
             $request->validate([
                 'nom_varietee' => 'required|string',
                 'produit_id' => 'required|exists:produits,id',
@@ -87,35 +90,29 @@ class VarieteeProduitController extends Controller
             $varietee = Varietee::findOrFail($id);
             $varietee->update([
                 'nom_varietee' => $request->nom_varietee,
-                'caracteristique_varietee'=> $request->caracteristique_varietee,
-                'produit_id'=> $request->produit_id
+                'caracteristique_varietee' => $request->caracteristique_varietee,
+                'produit_id' => $request->produit_id,
             ]);
 
-            return redirect()->back()->with('success', 'Variété modifiée avec succès.');
+            return redirect()->route('produit-varietee.index')->with('success', 'Variété modifiée avec succès.');
         }
     }
 
-    //SUPPRESSION DES VARIETEES ET PRODUITS
-
+    /* SUPPRESSION PRODUIT OU VARIETE */
     public function destroy(Request $request, $id)
     {
-        //SUPPRESSION PRODUIT
-
-        if($request->type === 'produit'){
+        if ($request->type === 'produit') {
             $produit = Produit::findOrFail($id);
             $produit->delete();
 
             return redirect()->back()->with('success', 'Produit supprimé avec succès.');
         }
 
-        //SUPPRESSION VARIETEE
-
-        if($request->type === 'varietee'){
+        if ($request->type === 'varietee') {
             $varietee = Varietee::findOrFail($id);
             $varietee->delete();
 
             return redirect()->back()->with('success', 'Variété supprimée avec succès.');
         }
     }
-
 }
