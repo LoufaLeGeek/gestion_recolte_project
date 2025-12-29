@@ -12,7 +12,7 @@
     <!-- En-tête avec icône -->
     <div class="mb-6 flex items-center gap-3">
         <div class="avatar placeholder">
-            <div class="bg-orange-100 text-orange-600 rounded-full w-10 h-10">
+            <div class="flex items-center justify-center bg-orange-100 text-orange-600 rounded-full w-10 h-10">
                 <i class="fas fa-carrot text-base"></i>
             </div>
         </div>
@@ -64,6 +64,7 @@
                         <span class="label-text-alt text-error text-xs">* Requis</span>
                     </label>
                     <textarea name="description_produit"
+                    style="resize: none"
                               class="textarea textarea-bordered textarea-sm sm:textarea-md h-32 sm:h-40 @error('description_produit') textarea-error @enderror"
                               placeholder="Décrivez le produit, ses caractéristiques, ses variétés..."
                               required>{{ old('description_produit', $produit->description_produit) }}</textarea>

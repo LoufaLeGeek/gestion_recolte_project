@@ -56,6 +56,7 @@
                         <span class="label-text-alt text-error text-xs">* Requis</span>
                     </label>
                     <textarea name="description_produit"
+                    style="resize: none"
                               class="textarea textarea-bordered textarea-sm sm:textarea-md h-32 sm:h-40 @error('description_produit') textarea-error @enderror"
                               placeholder="Décrivez le produit, ses caractéristiques, ses variétés..."
                               required>{{ old('description_produit') }}</textarea>

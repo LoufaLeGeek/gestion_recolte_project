@@ -84,6 +84,7 @@
                             <span class="label-text-alt text-error text-xs">* Requis</span>
                         </label>
                         <textarea name="caracteristique_varietee"
+                        style="resize: none"
                             class="textarea textarea-bordered textarea-sm sm:textarea-md h-32 sm:h-40 @error('caracteristique_varietee') textarea-error @enderror"
                             placeholder="Décrivez les caractéristiques spécifiques de cette variété : couleur, taille, goût, période de maturation, résistance..."
                             required>{{ old('caracteristique_varietee') }}</textarea>
