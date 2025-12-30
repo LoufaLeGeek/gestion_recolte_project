@@ -66,12 +66,13 @@
                 <!-- Sidebar content here -->
                 <ul class="menu w-full grow gap-1">
                     {{-- List item : Pour ajouter une route dans le href on met -> :href="route('name_route')"  --}}
+                    {{-- List item : Pour ajouter une route dans le href on met -> :href="route('name_route')"  --}}
                     <x-menu-item href="" class_icon="fas fa-tachometer-alt" content="Dashboard" />
                     <x-menu-item href="{{ route('produits.index') }}" class_icon="fas fa-carrot text-orange-500" content="Produit" />
                     <x-menu-item href="{{ route('varietees.index') }}" class_icon="fas fa-leaf text-xs"
                         content="Variété" />
                     <x-menu-item href="" class_icon="fas fa-seedling" content="Récoltes" />
-                    <x-menu-item href="" class_icon="fas fa-shopping-cart" content="Ventes" />
+                    <x-menu-item :href="route('gestion-vente')" class_icon="fas fa-shopping-cart" content="Ventes" />
                     <x-menu-item href="" class_icon="fa-solid fa-box" content="Stocks" />
                     <x-menu-item href="" class_icon="fa-solid fa-chart-column"
                         content="Rapports & statistique" />
