@@ -50,7 +50,7 @@
                 <h1 class="text-xl sm:text-2xl font-bold text-gray-800">Gestion des Variétés</h1>
                 <p class="text-gray-600 text-sm mt-1">Gérez les variétés de vos produits agricoles</p>
             </div>
-            <a href="{{ route('varietees.create') }}" class="btn btn-success btn-sm sm:btn-md gap-1">
+            <a href="{{ route('varietees.create') }}" class="btn btn-primary btn-sm sm:btn-md gap-1">
                 <i class="fas fa-plus text-xs sm:text-sm"></i>
                 <span class="text-xs sm:text-sm">Nouvelle variété</span>
             </a>
@@ -369,7 +369,7 @@
                 <!-- Pagination -->
                 @if ($varietees->hasPages())
                     <div class="mt-4">
-                        {{ $varietees->links() }}
+                        {{ $varietees->links('vendor.pagination.tailwind') }}
                     </div>
                 @endif
 
