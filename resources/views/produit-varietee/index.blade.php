@@ -1,168 +1,253 @@
 @extends('app')
 
-@section('title', 'Produits & Variétés')
+@section('title', 'Produits')
 
 @section('content')
+
+<!-- Conteneur principal centré -->
 <div class="max-w-7xl mx-auto px-6 py-8">
 
-    {{-- TITRE --}}
-    <div class="mb-8">
-        <h1 class="text-4xl font-bold text-slate-800 dark:text-slate-100">
-            Produits et Variétés
-        </h1>
-        <p class="mt-2 text-slate-600 dark:text-slate-400">
-            Gestion des produits agricoles et de leurs variétés
+    {{-- Bloc titre --}}
+    <div class="mb-8 text-center">
+
+        <h1 class="tracking-wider">Gestion des Produits</h1>
+        <p class="text-neutral-content">
+            Liste des produits agricoles et aperçu de leurs variétés
         </p>
     </div>
 
-    {{-- MESSAGE SUCCESS --}}
+    {{-- Zone recherche et statistiques --}}
+    <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
+
+        <!-- Formulaire de recherche -->
+        <form method="GET"
+            action="{{ route('produit-varietee.index') }}"
+            class="flex gap-3 w-full md:w-auto">
+
+            <!-- Champ de recherche -->
+            <input type="text"
+                name="search"
+                value="{{ request('search') }}"
+                placeholder="Rechercher un produit ou une variété"
+                class="input input-bordered w-full md:w-64">
+
+            <!-- Bouton de soumission -->
+            <button type="submit" class="btn btn-info">
+                Rechercher
+            </button>
+        </form>
+
+        <!-- Bloc statistiques -->
+        <div class="stats shadow">
+
+            <!-- Statistique produits -->
+            <div class="stat">
+                <div class="stat-title">Produits</div>
+                <div class="stat-value">{{ $total_produits }}</div>
+            </div>
+
+            <!-- Statistique variétés -->
+            <div class="stat">
+                <div class="stat-title">Variétés</div>
+                <div class="stat-value">{{ $total_varietes }}</div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Message de succès --}}
     @if(session('success'))
-        <div class="mb-6 rounded-md border border-green-300 bg-green-50 px-4 py-3 text-green-700 dark:bg-green-900/30 dark:text-green-300">
+        <div class="alert alert-success shadow-lg mb-6">
             {{ session('success') }}
         </div>
     @endif
 
-    {{-- AJOUT PRODUIT --}}
-    <div class="mb-10 rounded-lg border bg-white dark:bg-slate-900 p-6 shadow-sm">
-        <h2 class="text-xl font-semibold mb-4">Ajouter un produit</h2>
+    {{-- Formulaire d'ajout de produit --}}
+    <div class="card bg-base-100 shadow-md mb-10">
+        <div class="card-body">
 
-        <form method="POST" action="{{ route('produit-varietee.store') }}" class="space-y-4">
-            @csrf
-            <input type="hidden" name="type" value="produit">
+            <!-- Formulaire -->
+            <form method="POST"
+                action="{{ route('produit-varietee.store') }}"
+                class="flex flex-col md:flex-row gap-3 items-center">
 
-            <input type="text" name="nom_produit" placeholder="Nom du produit"
-                   class="w-full rounded-md border px-4 py-2" required>
+                {{-- Protection CSRF --}}
+                @csrf
 
-            <textarea name="description_produit" placeholder="Description du produit"
-                      class="w-full rounded-md border px-4 py-2" required></textarea>
+                {{-- Type de formulaire --}}
+                <input type="hidden" name="type" value="produit">
 
-            <button type="submit" class="rounded-md bg-blue-600 px-6 py-2 text-white hover:bg-blue-700 transition">
-                Ajouter
-            </button>
-        </form>
+                <!-- Nom du produit -->
+                <input type="text"
+                    name="nom_produit"
+                    placeholder="Nom du produit"
+                    class="input input-bordered flex-1"
+                    required>
+
+                <!-- Description du produit -->
+                <input type="text"
+                    name="description_produit"
+                    placeholder="Description"
+                    class="input input-bordered flex-1"
+                    required>
+
+                <!-- Bouton ajouter -->
+                <button type="submit" class="btn btn-primary">
+                    Ajouter
+                </button>
+            </form>
+        </div>
     </div>
 
-    {{-- LISTE PRODUITS --}}
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        @forelse($produits as $produit)
-            <div class="rounded-lg border bg-white dark:bg-slate-900 p-6 shadow-sm">
+    {{-- Tableau des produits --}}
+    <div class="overflow-x-auto">
+        <table class="table table-zebra w-full">
 
-                {{-- PRODUIT --}}
-                <div class="flex justify-between items-start mb-4">
-                    <div>
-                        <h3 class="text-lg font-semibold">{{ $produit->nom_produit }}</h3>
-                        <p class="text-sm text-slate-600">{{ $produit->description_produit }}</p>
-                    </div>
+            <!-- En-tête -->
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Description</th>
+                    <th>Variétés</th>
+                    <th>Créé le</th>
+                    <th>Modifié le</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
 
-                    <div class="flex items-center space-x-2">
-                        {{-- Bouton Modifier inline --}}
-                        <button type="button"
-                                onclick="document.getElementById('edit-produit-{{ $produit->id }}').classList.toggle('hidden')"
-                                class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm">
-                            Modifier
-                        </button>
+            <!-- Corps du tableau -->
+            <tbody>
 
-                        {{-- Bouton Supprimer --}}
-                        <form method="POST" action="{{ route('produit-varietee.destroy', $produit->id) }}">
-                            @csrf @method('DELETE')
-                            <input type="hidden" name="type" value="produit">
-                            <button class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm">
-                                Supprimer
+                {{-- Boucle sur les produits --}}
+                @forelse($produits as $produit)
+
+                    <!-- Ligne produit -->
+                    <tr>
+                        <td>{{ $produit->nom_produit }}</td>
+                        <td>{{ $produit->description_produit }}</td>
+
+                        <!-- Bouton affichage variétés -->
+                        <td>
+                            <button onclick="toggleVarietees({{ $produit->id }})"
+                                    class="badge badge-info">
+                                {{ $produit->varietees->count() }} variétés
                             </button>
-                        </form>
-                    </div>
-                </div>
+                        </td>
 
-                {{-- FORMULAIRE MODIFIER PRODUIT (inline) --}}
-                <div id="edit-produit-{{ $produit->id }}" class="hidden mb-4">
-                    <form method="POST" action="{{ route('produit-varietee.update', $produit->id) }}" class="space-y-3">
-                        @csrf @method('PUT')
-                        <input type="hidden" name="type" value="produit">
+                        <!-- Dates -->
+                        <td>{{ $produit->created_at->format('d/m/Y H:i') }}</td>
+                        <td>{{ $produit->updated_at->format('d/m/Y H:i') }}</td>
 
-                        <input type="text" name="nom_produit" value="{{ $produit->nom_produit }}"
-                               class="w-full rounded-md border px-3 py-2" required>
+                        <!-- Actions -->
+                        <td>
+                            <button onclick="document.getElementById('edit-produit-{{ $produit->id }}').classList.toggle('hidden')"
+                                    class="btn btn-sm btn-warning">
+                                Modifier
+                            </button>
+                        </td>
+                    </tr>
 
-                        <textarea name="description_produit" class="w-full rounded-md border px-3 py-2" required>{{ $produit->description_produit }}</textarea>
+                    {{-- Formulaire de modification --}}
+                    <tr id="edit-produit-{{ $produit->id }}"
+                        class="hidden bg-base-200">
+                        <td colspan="6">
 
-                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
-                            Sauvegarder
-                        </button>
-                    </form>
-                </div>
+                            <!-- Formulaire modification -->
+                            <form method="POST"
+                                action="{{ route('produit-varietee.update', $produit->id) }}"
+                                class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
 
-                {{-- VARIÉTÉS --}}
-                <h4 class="font-medium mb-2">Variétés</h4>
-                @if($produit->varietees->count())
-                    <ul class="space-y-2">
-                        @foreach($produit->varietees as $varietee)
-                            <li class="rounded border bg-slate-50 dark:bg-slate-800 px-3 py-2">
-                                <div class="flex justify-between items-center">
-                                    <div>
-                                        <p class="font-medium">{{ $varietee->nom_varietee }}</p>
-                                        <p class="text-xs text-slate-500">{{ $varietee->caracteristique_varietee }}</p>
-                                    </div>
+                                @csrf
+                                @method('PUT')
 
-                                    <div class="flex space-x-1">
-                                        <button type="button"
-                                                onclick="document.getElementById('edit-varietee-{{ $varietee->id }}').classList.toggle('hidden')"
-                                                class="bg-yellow-500 hover:bg-yellow-600 text-white px-2 py-1 rounded text-xs">
-                                            Modifier
-                                        </button>
+                                <input type="hidden" name="type" value="produit">
 
-                                        <form method="POST" action="{{ route('produit-varietee.destroy', $varietee->id) }}">
-                                            @csrf @method('DELETE')
-                                            <input type="hidden" name="type" value="varietee">
-                                            <button class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-xs">
-                                                Supprimer
-                                            </button>
-                                        </form>
-                                    </div>
+                                <input type="text"
+                                       name="nom_produit"
+                                       value="{{ $produit->nom_produit }}"
+                                       class="input input-bordered w-full"
+                                       required>
+
+                                <input type="text"
+                                       name="description_produit"
+                                       value="{{ $produit->description_produit }}"
+                                       class="input input-bordered w-full"
+                                       required>
+
+                                <button class="btn btn-primary w-full">
+                                    Sauvegarder
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+
+                    {{-- Liste des variétés --}}
+                    <tr id="varietees-{{ $produit->id }}"
+                        class="hidden bg-base-100">
+                        <td colspan="6">
+
+                            @if($produit->varietees->count())
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                                    @foreach($produit->varietees as $varietee)
+
+                                        <div class="card bg-base-200 p-4">
+                                            <p class="font-semibold">
+                                                {{ $varietee->nom_varietee }}
+                                            </p>
+                                            <p class="text-sm text-neutral-content">
+                                                {{ $varietee->caracteristique_varietee }}
+                                            </p>
+                                            <p class="text-xs text-neutral-content mt-2">
+                                                Créé le : {{ $varietee->created_at->format('d/m/Y H:i') }}<br>
+                                                Modifié le : {{ $varietee->updated_at->format('d/m/Y H:i') }}
+                                            </p>
+                                        </div>
+
+                                    @endforeach
                                 </div>
+                            @else
+                                <p class="text-sm text-neutral-content">
+                                    Aucune variété enregistrée.
+                                </p>
+                            @endif
+                        </td>
+                    </tr>
 
-                                {{-- FORMULAIRE MODIFIER VARIÉTÉ (inline) --}}
-                                <div id="edit-varietee-{{ $varietee->id }}" class="hidden mt-2">
-                                    <form method="POST" action="{{ route('produit-varietee.update', $varietee->id) }}" class="space-y-2">
-                                        @csrf @method('PUT')
-                                        <input type="hidden" name="type" value="varietee">
+                @empty
+                    <tr>
+                        <td colspan="6"
+                            class="text-center text-neutral-content">
+                            Aucun produit enregistré.
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
 
-                                        <input type="text" name="nom_varietee" value="{{ $varietee->nom_varietee }}"
-                                               class="w-full rounded-md border px-3 py-2 text-sm" required>
-
-                                        <input type="text" name="caracteristique_varietee" value="{{ $varietee->caracteristique_varietee }}"
-                                               class="w-full rounded-md border px-3 py-2 text-sm">
-
-                                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
-                                            Sauvegarder
-                                        </button>
-                                    </form>
-                                </div>
-                            </li>
-                        @endforeach
-                    </ul>
-                @else
-                    <p class="text-sm text-slate-500">Aucune variété enregistrée.</p>
-                @endif
-
-                {{-- AJOUT VARIÉTÉ --}}
-                <form method="POST" action="{{ route('produit-varietee.store') }}" class="border-t pt-4 space-y-3">
-                    @csrf
-                    <input type="hidden" name="type" value="varietee">
-                    <input type="hidden" name="produit_id" value="{{ $produit->id }}">
-
-                    <input type="text" name="nom_varietee" placeholder="Nom de la variété"
-                           class="w-full rounded-md border px-3 py-2 text-sm" required>
-
-                    <input type="text" name="caracteristique_varietee" placeholder="Caractéristique"
-                           class="w-full rounded-md border px-3 py-2 text-sm">
-
-                    <button class="w-full rounded-md bg-slate-800 text-white py-2 hover:bg-slate-900 transition">
-                        Ajouter variété
-                    </button>
-                </form>
-            </div>
-        @empty
-            <p class="col-span-full text-center text-slate-500">Aucun produit enregistré.</p>
-        @endforelse
+    {{-- Pagination --}}
+    <div class="mt-6">
+        {{ $produits->links() }}
     </div>
 </div>
+
+{{-- Script JavaScript --}}
+<script>
+    // Fonction d'affichage unique des variétés
+    function toggleVarietees(id) {
+
+        // Masquer toutes les listes
+        document.querySelectorAll('[id^="varietees-"]').forEach(function (div) {
+            if (div.id !== 'varietees-' + id) {
+                div.classList.add('hidden');
+            }
+        });
+
+        // Afficher ou masquer la liste sélectionnée
+        document.getElementById('varietees-' + id).classList.toggle('hidden');
+    }
+</script>
+
+{{-- Fin de la section contenu --}}
 @endsection
