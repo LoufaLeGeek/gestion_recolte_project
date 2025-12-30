@@ -124,65 +124,10 @@
 
             <!-- Statistiques principales -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-3">
-                <div class="stat bg-base-200 rounded-lg p-3">
-                    <div class="flex items-center gap-2 mb-1">
-                        <div>
-                            <div class="stat-title text-xs">Variétés</div>
-                            <div class="stat-value text-lg">{{ $varietees->total() }}</div>
-                        </div>
-                    </div>
-                    <div class="stat-desc text-xs">
-                        @if (request('produit_id'))
-                            Pour ce produit
-                        @else
-                            Total
-                        @endif
-                    </div>
-                    <div class="stat-figure text-primary">
-                        <i class="fas fa-leaf"></i>
-                    </div>
-                </div>
+                <x-varietee.card-stat-variete type="Variétés" :value="$varietees->total()" icone="fas fa-leaf" />
 
-                {{-- <div class="stat bg-base-200 rounded-lg p-3">
-                    <div class="flex items-center gap-2 mb-1">
-                        <div class="stat-figure text-green-500">
-                            <i class="fas fa-money-bill-wave"></i>
-                        </div>
-                        <div>
-                            <div class="stat-title text-xs">Prix moyen</div>
-                            <div class="stat-value text-lg">
-                                @php
-                                    $prixMoyen = $varietees
-                                        ->filter(fn($v) => $v->prix_actuelle)
-                                        ->avg('prix_actuelle.prix');
-                                @endphp
-                                @if ($prixMoyen)
-                                    {{ number_format($prixMoyen, 0, '', ' ') }}
-                                @else
-                                    --
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                    <div class="stat-desc text-xs">FCFA</div>
-                </div> --}}
-
-                <div class="stat bg-base-200 rounded-lg p-3">
-                    <div class="flex items-center gap-2 mb-1">
-
-                        <div>
-                            <div class="stat-title text-xs">Produits</div>
-                            <div class="stat-value text-lg">
-                                {{ $varietees->pluck('produit_id')->unique()->count() }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="stat-desc text-xs">Différents</div>
-                    <div class="stat-figure text-orange-500">
-                        <i class="fas fa-carrot"></i>
-                    </div>
-                </div>
-
+                <x-varietee.card-stat-variete type="Produits" :value="$varietees->pluck('produit_id')->unique()->count()" description="Différents"
+                    icone="fas fa-carrot" color="orange" />
 
                 <!-- Gamme de prix (optionnel) -->
                 @if ($varietees->count() > 0)
@@ -190,28 +135,21 @@
                         $varieteesAvecPrix = $varietees->filter(fn($v) => $v->prix_actuelle);
                         $prixMin = $varieteesAvecPrix->min('prix_actuelle.prix');
                         $prixMax = $varieteesAvecPrix->max('prix_actuelle.prix');
+                        $prixMoyen = $varieteesAvecPrix->avg('prix_actuelle.prix');
                     @endphp
 
                     @if ($prixMin && $prixMax)
                         <div class="mt-3 pt-3 border-t border-base-200 col-span-2">
                             <div class="text-xs font-semibold text-gray-600 mb-2">Gamme de prix :</div>
                             <div class="flex items-center justify-between text-sm">
-                                <div class="text-green-600 font-medium">
-                                    <i class="fas fa-arrow-down text-xs mr-1"></i>
-                                    Min : {{ number_format($prixMin, 0, '', ' ') }} FCFA
-                                </div>
-                                <div class="text-blue-600 font-medium">
-                                    <i class="fas fa-chart-line text-xs mr-1"></i>
-                                    Moy :
-                                    @php
-                                        $prixMoyen = $varieteesAvecPrix->avg('prix_actuelle.prix');
-                                    @endphp
-                                    {{ $prixMoyen ? number_format($prixMoyen, 0, '', ' ') . ' FCFA' : '--' }}
-                                </div>
-                                <div class="text-red-600 font-medium">
-                                    <i class="fas fa-arrow-up text-xs mr-1"></i>
-                                    Max : {{ number_format($prixMax, 0, '', ' ') }} FCFA
-                                </div>
+                                <!-- Prix Min -->
+                                <x-varietee.variete-gamme-prix prixType="Min" color="green" :prix="$prixMin" />
+
+                                <!-- Prix Moyen -->
+                                <x-varietee.variete-gamme-prix prixType="Moyen" color="blue" :prix="$prixMoyen" />
+
+                                <!-- Prix Max -->
+                                <x-varietee.variete-gamme-prix prixType="Max" color="red" :prix="$prixMax" />
                             </div>
                         </div>
                     @endif
@@ -236,130 +174,14 @@
                                 <th class="font-semibold text-xs sm:text-sm py-2 text-center">Actions</th>
                             </tr>
                         </thead>
+
+
                         <tbody>
                             @forelse($varietees as $varietee)
-                                <tr class="hover:bg-base-100 transition-colors">
-                                    <td class="text-xs sm:text-sm py-2">#{{ $varietee->id }}</td>
-                                    <td class="py-2">
-                                        <div class="flex items-center gap-2">
-                                            <div class="avatar placeholder">
-                                                <div
-                                                    class="flex items-center justify-center bg-green-100 text-green-600 rounded-full w-6 h-6">
-                                                    <i class="fas fa-leaf text-xs"></i>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <span
-                                                    class="font-medium text-xs sm:text-sm">{{ $varietee->nom_varietee }}</span>
-                                                @if ($varietee->prix_actuel)
-                                                    <div class="text-green-600 text-xs font-semibold">
-                                                        <i class="fas fa-money-bill-wave text-xs"></i>
-                                                        {{ $varietee->prix_formate }}
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="py-2">
-                                        <div class="flex items-center gap-2">
-                                            <div class="avatar placeholder">
-                                                <div
-                                                    class="flex items-center justify-center bg-orange-100 text-orange-600 rounded-full w-6 h-6">
-                                                    <i class="fas fa-carrot text-xs"></i>
-                                                </div>
-                                            </div>
-                                            <a href="{{ route('produits.show', $varietee->produit_id) }}"
-                                                class="text-blue-600 hover:text-blue-800 text-xs sm:text-sm">
-                                                {{ $varietee->produit->nom_produit ?? 'N/A' }}
-                                            </a>
-                                        </div>
-                                    </td>
-                                    <td class="py-2">
-                                        <div class="text-center">
-                                            @if ($varietee->prix_actuelle)
-                                                <div class="inline-flex flex-col items-center">
-                                                    <span class="font-bold text-green-700 text-sm">
-                                                        {{ number_format($varietee->prix_actuelle->prix, 0, ',', ' ') }}
-                                                    </span>
-                                                    <span class="text-xs text-gray-500">FCFA</span>
-                                                </div>
-                                                <div class="text-xs text-gray-500 mt-1">
-                                                    <i class="fas fa-calendar-day text-xs"></i>
-                                                    Depuis
-                                                    {{ \Carbon\Carbon::parse($varietee->prix_actuelle->date_debut ?? now())->format('D-M-Y') }}
-                                                </div>
-                                            @else
-                                                <span class="badge badge-warning badge-sm gap-1">
-                                                    <i class="fas fa-exclamation-triangle text-xs"></i>
-                                                    Aucun prix
-                                                </span>
-                                                <a href="{{ route('varietees.edit', $varietee) }}"
-                                                    class="text-xs text-blue-600 hover:text-blue-800 mt-1 block">
-                                                    Définir un prix
-                                                </a>
-                                            @endif
-                                        </div>
-                                    </td>
-                                    <td class="py-2">
-                                        <div class="max-w-[150px] sm:max-w-xs">
-                                            <span class="truncate-2-lines text-xs sm:text-sm">
-                                                {{ $varietee->caracteristique_varietee }}
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td class="py-2">
-                                        <div class="text-xs">
-                                            <div>{{ $varietee->created_at->format('d/m/Y') }}</div>
-                                            <div class="text-gray-500">{{ $varietee->created_at->format('H:i') }}</div>
-                                        </div>
-                                    </td>
-                                    <td class="py-2">
-                                        <div class="flex gap-1 justify-center">
-                                            <a href="{{ route('varietees.show', $varietee) }}"
-                                                class="btn btn-info btn-xs sm:btn-sm gap-1" title="Voir détails">
-                                                <i class="fas fa-eye text-xs"></i>
-                                                <span class="hidden xs:inline text-xs">Voir</span>
-                                            </a>
-                                            <a href="{{ route('varietees.edit', $varietee) }}"
-                                                class="btn btn-warning btn-xs sm:btn-sm gap-1" title="Modifier">
-                                                <i class="fas fa-edit text-xs"></i>
-                                                <span class="hidden xs:inline text-xs">Éditer</span>
-                                            </a>
-                                            <form action="{{ route('varietees.destroy', $varietee) }}" method="POST"
-                                                class="inline"
-                                                onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette variété ?')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-error btn-xs sm:btn-sm gap-1"
-                                                    title="Supprimer">
-                                                    <i class="fas fa-trash text-xs"></i>
-                                                    <span class="hidden xs:inline text-xs">Supprimer</span>
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
+                                <x-varietee.varietee-tuile :varietee="$varietee" />
                             @empty
                                 <tr>
-                                    <td colspan="7" class="text-center py-6">
-                                        <div class="flex flex-col items-center justify-center gap-3">
-                                            <div class="avatar placeholder">
-                                                <div class="bg-base-200 text-base-400 rounded-full w-12 h-12">
-                                                    <i class="fas fa-leaf text-lg"></i>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <h3 class="text-sm font-semibold text-gray-700">Aucune variété trouvée</h3>
-                                                <p class="text-gray-500 text-xs mt-1">Commencez par créer votre première
-                                                    variété</p>
-                                            </div>
-                                            <a href="{{ route('varietees.create') }}"
-                                                class="btn btn-success btn-sm mt-1">
-                                                <i class="fas fa-plus me-1 text-xs"></i>
-                                                <span class="text-xs">Créer une variété</span>
-                                            </a>
-                                        </div>
-                                    </td>
+                                    <x-varietee.varietee-empty-tuile />
                                 </tr>
                             @endforelse
                         </tbody>
@@ -369,7 +191,7 @@
                 <!-- Pagination -->
                 @if ($varietees->hasPages())
                     <div class="mt-4">
-                        {{ $varietees->links('vendor.pagination.tailwind') }}
+                        {{ $varietees->links() }}
                     </div>
                 @endif
 
@@ -377,34 +199,8 @@
         </div>
     </div>
 
-    <style>
-        .truncate-2-lines {
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            text-overflow: auto;
-            max-height: 2.5em;
-            line-height: 1.25em;
-        }
-    </style>
     @push('scripts')
-        <script>
-            // Auto-dismiss des messages après 5 secondes
-            document.addEventListener('DOMContentLoaded', function() {
-                const messages = document.querySelectorAll('[data-auto-dismiss]');
-
-                messages.forEach(message => {
-                    const duration = parseInt(message.getAttribute('data-auto-dismiss'));
-
-                    setTimeout(() => {
-                        message.style.opacity = '0';
-                        message.style.transform = 'translateY(-10px)';
-                        setTimeout(() => message.remove(), 300);
-                    }, duration);
-                });
-            });
-        </script>
+        <script src="resources/js/varietee/auto-dismiss-message.js"></script>
     @endpush
 
     @push('styles')
