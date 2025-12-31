@@ -48,12 +48,15 @@ class StockTable extends Component
             ]);
         }
 
-        if($this->disponible){
+        if ($this->disponible) {
             $query = $query->where("stocks.quantite_actuelle", '>', 0);
         }
 
-        if($this->epuise){
-            $query = $query->where("stocks.quantite_actuelle",  0)->orWhereDoesntHave("stock");
+        if ($this->epuise) {
+            $query->where(function ($q) {
+                $q->where('stocks.quantite_actuelle', 0)
+                    ->orWhereDoesntHave('stock');
+            });
         }
 
         $this->resetPage();

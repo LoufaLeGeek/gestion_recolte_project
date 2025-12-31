@@ -21,16 +21,12 @@
         <div class="space-y-1 ml-10">
             <p class="text-[12px] font-semibold text-primary">Cliquer pour filtrer</p>
             <div class="space-x-2">
-                <label class="btn btn-success text-[12px]"
-                @disabled($epuise)
-                >
+                <label class="btn btn-success text-[12px]" @disabled($epuise)>
                     <input type="checkbox" class="checkbox" wire:click="toggle('disponible')" :checked="$disponible" />
                     <span>Disponible</span>
                 </label>
 
-                <label class="btn btn-error text-[12px]"
-                @disabled($disponible)
-                >
+                <label class="btn btn-error text-[12px]" @disabled($disponible)>
                     <input type="checkbox" class="checkbox" wire:click="toggle('epuise')" :checked="$epuise" />
                     <span>Épuisé</span>
                 </label>

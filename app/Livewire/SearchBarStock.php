@@ -20,6 +20,7 @@ class SearchBarStock extends Component
     #[Locked()]
     protected array $allowedFields = ['disponible', 'epuise'];
 
+    #[Locked()]
     public function search()
     {
         $this->dispatch(
