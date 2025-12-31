@@ -48,7 +48,7 @@ class ProduitController extends Controller
         $total_varietes = Varietee::count();
 
         // Retour de la vue avec les données nécessaires
-        return view('produits.index',compact('produits', 'total_produits', 'total_varietes'));
+        return view('produit.index',compact('produits', 'total_produits', 'total_varietes'));
 
     }
 
@@ -101,7 +101,7 @@ class ProduitController extends Controller
 
             // Redirection avec message de succès
             return redirect()
-                ->route('produits.index')
+                ->route('produit.index')
                 ->with('success', 'Produit modifié avec succès.');
         }
 
