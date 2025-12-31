@@ -2,84 +2,130 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Varietee;
+
 use App\Models\Produit;
+
 use Illuminate\Http\Request;
 
 class ProduitController extends Controller
 {
-    /**
-     * Afficher la liste des produits.
-     */
-    public function index()
+    /* =====================================================
+       PAGE PRINCIPALE : LISTE PRODUITS ET VARIÉTÉS
+       ===================================================== */
+    public function index(Request $request)
     {
-       $produits = Produit::withCount('varietees')->orderBy('produit_id', 'desc')->paginate(10);
-        return view('produits.index', compact('produits'));
+        // Initialisation de la requête avec la relation varietees
+        $query = Produit::with('varietees');
+
+        // Vérification si un mot-clé de recherche est fourni
+        if ($request->filled('search')) {
+
+            // Récupération du mot-clé de recherche en minuscule
+            $search = strtolower($request->search);
+
+            // Filtrage par nom de produit ou nom de variété
+            $query->whereRaw(
+                "LOWER(nom_produit) LIKE '%' || ? || '%'",
+                [$search]
+            )
+            ->orWhereHas('varietees', function ($q) use ($search) {
+
+                // Condition de recherche sur le nom de la variété
+                $q->whereRaw(
+                    "LOWER(nom_varietee) LIKE '%' || ? || '%'",
+                    [$search]
+                );
+            });
+        }
+
+        // Récupération des produits avec pagination (5 par page)
+        $produits = $query->paginate(5);
+
+        // Calcul du nombre total de produits et de variétés
+        $total_produits = Produit::count();
+
+        $total_varietes = Varietee::count();
+
+        // Retour de la vue avec les données nécessaires
+        return view('produits.index',compact('produits', 'total_produits', 'total_varietes'));
+
     }
 
-    /**
-     * Afficher le formulaire de création d'un produit.
-     */
-    public function create()
-    {
-        return view('produits.create');
-    }
-
-    /**
-     * Enregistrer un nouveau produit.
-     */
+    /* =====================================================
+    CRÉATION D'UN PRODUIT OU D'UNE VARIÉTÉ
+       ===================================================== */
     public function store(Request $request)
     {
-        $request->validate([
-            'nom_produit' => 'required|string|max:255',
-            'description_produit' => 'required|string',
-        ]);
+        // Vérification si la création concerne un produit
+        if ($request->type === 'produit') {
 
-        Produit::create($request->all());
+            // Validation des données du produit
+            $request->validate([
+                'nom_produit' => 'required|string',
+                'description_produit' => 'required|string',
+            ]);
 
-        return redirect()->route('produits.index')
-            ->with('success', 'Produit créé avec succès.');
+            // Création du produit en base de données
+            Produit::create(
+                $request->only('nom_produit', 'description_produit')
+            );
+
+            // Redirection avec message de succès
+            return redirect()->back()->with('success', 'Produit créé avec succès.');
+        }
+
     }
 
-    /**
-     * Afficher un produit spécifique.
-     */
-    public function show(Produit $produit)
+    /* =====================================================
+    MODIFICATION D'UN PRODUIT OU D'UNE VARIÉTÉ
+       ===================================================== */
+    public function update(Request $request, $id)
     {
-        return view('produits.show', compact('produit'));
+        // Vérification si la modification concerne un produit
+        if ($request->type === 'produit') {
+
+            // Validation des données du produit
+            $request->validate([
+                'nom_produit' => 'required|string',
+                'description_produit' => 'required|string',
+            ]);
+
+            // Récupération du produit à modifier
+            $produit = Produit::findOrFail($id);
+
+            // Mise à jour du produit
+            $produit->update(
+                $request->only('nom_produit', 'description_produit')
+            );
+
+            // Redirection avec message de succès
+            return redirect()
+                ->route('produits.index')
+                ->with('success', 'Produit modifié avec succès.');
+        }
+
     }
 
-    /**
-     * Afficher le formulaire d'édition d'un produit.
-     */
-    public function edit(Produit $produit)
+    /* =====================================================
+       SUPPRESSION D'UN PRODUIT OU D'UNE VARIÉTÉ
+       ===================================================== */
+    public function destroy(Request $request, $id)
     {
-        return view('produits.edit', compact('produit'));
-    }
+        // Vérification si la suppression concerne un produit
+        if ($request->type === 'produit') {
 
-    /**
-     * Mettre à jour un produit.
-     */
-    public function update(Request $request, Produit $produit)
-    {
-        $request->validate([
-            'nom_produit' => 'required|string|max:255',
-            'description_produit' => 'required|string',
-        ]);
+            // Récupération du produit à supprimer
+            $produit = Produit::findOrFail($id);
 
-        $produit->update($request->all());
+            // Suppression du produit
+            $produit->delete();
 
-        return redirect()->route('produits.index')
-            ->with('success', 'Produit mis à jour avec succès.');
-    }
+            // Redirection avec message de succès
+            return redirect()
+                ->back()
+                ->with('success', 'Produit supprimé avec succès.');
+        }
 
-    /**
-     * Supprimer un produit.
-     */
-    public function destroy(Produit $produit)
-    {
-        $produit->delete();
-
-        return redirect()->route('produits.index')
-            ->with('success', 'Produit supprimé avec succès.');
     }
 }

@@ -74,8 +74,7 @@
                     <x-menu-item href="" class_icon="fas fa-seedling" content="Récoltes" />
                     <x-menu-item :href="route('gestion-vente')" class_icon="fas fa-shopping-cart" content="Ventes" />
                     <x-menu-item href="" class_icon="fa-solid fa-box" content="Stocks" />
-                    <x-menu-item href="" class_icon="fa-solid fa-chart-column"
-                        content="Rapports & statistique" />
+                    <x-menu-item href="" class_icon="fa-solid fa-chart-column"content="Rapports & statistique" />
                     <x-menu-item href="" class_icon="fas fa-search" content="Recherche paramétrée" />
                     <x-menu-item href="" class_icon="fas fa-exclamation-triangle" content="Perte et Invendue" />
 
