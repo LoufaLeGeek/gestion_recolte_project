@@ -18,3 +18,7 @@ Route::resource('produits', ProduitController::class);
 
 // Routes CRUD pour les variétés
 Route::resource('varietees', VarieteeController::class);
+
+
+
+Route::get('/ventes', [VenteController::class, 'index'])->name('gestion-vente');

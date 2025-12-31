@@ -33,13 +33,13 @@ class VarieteeController extends Controller
         }
 
         // Trier par défaut par date de création descendante
-        $sort = $request->get('sort', 'created_at');
-        $direction = $request->get('direction', 'desc');
+        $sort = $request->get('sort', 'id');
+        $direction = $request->get('direction', 'asc');
         $query->orderBy($sort, $direction);
 
         $varietees = $query->paginate(10)->withQueryString();
 
-        $produits = Produit::orderBy('nom_produit')->get();
+        $produits = Produit::All();
 
         return view('varietees.index', compact('varietees', 'produits'));
     }

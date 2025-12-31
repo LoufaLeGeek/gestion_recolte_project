@@ -96,10 +96,10 @@
                         </select>
 
                         <select name="direction" class="select select-bordered select-xs">
-                            <option value="desc" {{ request('direction', 'desc') == 'desc' ? 'selected' : '' }}>
+                            <option value="desc" {{ request('direction') == 'desc' ? 'selected' : '' }}>
                                 ↓ Décroissant
                             </option>
-                            <option value="asc" {{ request('direction') == 'asc' ? 'selected' : '' }}>
+                            <option value="asc" {{ request('direction', 'asc') == 'asc' ? 'selected' : '' }}>
                                 ↑ Croissant
                             </option>
                         </select>

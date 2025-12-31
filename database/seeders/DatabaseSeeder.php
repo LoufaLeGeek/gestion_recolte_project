@@ -11,6 +11,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             ProduitsVarietesSeeder::class,
             PrixVarieteeSeeder::class,
+            RecolteSeeder::class,
+            VentesSeeder::class,
         ]);
     }
 }
