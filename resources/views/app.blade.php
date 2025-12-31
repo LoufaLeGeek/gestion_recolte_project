@@ -15,7 +15,7 @@
         <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
         <div class="drawer-content">
             <!-- Navbar -->
-            <nav class="navbar w-full bg-base-100 sticky top-0 border-b border-base-300">
+            <nav class="navbar z-5 w-full bg-base-100 sticky top-0 border-b border-base-300">
                 <label for="my-drawer-4" aria-label="open sidebar" class="btn btn-square btn-ghost">
                     <i class="fa-solid fa-list"></i>
                 </label>
@@ -41,7 +41,7 @@
                     {{-- List item : Pour ajouter une route dans le href on met -> :href="route('name_route')"  --}}
                     <x-menu-item href="" class_icon="fas fa-tachometer-alt" content="Dashboard" />
                     <x-menu-item href="" class_icon="fas fa-carrot" content="Produit & Variété" />
-                    <x-menu-item href="" class_icon="fas fa-seedling" content="Récoltes" />
+                    <x-menu-item :href="route('recoltes.index')" class_icon="fas fa-seedling" content="Récoltes" />
                     <x-menu-item href="" class_icon="fas fa-shopping-cart" content="Ventes" />
                     <x-menu-item href="" class_icon="fa-solid fa-box" content="Stocks" />
                     <x-menu-item href="" class_icon="fa-solid fa-chart-column"
