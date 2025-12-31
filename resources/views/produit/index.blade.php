@@ -21,7 +21,7 @@
 
         <!-- Formulaire de recherche -->
         <form method="GET"
-            action="{{ route('produit-varietee.index') }}"
+            action="{{ route('produit.index') }}"
             class="flex gap-3 w-full md:w-auto">
 
             <!-- Champ de recherche -->
@@ -67,7 +67,7 @@
 
             <!-- Formulaire -->
             <form method="POST"
-                action="{{ route('produit-varietee.store') }}"
+                action="{{ route('produit.store') }}"
                 class="flex flex-col md:flex-row gap-3 items-center">
 
                 {{-- Protection CSRF --}}
@@ -153,7 +153,7 @@
 
                             <!-- Formulaire modification -->
                             <form method="POST"
-                                action="{{ route('produit-varietee.update', $produit->id) }}"
+                                action="{{ route('produit.update', $produit->id) }}"
                                 class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
 
                                 @csrf

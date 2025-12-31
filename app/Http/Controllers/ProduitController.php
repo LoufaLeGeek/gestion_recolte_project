@@ -8,7 +8,7 @@ use App\Models\Produit;
 
 use Illuminate\Http\Request;
 
-class VarieteeProduitController extends Controller
+class ProduitController extends Controller
 {
     /* =====================================================
        PAGE PRINCIPALE : LISTE PRODUITS ET VARIÉTÉS
@@ -48,7 +48,7 @@ class VarieteeProduitController extends Controller
         $total_varietes = Varietee::count();
 
         // Retour de la vue avec les données nécessaires
-        return view('produit-varietee.index',compact('produits', 'total_produits', 'total_varietes'));
+        return view('produit.index',compact('produits', 'total_produits', 'total_varietes'));
 
     }
 
@@ -101,7 +101,7 @@ class VarieteeProduitController extends Controller
 
             // Redirection avec message de succès
             return redirect()
-                ->route('produit-varietee.index')
+                ->route('produit.index')
                 ->with('success', 'Produit modifié avec succès.');
         }
 
