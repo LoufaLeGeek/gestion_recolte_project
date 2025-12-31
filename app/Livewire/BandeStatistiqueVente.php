@@ -6,7 +6,7 @@ use App\Models\Produit;
 use App\Models\Vente;
 use Livewire\Component;
 
-class BandeStatistique extends Component
+class BandeStatistiqueVente extends Component
 {
 
     public $montant_totale_vente = 0;
@@ -33,6 +33,6 @@ class BandeStatistique extends Component
 
     public function render()
     {
-        return view('livewire.bande-statistique');
+        return view('livewire.bande-statistique-vente');
     }
 }

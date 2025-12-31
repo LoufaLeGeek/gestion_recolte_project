@@ -15,7 +15,7 @@
         <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
         <div class="drawer-content">
             <!-- Navbar -->
-            <nav class="navbar w-full bg-base-100 sticky top-0 border-b border-base-300 z-100">
+            <nav class="navbar w-full bg-base-100 sticky top-0 border-b border-base-300 z-5">
                 <label for="my-drawer-4" aria-label="open sidebar" class="btn btn-square btn-ghost">
                     <i class="fa-solid fa-list"></i>
                 </label>
@@ -41,7 +41,7 @@
                     <x-menu-item href="" class_icon="fas fa-carrot" content="Produit & Variété" />
                     <x-menu-item href="" class_icon="fas fa-seedling" content="Récoltes" />
                     <x-menu-item :href="route('gestion-vente')" class_icon="fas fa-shopping-cart" content="Ventes" />
-                    <x-menu-item href="" class_icon="fa-solid fa-box" content="Stocks" />
+                    <x-menu-item :href="route('gestion-stock')" class_icon="fa-solid fa-box" content="Stocks" />
                     <x-menu-item href="" class_icon="fa-solid fa-chart-column" content="Rapports & statistique" />
                     <x-menu-item href="" class_icon="fas fa-search" content="Recherche paramétrée" />
                     <x-menu-item href="" class_icon="fas fa-exclamation-triangle" content="Perte et Invendue" />

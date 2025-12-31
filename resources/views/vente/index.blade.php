@@ -4,7 +4,7 @@
     <div class="space-y-8">
         <livewire:vente-add></livewire:vente-add>
         {{-- statisques table --}}
-        <livewire:bande-statistique></livewire:bande-statistique>
+        <livewire:bande-statistique-vente></livewire:bande-statistique-vente>
         {{-- title table --}}
         <div class="space-y-4">
             <div>

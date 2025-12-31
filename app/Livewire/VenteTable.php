@@ -7,6 +7,7 @@ use Livewire\Component;
 
 class VenteTable extends Component
 {
+
     protected $listeners = [
         'refresh_component' => '$refresh',
     ];
