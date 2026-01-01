@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Vente;
 
 use App\Models\Produit;
 use App\Models\Vente;
@@ -33,6 +33,6 @@ class BandeStatistiqueVente extends Component
 
     public function render()
     {
-        return view('livewire.bande-statistique-vente');
+        return view('livewire.vente.bande-statistique-vente');
     }
 }

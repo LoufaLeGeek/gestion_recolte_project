@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Perte;
 
 use App\Models\Perte;
 use App\Models\Produit;
@@ -30,6 +30,6 @@ class BandeStatistiquePerte extends Component
 
     public function render()
     {
-        return view('livewire.bande-statistique-perte');
+        return view('livewire.perte.bande-statistique-perte');
     }
 }

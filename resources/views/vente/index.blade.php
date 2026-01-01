@@ -2,9 +2,9 @@
 @section('title', 'Vente')
 @section('content')
     <div class="space-y-8">
-        <livewire:vente-add></livewire:vente-add>
+        <livewire:vente.vente-add></livewire:vente.vente-add>
         {{-- statisques table --}}
-        <livewire:bande-statistique-vente></livewire:bande-statistique-vente>
+        <livewire:vente.bande-statistique-vente></livewire:vente.bande-statistique-vente>
         {{-- title table --}}
         <div class="space-y-4">
             <div>
@@ -12,7 +12,7 @@
                 <p class="text-sm text-base-content">Double cliquer sur une ligne pour voir les infos en detaille</p>
             </div>
             {{-- Table des ventes --}}
-            <livewire:vente-table></livewire:vente-table>
+            <livewire:vente.vente-table></livewire:vente.vente-table>
         </div>
     </div>
 @endsection

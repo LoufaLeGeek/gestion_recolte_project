@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Stock;
 use Livewire\Attributes\On;
 use App\Models\Varietee;
 use Livewire\Component;
@@ -61,6 +61,6 @@ class StockTable extends Component
         }
 
         $this->resetPage();
-        return view('livewire.stock-table', ["varietees" => $query->paginate(10)]);
+        return view('livewire.stock.stock-table', ["varietees" => $query->paginate(10)]);
     }
 }

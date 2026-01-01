@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Perte;
 
 use App\Models\Perte;
 use Livewire\Attributes\On;
@@ -43,6 +43,6 @@ class PerteTable extends Component
             ]);
         }
 
-        return view('livewire.perte-table', ["pertes" => $query->paginate(10)]);
+        return view('livewire.perte.perte-table', ["pertes" => $query->paginate(10)]);
     }
 }

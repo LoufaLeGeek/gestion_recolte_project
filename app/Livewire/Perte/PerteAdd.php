@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Perte;
 
 use App\Models\Stock;
 use App\Models\Varietee;
@@ -52,6 +52,6 @@ class PerteAdd extends Component
 
     public function render()
     {
-        return view('livewire.perte-add', ["varietees" => Varietee::all()->pluck("nom_varietee", "id")]);
+        return view('livewire.perte.perte-add', ["varietees" => Varietee::all()->pluck("nom_varietee", "id")]);
     }
 }

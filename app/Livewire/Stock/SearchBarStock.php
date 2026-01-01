@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Stock;
 
 use Livewire\Attributes\Locked;
 use Livewire\Component;
@@ -62,6 +62,6 @@ class SearchBarStock extends Component
 
     public function render()
     {
-        return view('livewire.search-bar-stock');
+        return view('livewire.stock.search-bar-stock');
     }
 }

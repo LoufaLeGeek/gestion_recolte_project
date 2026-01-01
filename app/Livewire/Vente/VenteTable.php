@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Vente;
 
 use App\Models\Vente;
 use Livewire\Component;
@@ -14,6 +14,6 @@ class VenteTable extends Component
 
     public function render()
     {
-        return view('livewire.vente-table', ["ventes" => Vente::with("varietee.produit")->orderBy("created_at", "DESC")->paginate(10)]);
+        return view('livewire.vente.vente-table', ["ventes" => Vente::with("varietee.produit")->orderBy("created_at", "DESC")->paginate(10)]);
     }
 }
