@@ -27,60 +27,7 @@
         </div>
     @endif
 
-    {{-- SECTION : FORMULAIRE AJOUT RECOLTE --}}
-    <div class="mb-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-6 rounded-lg shadow-sm">
-        <h2 class="text-xl font-semibold mb-4 text-slate-800 dark:text-slate-100">Ajouter une récolte</h2>
-        <form method="POST" action="{{ route('recoltes.store') }}" class="grid grid-cols-1 md:grid-cols-4 gap-4">
-            @csrf
 
-            {{-- Input date avec icône calendrier --}}
-            <div class="relative">
-                <label class="block mb-1 text-sm font-medium text-slate-700 dark:text-slate-300">Date</label>
-                <input type="date" name="date_recolte"
-                    class="w-full pl-10 rounded-md border px-3 py-2 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500"
-                    required>
-                <div class="absolute left-3 top-9 text-slate-400 pointer-events-none">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M8 7V3m8 4V3m-9 10h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                    </svg>
-                </div>
-            </div>
-
-            {{-- Input recherche et select pour variété --}}
-            <div>
-                <label class="block mb-1 text-sm font-medium text-slate-700 dark:text-slate-300">Variété</label>
-                <input type="text" id="search-varietee-add" placeholder="Rechercher une variété..."
-                    class="mb-2 w-full rounded-md border px-3 py-2 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500">
-                <select id="select-varietee-add" name="varietee_id" required
-                        class="w-full rounded-md border px-3 py-2 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500">
-                    <option value="">Sélectionnez une variété</option>
-                    @foreach($liste_varietees as $varietee)
-                        <option value="{{ $varietee->id }}">
-                            {{ $varietee->produit->nom_produit }} - {{ $varietee->nom_varietee }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-
-            {{-- Input quantité --}}
-            <div>
-                <label class="block mb-1 text-sm font-medium text-slate-700 dark:text-slate-300">Quantité (kg)</label>
-                <input type="number" step="0.001" name="quantite_recolte"
-                    class="w-full rounded-md border px-3 py-2 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500"
-                    required>
-            </div>
-
-            {{-- Bouton ajouter --}}
-            <div class="flex items-end">
-                <button type="submit"
-                        class="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-md px-4 py-2 transition">
-                    Ajouter
-                </button>
-            </div>
-        </form>
-    </div>
 
     {{-- SECTION : FILTRE PAR VARIÉTÉ --}}
     <form method="GET" action="{{ route('recoltes.index') }}" class="flex items-start gap-2 mb-4">
@@ -154,10 +101,67 @@
         {{ $recoltes->links() }}
     </div>
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/MATHUS
 
 </div>
 
+    {{-- SECTION : FORMULAIRE AJOUT RECOLTE --}}
+    <div class="mb-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-6 rounded-lg shadow-sm">
+        <h2 class="text-xl font-semibold mb-4 text-slate-800 dark:text-slate-100">Ajouter une récolte</h2>
+        <form method="POST" action="{{ route('recoltes.store') }}" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            @csrf
+
+            {{-- Input date avec icône calendrier --}}
+            <div class="relative">
+                <label class="block mb-1 text-sm font-medium text-slate-700 dark:text-slate-300">Date</label>
+                <input type="date" name="date_recolte"
+                    class="w-full pl-10 rounded-md border px-3 py-2 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500"
+                    required>
+                <div class="absolute left-3 top-9 text-slate-400 pointer-events-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 7V3m8 4V3m-9 10h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                </div>
+            </div>
+
+            {{-- Input recherche et select pour variété --}}
+            <div>
+                <label class="block mb-1 text-sm font-medium text-slate-700 dark:text-slate-300">Variété</label>
+                <input type="text" id="search-varietee-add" placeholder="Rechercher une variété..."
+                    class="mb-2 w-full rounded-md border px-3 py-2 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500">
+                <select id="select-varietee-add" name="varietee_id" required
+                        class="w-full rounded-md border px-3 py-2 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500">
+                    <option value="">Sélectionnez une variété</option>
+                    @foreach($liste_varietees as $varietee)
+                        <option value="{{ $varietee->id }}">
+                            {{ $varietee->produit->nom_produit }} - {{ $varietee->nom_varietee }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            {{-- Input quantité --}}
+            <div>
+                <label class="block mb-1 text-sm font-medium text-slate-700 dark:text-slate-300">Quantité (kg)</label>
+                <input type="number" step="0.001" name="quantite_recolte"
+                    class="w-full rounded-md border px-3 py-2 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500"
+                    required>
+            </div>
+
+            {{-- Bouton ajouter --}}
+            <div class="flex items-end">
+                <button type="submit"
+                        class="w-full bg-blue-600 hover:bg-blue-700 text-white rounded-md px-4 py-2 transition">
+                    Ajouter
+                </button>
+            </div>
+        </form>
+    </div>
 {{-- SCRIPTS : Toggle edition + recherche client-side --}}
 <script>
     // Fonction pour afficher/cacher le formulaire inline de modification

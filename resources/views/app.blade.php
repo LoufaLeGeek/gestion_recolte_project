@@ -12,7 +12,9 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/varietee.auto-dismiss-message.js', 'resources/css/varietee-style.css'])
-    <title>@yield('title')</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <title>@yield('title') - SyGRA</title>
 </head>
 
 <body class="bg-base-200">
@@ -25,8 +27,8 @@
                     <i class="fa-solid fa-list"></i>
                 </label>
                 <div class="px-10 flex-1 items-center justify-center space-x-4">
-                    <i class="fas fa-seedling text-xl"></i>
-                    <h4 class="tracking-wider" style="word-spacing: 4px">Gestion des récoltes</h4>
+                    <h2 style="font-family: poppins; word-spacing: 4px;"><i class="fas fa-seedling text-xl mr-3 text-green-500"></i>SyGRA</h2>
+                    <h8 class="tracking-wider">Systeme de Gestion des Ressources Agricoles</h8>
                 </div>
                 <div class="flex gap-2">
                     <input type="text" placeholder="Search" class="input input-bordered w-24 md:w-auto" />
@@ -67,16 +69,22 @@
                 <ul class="menu w-full grow gap-1">
                     {{-- List item : Pour ajouter une route dans le href on met -> :href="route('name_route')"  --}}
                     {{-- List item : Pour ajouter une route dans le href on met -> :href="route('name_route')"  --}}
-                    <x-menu-item href="" class_icon="fas fa-tachometer-alt" content="Dashboard" />
+                    <x-menu-item href="{{ route('dashboard') }}" class_icon="fas fa-tachometer-alt text-black" content="Dashboard" />
                     <x-menu-item href="{{ route('produits.index') }}" class_icon="fas fa-carrot text-orange-500" content="Produit" />
-                    <x-menu-item href="{{ route('varietees.index') }}" class_icon="fas fa-leaf text-xs"
+                    <x-menu-item href="{{ route('varietees.index') }}" class_icon="fas fa-leaf text-green-500"
                         content="Variété" />
+<<<<<<< HEAD
                     <x-menu-item href="{{ route('recoltes.index') }}" class_icon="fas fa-seedling" content="Récoltes" />
                     <x-menu-item :href="route('gestion-vente')" class_icon="fas fa-shopping-cart" content="Ventes" />
                     <x-menu-item href="" class_icon="fa-solid fa-box" content="Stocks" />
+=======
+                    <x-menu-item href="{{ route('recoltes.index') }}" class_icon="fas fa-seedling text-yellow-500" content="Récoltes" />
+                    <x-menu-item :href="route('gestion-vente')" class_icon="fas fa-shopping-cart text-red-900" content="Ventes" />
+                    <x-menu-item href="" class_icon="fa-solid fa-box text-gray-300" content="Stocks" />
+>>>>>>> origin/MATHUS
                     <x-menu-item href="" class_icon="fa-solid fa-chart-column"content="Rapports & statistique" />
-                    <x-menu-item href="" class_icon="fas fa-search" content="Recherche paramétrée" />
-                    <x-menu-item href="" class_icon="fas fa-exclamation-triangle" content="Perte et Invendue" />
+                    <x-menu-item href="" class_icon="fas fa-search text-gray-900" content="Recherche paramétrée" />
+                    <x-menu-item href="" class_icon="fas fa-exclamation-triangle text-orange-400" content="Perte et Invendue" />
 
                 </ul>
             </div>

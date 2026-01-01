@@ -27,7 +27,7 @@ class RecolteController extends Controller
         $recoltes = Recolte::with(['varietee.produit'])
             ->when($request->varietee_id, fn($q) => $q->where('varietee_id', $request->varietee_id))
             ->orderBy('date_recolte', 'desc')
-            ->paginate(5);
+            ->paginate(15);
 
 
         // Retourne la vue 'recoltes.index' avec les données compactées
