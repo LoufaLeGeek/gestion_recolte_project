@@ -5,7 +5,6 @@ namespace App\Livewire;
 use App\Models\Stock;
 use App\Models\Varietee;
 use App\Services\AjouterVenteService;
-use Livewire\Attributes\Locked;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 

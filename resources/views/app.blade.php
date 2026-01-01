@@ -44,7 +44,7 @@
                     <x-menu-item :href="route('gestion-stock')" class_icon="fa-solid fa-box" content="Stocks" />
                     <x-menu-item href="" class_icon="fa-solid fa-chart-column" content="Rapports & statistique" />
                     <x-menu-item href="" class_icon="fas fa-search" content="Recherche paramétrée" />
-                    <x-menu-item href="" class_icon="fas fa-exclamation-triangle" content="Perte et Invendue" />
+                    <x-menu-item :href="route('gestion-perte')" class_icon="fas fa-exclamation-triangle" content="Perte et Invendue" />
 
                     {{-- A faire a la fin du projet --}}
                     <div class="flex-none absolute bottom-2">

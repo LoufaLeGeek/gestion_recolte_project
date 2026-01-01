@@ -13,6 +13,7 @@ class StockTable extends Component
     public bool $disponible = false;
     public bool $epuise = false;
 
+
     #[On('search_detected')]
     public function search_detected($produit_nom, $varietee_nom)
     {
@@ -38,13 +39,13 @@ class StockTable extends Component
 
         if (!empty($this->varietee_nom)) {
             $query = $query->whereRaw('UPPER(varietees.nom_varietee) LIKE ?', [
-                '%' . strtoupper($this->varietee_nom) . '%'
+                '%' . trim(strtoupper($this->varietee_nom)) . '%'
             ]);
         }
 
         if (!empty($this->produit_nom)) {
             $query = $query->whereRaw('UPPER(produits.nom_produit) LIKE ?', [
-                '%' . strtoupper($this->produit_nom) . '%'
+                '%' . trim(strtoupper($this->produit_nom)) . '%'
             ]);
         }
 

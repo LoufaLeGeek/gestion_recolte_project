@@ -22,12 +22,12 @@
             <p class="text-[12px] font-semibold text-primary">Cliquer pour filtrer</p>
             <div class="space-x-2">
                 <label class="btn btn-success text-[12px]" @disabled($epuise)>
-                    <input type="checkbox" class="checkbox" wire:click="toggle('disponible')" :checked="$disponible" />
+                    <input type="checkbox" class="checkbox checkbox-neutral rounded-4xl w-4 h-4" wire:click="toggle('disponible')" :checked="$disponible" />
                     <span>Disponible</span>
                 </label>
 
                 <label class="btn btn-error text-[12px]" @disabled($disponible)>
-                    <input type="checkbox" class="checkbox" wire:click="toggle('epuise')" :checked="$epuise" />
+                    <input type="checkbox" class="checkbox checkbox-neutral rounded-4xl w-4 h-4" wire:click="toggle('epuise')" :checked="$epuise" />
                     <span>Épuisé</span>
                 </label>
             </div>

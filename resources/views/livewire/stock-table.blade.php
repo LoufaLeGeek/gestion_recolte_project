@@ -10,7 +10,7 @@
             </tr>
         </thead>
         <tbody class="[&_tr]:text-sm [&_tr]:hover:bg-base-content/10">
-            @foreach ($varietees as $varietee)
+            @forelse ($varietees as $varietee)
                 <tr>
                     <td><span class="badge bg-green-300/30">{{ $varietee->produit->nom_produit }}</span></td>
                     <td><span class="badge badge-soft badge-error">{{ $varietee->nom_varietee }}</span></td>
@@ -39,7 +39,11 @@
                         @endif
                     </td>
                 </tr>
-            @endforeach
+            @empty
+                <tr>
+                    <td colspan="4">Aucune valeur trouvée</td>
+                </tr>
+            @endforelse
         </tbody>
     </table>
     <div>
