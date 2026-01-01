@@ -71,7 +71,7 @@
                     <x-menu-item href="{{ route('produits.index') }}" class_icon="fas fa-carrot text-orange-500" content="Produit" />
                     <x-menu-item href="{{ route('varietees.index') }}" class_icon="fas fa-leaf text-xs"
                         content="Variété" />
-                    <x-menu-item href="" class_icon="fas fa-seedling" content="Récoltes" />
+                    <x-menu-item href="{{ route('recoltes.index') }}" class_icon="fas fa-seedling" content="Récoltes" />
                     <x-menu-item :href="route('gestion-vente')" class_icon="fas fa-shopping-cart" content="Ventes" />
                     <x-menu-item href="" class_icon="fa-solid fa-box" content="Stocks" />
                     <x-menu-item href="" class_icon="fa-solid fa-chart-column"content="Rapports & statistique" />

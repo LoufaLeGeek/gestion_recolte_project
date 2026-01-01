@@ -21,7 +21,7 @@
 
         <!-- Formulaire de recherche -->
         <form method="GET"
-            action="{{ route('produit.index') }}"
+            action="{{ route('produits.index') }}"
             class="flex gap-3 w-full md:w-auto">
 
             <!-- Champ de recherche -->
@@ -67,7 +67,7 @@
 
             <!-- Formulaire -->
             <form method="POST"
-                action="{{ route('produit.store') }}"
+                action="{{ route('produits.store') }}"
                 class="flex flex-col md:flex-row gap-3 items-center">
 
                 {{-- Protection CSRF --}}
@@ -153,7 +153,7 @@
 
                             <!-- Formulaire modification -->
                             <form method="POST"
-                                action="{{ route('produit.update', $produit->id) }}"
+                                action="{{ route('produits.update', $produit->id) }}"
                                 class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
 
                                 @csrf
@@ -162,16 +162,16 @@
                                 <input type="hidden" name="type" value="produit">
 
                                 <input type="text"
-                                       name="nom_produit"
-                                       value="{{ $produit->nom_produit }}"
-                                       class="input input-bordered w-full"
-                                       required>
+                                    name="nom_produit"
+                                    value="{{ $produit->nom_produit }}"
+                                    class="input input-bordered w-full"
+                                    required>
 
                                 <input type="text"
-                                       name="description_produit"
-                                       value="{{ $produit->description_produit }}"
-                                       class="input input-bordered w-full"
-                                       required>
+                                    name="description_produit"
+                                    value="{{ $produit->description_produit }}"
+                                    class="input input-bordered w-full"
+                                    required>
 
                                 <button class="btn btn-primary w-full">
                                     Sauvegarder

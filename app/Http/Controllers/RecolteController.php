@@ -29,14 +29,9 @@ class RecolteController extends Controller
             ->orderBy('date_recolte', 'desc')
             ->paginate(5);
 
-        // Calcul des statistiques : somme des quantités par variété
-        $statistiques = Recolte::selectRaw('varietee_id, SUM(quantite_recolte) as total_quantite')
-            ->groupBy('varietee_id')
-            ->with(['varietee.produit'])
-            ->get();
 
         // Retourne la vue 'recoltes.index' avec les données compactées
-        return view('recoltes.index', compact('recoltes', 'liste_varietees', 'statistiques'));
+        return view('recoltes.index', compact('recoltes', 'liste_varietees', ));
     }
 
     /**
