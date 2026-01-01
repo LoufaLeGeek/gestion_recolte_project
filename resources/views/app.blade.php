@@ -15,7 +15,7 @@
         <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
         <div class="drawer-content">
             <!-- Navbar -->
-            <nav class="navbar w-full bg-base-100 sticky top-0 border-b border-base-300">
+            <nav class="navbar w-full bg-base-100 sticky top-0 border-b border-base-300 z-5">
                 <label for="my-drawer-4" aria-label="open sidebar" class="btn btn-square btn-ghost">
                     <i class="fa-solid fa-list"></i>
                 </label>
@@ -33,21 +33,18 @@
 
         <div class="drawer-side is-drawer-close:overflow-visible">
             <label for="my-drawer-4" aria-label="close sidebar" class="drawer-overlay"></label>
-            <div
-                class="flex min-h-full flex-col items-start
-            bg-base-100 border-r border-base-300  is-drawer-close:w-14 is-drawer-open:w-64">
+            <div class="flex min-h-full flex-col items-start bg-base-100 border-r border-base-300 is-drawer-close:w-14 is-drawer-open:w-64">
                 <!-- Sidebar content here -->
                 <ul class="menu w-full grow gap-1">
                     {{-- List item : Pour ajouter une route dans le href on met -> :href="route('name_route')"  --}}
                     <x-menu-item href="" class_icon="fas fa-tachometer-alt" content="Dashboard" />
                     <x-menu-item href="" class_icon="fas fa-carrot" content="Produit & Variété" />
                     <x-menu-item href="" class_icon="fas fa-seedling" content="Récoltes" />
-                    <x-menu-item href="" class_icon="fas fa-shopping-cart" content="Ventes" />
-                    <x-menu-item href="" class_icon="fa-solid fa-box" content="Stocks" />
-                    <x-menu-item href="" class_icon="fa-solid fa-chart-column"
-                        content="Rapports & statistique" />
+                    <x-menu-item :href="route('gestion-vente')" class_icon="fas fa-shopping-cart" content="Ventes" />
+                    <x-menu-item :href="route('gestion-stock')" class_icon="fa-solid fa-box" content="Stocks" />
+                    <x-menu-item href="" class_icon="fa-solid fa-chart-column" content="Rapports & statistique" />
                     <x-menu-item href="" class_icon="fas fa-search" content="Recherche paramétrée" />
-                    <x-menu-item href="" class_icon="fas fa-exclamation-triangle" content="Perte et Invendue" />
+                    <x-menu-item :href="route('gestion-perte')" class_icon="fas fa-exclamation-triangle" content="Perte et Invendue" />
 
                     {{-- A faire a la fin du projet --}}
                     <div class="flex-none absolute bottom-2">

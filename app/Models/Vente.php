@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Vente extends Model
@@ -28,4 +29,23 @@ class Vente extends Model
         return $this->belongsTo(Varietee::class);
     }
 
+    public function get_date()
+    {
+        return Carbon::parse($this->date_vente)->format('d / m / Y - H : i : s');
+    }
+
+    public function get_montant()
+    {
+        return number_format((float)$this->montant_totale, 2, ",", " ");
+    }
+
+    public function get_prix()
+    {
+        return number_format((float)$this->prix_unitaire, 2, ",", " ");
+    }
+
+    public function get_quantite()
+    {
+        return number_format((float)$this->quantite_vendu, 3, ",", " ");
+    }
 }

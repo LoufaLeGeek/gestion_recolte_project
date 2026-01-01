@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class Stock extends Model
 {
@@ -20,5 +21,10 @@ class Stock extends Model
     public function varietee()
     {
         return $this->belongsTo(Varietee::class);
+    }
+
+    public function get_update_date()
+    {
+        return Carbon::parse($this->updated_at)->format('d / m / Y - H : i : s');
     }
 }

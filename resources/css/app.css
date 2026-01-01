@@ -2,6 +2,7 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
+
 @plugin "daisyui/theme" {
   name: "winter";
   default: true;
@@ -36,6 +37,7 @@
   --depth: 1;
   --noise: 1;
 }
+
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
