@@ -101,10 +101,23 @@
         {{ $recoltes->links() }}
     </div>
 
-<<<<<<< HEAD
+    {{-- STATISTIQUES PAR VARIÉTÉ --}}
+    <div class="mt-8">
+        <h2 class="text-2xl font-semibold mb-4 text-slate-800 dark:text-slate-100">Statistiques par variété</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            @foreach($statistiques as $stat)
+                <div class="rounded-lg border border-slate-200 dark:border-slate-700 p-4 bg-white dark:bg-slate-900 shadow-sm">
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mb-1">
+                        {{ $stat->varietee->produit->nom_produit }} - {{ $stat->varietee->nom_varietee }}
+                    </p>
+                    <p class="text-xl font-bold text-slate-800 dark:text-slate-100">
+                        {{ number_format($stat->total_quantite, 3) }} kg
+                    </p>
+                </div>
+            @endforeach
+        </div>
+    </div>
 
-=======
->>>>>>> origin/MATHUS
 
 </div>
 

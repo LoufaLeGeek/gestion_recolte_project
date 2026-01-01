@@ -73,18 +73,10 @@
                     <x-menu-item href="{{ route('produits.index') }}" class_icon="fas fa-carrot text-orange-500" content="Produit" />
                     <x-menu-item href="{{ route('varietees.index') }}" class_icon="fas fa-leaf text-green-500"
                         content="Variété" />
-<<<<<<< HEAD
-                    <x-menu-item href="{{ route('recoltes.index') }}" class_icon="fas fa-seedling" content="Récoltes" />
-                    <x-menu-item :href="route('gestion-vente')" class_icon="fas fa-shopping-cart" content="Ventes" />
-                    <x-menu-item href="" class_icon="fa-solid fa-box" content="Stocks" />
-=======
+
                     <x-menu-item href="{{ route('recoltes.index') }}" class_icon="fas fa-seedling text-yellow-500" content="Récoltes" />
                     <x-menu-item :href="route('gestion-vente')" class_icon="fas fa-shopping-cart text-red-900" content="Ventes" />
                     <x-menu-item href="" class_icon="fa-solid fa-box text-gray-300" content="Stocks" />
->>>>>>> origin/MATHUS
-                    <x-menu-item href="" class_icon="fa-solid fa-chart-column"content="Rapports & statistique" />
-                    <x-menu-item href="" class_icon="fas fa-search text-gray-900" content="Recherche paramétrée" />
-                    <x-menu-item href="" class_icon="fas fa-exclamation-triangle text-orange-400" content="Perte et Invendue" />
 
                 </ul>
             </div>
