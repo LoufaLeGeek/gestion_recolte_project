@@ -36,3 +36,7 @@ Route::get('/dashboard/ventes-data', [DashboardController::class, 'ventesData'])
 
 
 Route::get('/dashboard/ventes-varietees', [DashboardController::class, 'ventesParVarietee']);
+
+
+Route::get('/dashboard/ventes-recoltes', [DashboardController::class, 'ventesEtRecoltes'])
+    ->name('dashboard.ventes-recoltes');

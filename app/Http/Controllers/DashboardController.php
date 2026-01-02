@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Recolte;
 use App\Models\Vente;
 use App\Models\PrixVarietee;
+use App\Models\Varietee;
 
 class DashboardController extends Controller
 {
@@ -29,6 +30,11 @@ class DashboardController extends Controller
             ->join('varietees', 'recoltes.varietee_id', '=', 'varietees.id')
             ->join('produits', 'varietees.produit_id', '=', 'produits.id');
 
+
+        // Base queryVentes
+        $queryVentes = DB::table('ventes')
+            ->join('varietees', 'ventes.varietee_id', '=', 'varietees.id')
+            ->join('produits', 'varietees.produit_id', '=', 'produits.id');
         // Filtre mois (SQLite)
         if ($mois) {
             $query->whereRaw('strftime("%Y-%m", date_recolte) = ?', [$mois]);
@@ -38,6 +44,14 @@ class DashboardController extends Controller
         if ($produitId) {
             $query->where('produits.id', $produitId);
             $queryRecolteVarieteeProduit->where('produits.id', $produitId);
+            $queryVentes->where('produits.id', $produitId);
+        }
+
+                // Filtre Varietee
+        if ($varieteeId) {
+            $query->where('varietees.id', $varieteeId);
+            $queryRecolteVarieteeProduit->where('varietees.id', $varieteeId);
+            $queryVentes->where('varietees.id', $varieteeId);
         }
 
         // KPI
@@ -45,7 +59,7 @@ class DashboardController extends Controller
         $nbRecoltes = (clone $query)->count();
         $moyenneRecolte = (clone $query)->avg('quantite_recolte');
         $moyenneRecolte = round($moyenneRecolte, 2);
-        $chiffreAffaires = DB::table('ventes')->sum('montant_totale');
+        $chiffreAffaires = (clone $queryVentes)->sum('montant_totale');
         $totalePertes = DB::table('pertes')->sum('quantite_perdu');
         $quantiteStockee = DB::table('stocks')->sum('quantite_actuelle');
 
@@ -73,7 +87,7 @@ class DashboardController extends Controller
 
         // Liste produits
         $produits = DB::table('produits')->get();
-        $varietees = DB::table('varietees')->get();
+        $varietees = Varietee::where('varietees.produit_id', $produitId)->get();
 
         return view('dashboard.index', compact(
             'totalRecolte',
@@ -95,56 +109,117 @@ class DashboardController extends Controller
     }
 
 
-    public function data()
-    {
-        $prixParVarietee = PrixVarietee::query()
-            ->join('varietees', 'prix_varietees.varietee_id', '=', 'varietees.id')
-            ->select(
-                'varietees.nom_varietee as varietee',
-                'prix_varietees.date_debut',
-                'prix_varietees.prix'
-            )
-            ->orderBy('prix_varietees.date_debut')
-            ->get()
-            ->groupBy('varietee');
-
-        return response()->json([
-            'prixParVarietee' => $prixParVarietee
-        ]);
-    }
-
-
-
-public function ventesData()
+public function data(Request $request)
 {
-    $ventes = DB::table('ventes')
-        ->selectRaw('DATE(date_vente) as date, SUM(montant_totale) as total')
-        ->groupBy('date')
-        ->orderBy('date')
-        ->get();
+    $produitId  = $request->get('produit');
+    $varieteeId = $request->get('varietee');
 
-    return response()->json([
-        'ventes' => $ventes
-    ]);
-}
-
-public function ventesParVarietee()
-{
-    $ventes = DB::table('ventes')
-        ->join('varietees', 'ventes.varietee_id', '=', 'varietees.id')
+    $query = PrixVarietee::query()
+        ->join('varietees', 'prix_varietees.varietee_id', '=', 'varietees.id')
+        ->join('produits', 'varietees.produit_id', '=', 'produits.id')
         ->select(
             'varietees.nom_varietee as varietee',
-            DB::raw('DATE(ventes.date_vente) as date'),
-            DB::raw('SUM(ventes.montant_totale) as total')
-        )
-        ->groupBy('varietee', 'date')
-        ->orderBy('date')
+            'prix_varietees.date_debut',
+            'prix_varietees.prix'
+        );
+
+    // 🔹 filtre produit
+    if ($produitId) {
+        $query->where('produits.id', $produitId);
+    }
+
+    // 🔹 filtre variété
+    if ($varieteeId) {
+        $query->where('varietees.id', $varieteeId);
+    }
+
+    $prixParVarietee = $query
+        ->orderBy('prix_varietees.date_debut')
         ->get()
         ->groupBy('varietee');
 
     return response()->json([
-        'ventesParVarietee' => $ventes
+        'prixParVarietee' => $prixParVarietee
     ]);
 }
+
+
+
+    public function ventesData(Request $request)
+    {
+        $produitId = $request->get('produit');
+        $varieteeId = $request->get('varietee');
+        $ventesQuery = DB::table('ventes')
+            ->join('varietees', 'ventes.varietee_id', '=', 'varietees.id')
+            ->join('produits', 'varietees.produit_id', '=', 'produits.id');
+
+        if ($produitId) {
+            $ventesQuery->where('produits.id', $produitId);
+        }
+        if ($varieteeId) {
+            $ventesQuery->where('varietees.id', $varieteeId);
+        }
+        $ventes = $ventesQuery
+            ->selectRaw('DATE(date_vente) as date, SUM(montant_totale) as total')
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get();
+
+        return response()->json([
+            'ventes' => $ventes
+        ]);
+    }
+    public function ventesEtRecoltes(Request $request)
+    {
+        $produitId = $request->get('produit');
+        $varieteeId = $request->get('varietee');
+
+        // =====================
+        // RÉCOLTES
+        // =====================
+        $recoltesQuery = DB::table('recoltes')
+            ->join('varietees', 'recoltes.varietee_id', '=', 'varietees.id')
+            ->join('produits', 'varietees.produit_id', '=', 'produits.id');
+
+        if ($produitId) {
+            $recoltesQuery->where('produits.id', $produitId);
+        }
+        if ($varieteeId) {
+            $recoltesQuery->where('varietees.id', $varieteeId);
+        }
+
+        $recoltes = $recoltesQuery
+            ->selectRaw('DATE(recoltes.date_recolte) as date, SUM(recoltes.quantite_recolte) as total')
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get();
+
+        // =====================
+        // VENTES
+        // =====================
+        $ventesQuery = DB::table('ventes')
+            ->join('varietees', 'ventes.varietee_id', '=', 'varietees.id')
+            ->join('produits', 'varietees.produit_id', '=', 'produits.id');
+
+        if ($produitId) {
+            $ventesQuery->where('produits.id', $produitId);
+        }
+        if ($varieteeId) {
+            $ventesQuery->where('varietees.id', $varieteeId);
+        }
+
+
+        $ventes = $ventesQuery
+            ->selectRaw('DATE(ventes.date_vente) as date, SUM(ventes.montant_totale) as total')
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get();
+
+        return response()->json([
+            'recoltes' => $recoltes,
+            'ventes' => $ventes
+        ]);
+    }
+
 
 }

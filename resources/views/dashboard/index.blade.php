@@ -5,7 +5,7 @@
 
 @section('content')
 
-<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
 
     <div class="container">
 
@@ -14,12 +14,41 @@
 
 
         <!-- FILTRES  & KPI-->
-        <div class="grid grid-cols-3 row mb-4 gap-4">
+        <div class="row mb-4 gap-4">
+
+            <!-- KPI -->
+            <div class="grid grid-cols-6 gap-2">
+                <h5 class="mb-3 col-span-6">📊 Indicateurs clés</h5>
+                <x-dashboard.card-stat type="Quantite Totale Recoltee" :value="$totalRecolte" unite="Kg"
+                    icone="fas fa-calendar-day" color="green" class="bg-white mb-4" />
+
+                <x-dashboard.card-stat type="Nombre de récoltes" :value="$nbRecoltes" unite="jours"
+                    icone="fas fa-calendar-day" color="blue" class="bg-white mb-4" />
+
+                <x-dashboard.card-stat type="Moyenne de récolte" :value="$moyenneRecolte" unite="Kg"
+                    icone="fas fa-calendar-day" color="orange" class="bg-white mb-4" />
+
+                <x-dashboard.card-stat type="Chiffre d'Affaires" :value="$chiffreAffaires" unite="Francs CFA"
+                    icone="fas fa-calendar-day" color="gray" class="bg-white mb-4" />
+
+                <x-dashboard.card-stat type="Quantite Perdu" :value="$totalePertes" unite="Kg" icone="fas fa-calendar-day"
+                    color="gray" class="bg-white mb-4" />
+
+                <x-dashboard.card-stat type="Quantite Stockee" :value="$quantiteStockee" unite="Kg" icone="fas fa-calendar-day"
+                    color="gray" class="bg-white mb-4" />
+            </div>
+
+
+        </div>
+
+
+        <!-- GRAPHIQUES -->
+        <div class="row grid grid grid-cols-6 grid-rows-5 gap-4">
 
             <!-- FILTRES -->
-            <div class="card card-body shadow-lg bg-success p-4 rounded-lg bg-white">
+            <div class="card card-body col-span-1 shadow-lg bg-success p-4 rounded-lg bg-white">
                 <h5 class="mb-3 col-span-2">🔍 Filtres</h5>
-                <form method="GET" id="filtersForm" class="grid grid-cols-2 ld:grid-cols-1 gap-2">
+                <form method="GET" id="filtersForm" class="grid grid-cols-1 ld:grid-cols-1 gap-2">
                     <div class="col-md-4 mb-2">
                         <select name="mois" class="border rounded-lg flex py-2 items-center form-select filter w-full">
                             <option value="">📅 Tous les mois</option>
@@ -55,167 +84,204 @@
                 </form>
 
             </div>
-        </div>
 
 
-        <!-- GRAPHIQUES -->
-        <div class="row grid grid grid-cols-2 grid-rows-5 gap-4">
-            <!-- Courbe -->
+            <x-dashboard.graphic-container title="📊 Récoltes & Ventes (comparatif)" icone="fas fa-chart-line"
+                chartId="chartVentesRecoltes" style="col-span-5" />
 
-            <x-dashboard.graphic-container title="📅 Récoltes par Mois en Kg" icone="fas fa-chart-line"
-                chartId="recoltesParMois" />
 
-            <!-- KPI -->
-            <div class="grid grid-cols-3 gap-2">
-                <h5 class="mb-3 col-span-3">📊 Indicateurs clés</h5>
-                <x-dashboard.card-stat type="Quantite Totale Recoltee" :value="$totalRecolte" unite="Kg"
-                    icone="fas fa-calendar-day" color="green" class="bg-white mb-4" />
+            <x-dashboard.graphic-container title="💰 Variation des prix par variété" icone="fas fa-chart-line"
+                chartId="prixParVarietee" style="col-span-3" />
 
-                <x-dashboard.card-stat type="Nombre de récoltes" :value="$nbRecoltes" unite="jours"
-                    icone="fas fa-calendar-day" color="blue" class="bg-white mb-4" />
 
-                <x-dashboard.card-stat type="Moyenne de récolte" :value="$moyenneRecolte" unite="Kg"
-                    icone="fas fa-calendar-day" color="orange" class="bg-white mb-4" />
-
-                <x-dashboard.card-stat type="Chiffre d'Affaires" :value="$chiffreAffaires" unite="Francs CFA"
-                    icone="fas fa-calendar-day" color="gray" class="bg-white mb-4" />
-
-                <x-dashboard.card-stat type="Quantite Perdu" :value="$totalePertes" unite="Kg" icone="fas fa-calendar-day"
-                    color="gray" class="bg-white mb-4" />
-
-                <x-dashboard.card-stat type="Quantite Stockee" :value="$quantiteStockee" unite="Kg" icone="fas fa-calendar-day"
-                    color="gray" class="bg-white mb-4" />
-            </div>
-
-                        <x-dashboard.graphic-container title="🛒 Chiffre d'Affaires des Ventes" icone="fas fa-chart-line"
-                            chartId="chartVentes" style="col-span-2"/>
+            <x-dashboard.graphic-container title="🛒 Chiffre d'Affaires des Ventes" icone="fas fa-chart-line"
+                chartId="chartVentes" style="col-span-3" />
 
             <!-- Barres -->
             <x-dashboard.graphic-container title="🌾 Récoltes par Produit en Kg" icone="fas fa-chart-bar"
-                chartId="recoltesParProduit" style="col-span-2" />
-            <x-dashboard.graphic-container title="💰 Variation des prix par variété" icone="fas fa-chart-line"
-                chartId="prixParVarietee" style="col-span-2" />
-
-            <x-dashboard.graphic-container title="🛒 Ventes par Variété" icone="fas fa-chart-line"
-                chartId="chartVentesVarietees"/>
-
+                chartId="recoltesParProduit" style="col-span-3" />
 
         </div>
     </div>
 
 
+
     <script>
-let chartVentesVarietees;
+        window.chartVentesRecoltes = null;
 
-function loadVentesVarietees() {
-    fetch('/dashboard/ventes-varietees')
-        .then(res => res.json())
-        .then(data => {
+        function loadVentesRecoltes() {
+            const params = new URLSearchParams(
+                new FormData(document.getElementById('filtersForm'))
+            );
 
-            const datasets = Object.keys(data.ventesParVarietee).map((varietee) => ({
-                label: varietee,
-                data: data.ventesParVarietee[varietee].map(v => ({
-                    x: v.date,
-                    y: v.total
-                })),
-                borderWidth: 2,
-                tension: 0.3
-            }));
+            fetch(`/dashboard/ventes-recoltes?${params}`)
 
-            if (chartVentesVarietees) {
-                chartVentesVarietees.destroy();
-            }
+                .then(res => res.json())
+                .then(data => {
 
-            chartVentesVarietees = new Chart(
-                document.getElementById('chartVentesVarietees'),
-                {
-                    type: 'line',
-                    data: { datasets },
-                    options: {
-                        parsing: false,
-                        plugins: {
-                            legend: {
-                                position: 'left'
-                            }
+                    const ctx = document.getElementById('chartVentesRecoltes');
+                    if (!ctx) return;
+
+                    const labels = [
+                        ...new Set([
+                            ...data.recoltes.map(r => r.date),
+                            ...data.ventes.map(v => v.date)
+                        ])
+                    ].sort();
+
+                    const recoltesData = labels.map(date => {
+                        const r = data.recoltes.find(r => r.date === date);
+                        return r ? Number(r.total) : null;
+                    });
+
+                    const ventesData = labels.map(date => {
+                        const v = data.ventes.find(v => v.date === date);
+                        return v ? Number(v.total) : null;
+                    });
+
+                    if (window.chartVentesRecoltes) {
+                        window.chartVentesRecoltes.destroy();
+                    }
+
+                    window.chartVentesRecoltes = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels,
+                            datasets: [{
+                                    label: 'Récoltes (Kg)',
+                                    data: recoltesData,
+                                    borderColor: 'green',
+                                    backgroundColor: 'rgba(0, 255, 100, 0.2)',
+                                    yAxisID: 'yRecoltes',
+                                    tension: 0.3
+                                },
+                                {
+                                    label: 'Ventes (CFA)',
+                                    data: ventesData,
+                                    borderColor: 'blue',
+                                    backgroundColor: 'rgba(0, 100, 255, 0.2)',
+                                    yAxisID: 'yVentes',
+                                    // tension: 0.9
+                                }
+                            ]
                         },
-                        scales: {
-                            x: {
-                                type: 'time',
-                                time: {
-                                    unit: 'day'
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom'
                                 }
                             },
-                            y: {
-                                beginAtZero: false
+                            scales: {
+                                x: {
+                                    ticks: {
+                                        color: '#555'
+                                    }
+                                },
+                                yRecoltes: {
+                                    type: 'linear',
+                                    position: 'left',
+                                    title: {
+                                        display: true,
+                                        text: 'Kg récoltés'
+                                    }
+                                },
+                                yVentes: {
+                                    type: 'linear',
+                                    position: 'right',
+                                    grid: {
+                                        drawOnChartArea: false
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: 'Montant des ventes (CFA)'
+                                    }
+                                }
                             }
                         }
-                    }
-                }
-            );
+                    });
+                });
+        }
+        document.querySelectorAll('.filter').forEach(el => {
+            el.addEventListener('change', loadVentesRecoltes);
         });
-}
 
-loadVentesVarietees();
-</script>
+        document.addEventListener('DOMContentLoaded', loadVentesRecoltes);
+    </script>
+
+
 
 
     <script>
-let chartVentes;
+        let chartVentes;
 
-function loadVentesChart() {
-    fetch('/dashboard/ventes-data')
-        .then(res => res.json())
-        .then(data => {
+        function loadVentesChart() {
+            const params = new URLSearchParams(
+                new FormData(document.getElementById('filtersForm'))
+            );
 
-            const labels = data.ventes.map(v => v.date);
-            const values = data.ventes.map(v => v.total);
+            fetch(`/dashboard/ventes-data?${params}`)
+                .then(res => res.json())
+                .then(data => {
 
-            if (chartVentes) {
-                chartVentes.destroy();
-            }
+                    const labels = data.ventes.map(v => v.date);
+                    const values = data.ventes.map(v => v.total);
 
-            chartVentes = new Chart(
-                document.getElementById('chartVentes'),
-                {
-                    type: 'line',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'Montant des ventes',
-                            data: values,
-                            borderWidth: 2,
-                            tension: 0.3,
-                            fill: false
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: 'left' // légende à gauche
-                            }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: false
+                    if (chartVentes) {
+                        chartVentes.destroy();
+                    }
+
+                    chartVentes = new Chart(
+                        document.getElementById('chartVentes'), {
+                            type: 'line',
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    label: 'Montant des ventes',
+                                    data: values,
+                                    borderWidth: 2,
+                                    tension: 0.3,
+                                    fill: false
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    legend: {
+                                        position: 'bottom' // légende à gauche
+                                    }
+                                },
+                                scales: {
+                                    y: {
+                                        beginAtZero: false
+                                    }
+                                }
                             }
                         }
-                    }
-                }
-            );
-        });
-}
+                    );
+                });
+        }
 
-loadVentesChart();
-</script>
+        document.querySelectorAll('.filter').forEach(el => {
+            el.addEventListener('change', loadVentesChart);
+        });
+
+        loadVentesChart();
+    </script>
 
 
     <script>
         let chartPrix;
 
         function loadDashboard() {
-            fetch('/dashboard/data')
+
+            const params = new URLSearchParams(
+                new FormData(document.getElementById('filtersForm'))
+            );
+
+            fetch(`/dashboard/data?${params}`)
                 .then(res => res.json())
                 .then(data => {
 
