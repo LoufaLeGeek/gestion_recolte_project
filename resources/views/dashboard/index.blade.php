@@ -7,9 +7,11 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
 
-    <div class="container space-y-8">
+    <div class="container">
 
         <h2 class="mb-4 border-b">📊 Dashboard des Récoltes</h2>
+
+
 
         <!-- FILTRES  & KPI-->
         <div class="row mb-4 gap-4">
@@ -41,7 +43,7 @@
 
 
         <!-- GRAPHIQUES -->
-        <div class="grid grid-cols-6 gap-4">
+        <div class="row grid grid grid-cols-6 grid-rows-5 gap-4">
 
             <!-- FILTRES -->
             <div class="card card-body col-span-1 shadow-lg bg-success p-4 rounded-lg bg-white">
@@ -58,8 +60,8 @@
                         </select>
                     </div>
 
-                    <div class="">
-                        <select name="produit" class="select outline-none">
+                    <div class="col-md-4 mb-2">
+                        <select name="produit" class="border rounded-lg flex py-2 items-center form-select filter w-full">
                             <option value="">🌾 Tous les produits</option>
                             @foreach ($produits as $p)
                                 <option value="{{ $p->id }}" {{ $produitId == $p->id ? 'selected' : '' }}>
@@ -69,8 +71,8 @@
                         </select>
                     </div>
 
-                    <div class="">
-                        <select name="varietee" class="select outline-none">
+                    <div class="col-md-4 mb-2">
+                        <select name="varietee" class="border rounded-lg flex py-2 items-center form-select filter w-full">
                             <option value="">🌾 Toutes les Varietees</option>
                             @foreach ($varietees as $v)
                                 <option value="{{ $v->id }}" {{ $varieteeId == $v->id ? 'selected' : '' }}>
