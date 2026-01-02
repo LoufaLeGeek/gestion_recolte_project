@@ -41,7 +41,7 @@
 
 
         <!-- GRAPHIQUES -->
-        <div class="row grid grid grid-cols-6 gap-4">
+        <div class="grid grid-cols-6 gap-4">
 
             <!-- FILTRES -->
             <div class="card card-body col-span-1 shadow-lg bg-success p-4 rounded-lg bg-white">
