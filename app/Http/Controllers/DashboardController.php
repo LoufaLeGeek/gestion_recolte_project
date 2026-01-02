@@ -29,8 +29,15 @@ class DashboardController extends Controller
             ->join('produits', 'varietees.produit_id', '=', 'produits.id');
 
         // Filtre mois (SQLite)
+        // if ($mois) {
+        //     $query->whereRaw('strftime("%Y-%m", date_recolte) = ?', [$mois]);
+        // }
+
         if ($mois) {
-            $query->whereRaw('strftime("%Y-%m", date_recolte) = ?', [$mois]);
+            $query->whereRaw(
+                "TO_CHAR(date_recolte, 'YYYY-MM') = ?",
+                [$mois]
+            );
         }
 
         // Filtre produit
@@ -58,16 +65,32 @@ class DashboardController extends Controller
             ->groupBy('produits.nom_produit')
             ->get();
 
+        // $recoltesParMois = (clone $queryRecolteVarieteeProduit)
+        //     ->selectRaw('strftime("%Y-%m", date_recolte) as mois, SUM(quantite_recolte) as total')
+        //     ->groupBy('mois')
+        //     ->orderBy('mois')
+        //     ->get();
+
         $recoltesParMois = (clone $queryRecolteVarieteeProduit)
-            ->selectRaw('strftime("%Y-%m", date_recolte) as mois, SUM(quantite_recolte) as total')
-            ->groupBy('mois')
-            ->orderBy('mois')
+            ->selectRaw("
+        TO_CHAR(date_recolte, 'YYYY-MM') AS mois,
+        SUM(quantite_recolte) AS total
+            ")
+            ->groupByRaw("TO_CHAR(date_recolte, 'YYYY-MM')")
+            ->orderByRaw("TO_CHAR(date_recolte, 'YYYY-MM')")
             ->get();
+
         // Liste mois
+        // $moisDisponibles = DB::table('recoltes')
+        //     ->selectRaw('strftime("%Y-%m", date_recolte) as mois')
+        //     ->groupBy('mois')
+        //     ->orderBy('mois')
+        //     ->pluck('mois');
+
         $moisDisponibles = DB::table('recoltes')
-            ->selectRaw('strftime("%Y-%m", date_recolte) as mois')
-            ->groupBy('mois')
-            ->orderBy('mois')
+            ->selectRaw("TO_CHAR(date_recolte, 'YYYY-MM') AS mois")
+            ->groupByRaw("TO_CHAR(date_recolte, 'YYYY-MM')")
+            ->orderByRaw("TO_CHAR(date_recolte, 'YYYY-MM')")
             ->pluck('mois');
 
         // Liste produits
@@ -89,7 +112,6 @@ class DashboardController extends Controller
             'produitId',
             'varietees',
             'varieteeId'
-
         ));
     }
 
