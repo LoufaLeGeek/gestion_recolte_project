@@ -13,12 +13,12 @@
 
 
         <!-- FILTRES  & KPI-->
-        <div class="grid grid-cols-3 row mb-4 gap-4">
+        <div class="row mb-4 gap-4">
 
             <!-- FILTRES -->
             <div class="card card-body shadow-lg bg-success p-4 rounded-lg bg-white">
                 <h5 class="mb-3 col-span-2">🔍 Filtres</h5>
-                <form method="GET" id="filtersForm" class="grid grid-cols-2 ld:grid-cols-1 gap-2">
+                <form method="GET" id="filtersForm" class="flex items-center justify-arround gap-2">
                     <div class="col-md-4 mb-2">
                         <select name="mois" class="border rounded-lg flex py-2 items-center form-select filter w-full">
                             <option value="">📅 Tous les mois</option>

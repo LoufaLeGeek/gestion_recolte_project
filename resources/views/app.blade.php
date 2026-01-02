@@ -22,35 +22,13 @@
         <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
         <div class="drawer-content">
             <!-- Navbar -->
-            <nav class="navbar w-full bg-base-100 sticky top-0 border-b border-base-300 z-5">
+            <div class="navbar bg-base-100 shadow-sm z-10 w-full bg-base-100 sticky top-0 border-b border-base-300">
                 <label for="my-drawer-4" aria-label="open sidebar" class="btn btn-square btn-ghost">
                     <i class="fa-solid fa-list"></i>
                 </label>
                 <div class="px-10 flex-1 items-center justify-center space-x-4">
                     <h2 style="font-family: poppins; word-spacing: 4px;"><i class="fas fa-seedling text-xl mr-3 text-green-500"></i>SyGRA</h2>
                     <h8 class="tracking-wider">Systeme de Gestion des Ressources Agricoles</h8>
-                </div>
-                <div class="flex gap-2">
-                    <input type="text" placeholder="Search" class="input input-bordered w-24 md:w-auto" />
-                    <div class="dropdown dropdown-end">
-                        <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
-                            <div class="w-10 rounded-full">
-                                <img alt="Tailwind CSS Navbar component"
-                                    src="{{ Auth::check() ? Auth::user()->profile : 'https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp' }}" />
-                            </div>
-                        </div>
-                        <ul tabindex="-1"
-                            class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-                            <li>
-                                <a class="justify-between">
-                                    Profile
-                                    <span class="badge">New</span>
-                                </a>
-                            </li>
-                            <li><a>Settings</a></li>
-                            <li><a>Logout</a></li>
-                        </ul>
-                    </div>
                 </div>
             </div>
             <!-- CONTENUE DU PAGE -->
@@ -77,12 +55,10 @@
 
                     <x-menu-item href="{{ route('recoltes.index') }}" class_icon="fas fa-seedling text-yellow-500" content="Récoltes" />
                     <x-menu-item :href="route('gestion-vente')" class_icon="fas fa-shopping-cart text-red-900" content="Ventes" />
-                    <x-menu-item href="" class_icon="fa-solid fa-box text-gray-300" content="Stocks" />
-                    <x-menu-item :href="route('gestion-vente')" class_icon="fas fa-shopping-cart" content="Ventes" />
-                    <x-menu-item :href="route('gestion-stock')" class_icon="fa-solid fa-box" content="Stocks" />
+                    <x-menu-item :href="route('gestion-stock')" class_icon="fa-solid fa-box text-gray-300" content="Stocks" />
                     <x-menu-item href="" class_icon="fa-solid fa-chart-column" content="Rapports & statistique" />
                     <x-menu-item href="" class_icon="fas fa-search" content="Recherche paramétrée" />
-                    <x-menu-item :href="route('gestion-perte')" class_icon="fas fa-exclamation-triangle" content="Perte et Invendue" />
+                    <x-menu-item :href="route('gestion-perte')" class_icon="fas fa-exclamation-triangle text-orange-300" content="Perte et Invendue" />
 
                     {{-- A faire a la fin du projet --}}
                     <div class="flex-none absolute bottom-2">
