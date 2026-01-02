@@ -31,4 +31,3 @@ Route::resource('recoltes', RecolteController::class);
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('/dashboard/data', [DashboardController::class, 'data'])
     ->name('dashboard.data');
-

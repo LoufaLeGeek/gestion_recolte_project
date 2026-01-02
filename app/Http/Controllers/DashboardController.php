@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use App\Models\Recolte;
+use App\Models\PrixVarietee;
 
 class DashboardController extends Controller
 {
@@ -14,6 +16,11 @@ class DashboardController extends Controller
         $produitId = $request->get(key: 'produit');
         $varieteeId = $request->get('varietee');
 
+
+        // Les queries de base pour les KPIs et graphiques
+        $queryRecolteVarieteeProduit = DB::table('recoltes')
+            ->join('varietees', 'recoltes.varietee_id', '=', 'varietees.id')
+            ->join('produits', 'varietees.produit_id', '=', 'produits.id');
 
 
         // Base query
@@ -29,6 +36,7 @@ class DashboardController extends Controller
         // Filtre produit
         if ($produitId) {
             $query->where('produits.id', $produitId);
+            $queryRecolteVarieteeProduit->where('produits.id', $produitId);
         }
 
         // KPI
@@ -50,7 +58,7 @@ class DashboardController extends Controller
             ->groupBy('produits.nom_produit')
             ->get();
 
-        $recoltesParMois = (clone $query)
+        $recoltesParMois = (clone $queryRecolteVarieteeProduit)
             ->selectRaw('strftime("%Y-%m", date_recolte) as mois, SUM(quantite_recolte) as total')
             ->groupBy('mois')
             ->orderBy('mois')
@@ -83,5 +91,24 @@ class DashboardController extends Controller
             'varieteeId'
 
         ));
+    }
+
+
+    public function data()
+    {
+        $prixParVarietee = PrixVarietee::query()
+            ->join('varietees', 'prix_varietees.varietee_id', '=', 'varietees.id')
+            ->select(
+                'varietees.nom_varietee as varietee',
+                'prix_varietees.date_debut',
+                'prix_varietees.prix'
+            )
+            ->orderBy('prix_varietees.date_debut')
+            ->get()
+            ->groupBy('varietee');
+
+        return response()->json([
+            'prixParVarietee' => $prixParVarietee
+        ]);
     }
 }
