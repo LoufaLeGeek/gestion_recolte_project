@@ -31,98 +31,93 @@
 
         <div class="flex flex-col md:flex-row justify-between items-center gap-4 mt-8 mb-8">
 
-        {{-- SECTION : FILTRE PAR VARIÉTÉ --}}
-        <form method="GET" action="{{ route('recoltes.index') }}" class="flex items-start gap-2 mb-4">
-            <div class="w-full max-w-md">
-                <label class="block mb-1 text-sm font-medium text-slate-700 dark:text-slate-300">Filtrer par variété</label>
-                <input type="text" id="search-varietee-filter" placeholder="Rechercher une variété..."
-                    class="mb-2 w-full rounded-md border px-3 py-2 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500">
-                <select id="select-varietee-filter" name="varietee_id"
-                    class="w-full rounded-md border px-3 py-2 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100">
-                    <option value="">Toutes les variétés</option>
-                    @foreach ($liste_varietees as $varietee)
-                        <option value="{{ $varietee->id }}" @selected(request('varietee_id') == $varietee->id)>
-                            {{ $varietee->produit->nom_produit }} - {{ $varietee->nom_varietee }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="pt-7">
-                <button type="submit"
-                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md">Filtrer</button>
-            </div>
-        </form>
+            {{-- SECTION : FILTRE PAR VARIÉTÉ --}}
+            <form method="GET" action="{{ route('recoltes.index') }}" class="flex items-start gap-2 mb-4">
+                <div class="w-full max-w-md">
+                    <label class="block mb-1 text-sm font-medium text-slate-700 dark:text-slate-300">Filtrer par
+                        variété</label>
+                    <input type="text" id="search-varietee-filter" placeholder="Rechercher une variété..."
+                        class="mb-2 w-full rounded-md border px-3 py-2 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 focus:ring-2 focus:ring-blue-500">
+                    <select id="select-varietee-filter" name="varietee_id"
+                        class="w-full rounded-md border px-3 py-2 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100">
+                        <option value="">Toutes les variétés</option>
+                        @foreach ($liste_varietees as $varietee)
+                            <option value="{{ $varietee->id }}" @selected(request('varietee_id') == $varietee->id)>
+                                {{ $varietee->produit->nom_produit }} - {{ $varietee->nom_varietee }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="pt-7">
+                    <button type="submit"
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md">Filtrer</button>
+                </div>
+            </form>
         </div>
 
         {{-- SECTION : TABLEAU DES RECOLTES --}}
-        <div class="overflow-x-auto rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm">
-            <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-700">
-                <thead class="bg-slate-50 dark:bg-slate-800">
-                    <tr>
-                        <th class="px-4 py-2 text-left text-sm font-medium text-slate-700 dark:text-slate-300">Date Récolte
-                        </th>
-                        <th class="px-4 py-2 text-left text-sm font-medium text-slate-700 dark:text-slate-300">Variété</th>
-                        <th class="px-4 py-2 text-left text-sm font-medium text-slate-700 dark:text-slate-300">Produit</th>
-                        <th class="px-4 py-2 text-left text-sm font-medium text-slate-700 dark:text-slate-300">Quantité (kg)
-                        </th>
-                        <th class="px-4 py-2 text-center text-sm font-medium text-slate-700 dark:text-slate-300">Actions
-                        </th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white dark:bg-slate-900 divide-y divide-slate-200 dark:divide-slate-700">
-                    @forelse($recoltes as $recolte)
-                        <tr>
-                            <td class="px-4 py-2">{{ $recolte->date_recolte->format('d/m/Y') }}</td>
-                            <td class="px-4 py-2">{{ $recolte->varietee->nom_varietee }}</td>
-                            <td class="px-4 py-2">{{ $recolte->varietee->produit->nom_produit }}</td>
-                            <td class="px-4 py-2">{{ number_format($recolte->quantite_recolte, 3) }}</td>
-                            <td class="px-4 py-2 text-center">
-                                <div class="flex justify-center gap-2">
-                                    <button type="button" onclick="toggleEdit({{ $recolte->id }})"
-                                        class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded-md text-sm">
-                                        Modifier
-                                    </button>
-                                    <form method="POST" action="{{ route('recoltes.destroy', $recolte->id) }}"
-                                        onsubmit="return confirm('Voulez-vous vraiment supprimer cette récolte ?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                            class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-sm">
-                                            Supprimer
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="px-4 py-4 text-center text-slate-500">Aucune récolte enregistrée.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
+        <div class="card bg-base-100 shadow-md">
+            <div class="card-body p-3 sm:p-4">
+                <!-- Tableau responsive -->
+                <div class="overflow-x-auto -mx-2 sm:mx-0">
+                    <table class="min-w-full divide-y divide-slate-200 dark:divide-slate-700">
+                        <thead class="bg-slate-50 dark:bg-slate-800">
+                            <tr>
+                                <th class="px-4 py-2 text-left text-sm font-medium text-slate-700 dark:text-slate-300">Date
+                                    Récolte
+                                </th>
+                                <th class="px-4 py-2 text-left text-sm font-medium text-slate-700 dark:text-slate-300">
+                                    Variété</th>
+                                <th class="px-4 py-2 text-left text-sm font-medium text-slate-700 dark:text-slate-300">
+                                    Produit</th>
+                                <th class="px-4 py-2 text-left text-sm font-medium text-slate-700 dark:text-slate-300">
+                                    Quantité (kg)
+                                </th>
+                                <th class="px-4 py-2 text-center text-sm font-medium text-slate-700 dark:text-slate-300">
+                                    Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white dark:bg-slate-900 divide-y divide-slate-200 dark:divide-slate-700">
+                            @forelse($recoltes as $recolte)
+                                <tr>
+                                    <td class="px-4 py-2">{{ $recolte->date_recolte->format('d/m/Y') }}</td>
+                                    <td class="px-4 py-2">{{ $recolte->varietee->nom_varietee }}</td>
+                                    <td class="px-4 py-2">{{ $recolte->varietee->produit->nom_produit }}</td>
+                                    <td class="px-4 py-2">{{ number_format($recolte->quantite_recolte, 3) }}</td>
+                                    <td class="px-4 py-2 text-center">
+                                        <div class="flex justify-center gap-2">
+                                            <button type="button" onclick="toggleEdit({{ $recolte->id }})"
+                                                class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded-md text-sm">
+                                                Modifier
+                                            </button>
+                                            <form method="POST" action="{{ route('recoltes.destroy', $recolte->id) }}"
+                                                onsubmit="return confirm('Voulez-vous vraiment supprimer cette récolte ?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                    class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-sm">
+                                                    Supprimer
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="px-4 py-4 text-center text-slate-500">Aucune récolte
+                                        enregistrée.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
 
-        {{-- PAGINATION --}}
-        <div class="mt-4">
-            {{ $recoltes->links() }}
-        </div>
+                {{-- PAGINATION --}}
+                <div class="mt-4">
+                    {{ $recoltes->links() }}
+                </div>
 
-        {{-- STATISTIQUES PAR VARIÉTÉ --}}
-        <div class="mt-8">
-            <h2 class="text-2xl font-semibold mb-4 text-slate-800 dark:text-slate-100">Statistiques par variété</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                @foreach ($statistiques as $stat)
-                    <div
-                        class="rounded-lg border border-slate-200 dark:border-slate-700 p-4 bg-white dark:bg-slate-900 shadow-sm">
-                        <p class="text-sm text-slate-500 dark:text-slate-400 mb-1">
-                            {{ $stat->varietee->produit->nom_produit }} - {{ $stat->varietee->nom_varietee }}
-                        </p>
-                        <p class="text-xl font-bold text-slate-800 dark:text-slate-100">
-                            {{ number_format($stat->total_quantite, 3) }} kg
-                        </p>
-                    </div>
-                @endforeach
             </div>
         </div>
 
