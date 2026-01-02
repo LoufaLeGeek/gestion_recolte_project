@@ -1,5 +1,335 @@
 @extends('app')
+
+
 @section('title', 'Dashboard')
+
 @section('content')
-    <p>gestion de ma dashbord</p>
+
+
+    <div class="container">
+
+        <h2 class="mb-4 border-b">📊 Dashboard des Récoltes</h2>
+
+
+
+        <!-- FILTRES  & KPI-->
+        <div class="grid grid-cols-3 row mb-4 gap-4">
+
+            <!-- FILTRES -->
+            <div class="card card-body shadow-lg bg-success p-4 rounded-lg bg-white">
+                <h5 class="mb-3 col-span-2">🔍 Filtres</h5>
+                <form method="GET" id="filtersForm" class="grid grid-cols-2 ld:grid-cols-1 gap-2">
+                    <div class="col-md-4 mb-2">
+                        <select name="mois" class="border rounded-lg flex py-2 items-center form-select filter w-full">
+                            <option value="">📅 Tous les mois</option>
+                            @foreach ($moisDisponibles as $m)
+                                <option value="{{ $m }}" {{ $mois == $m ? 'selected' : '' }}>
+                                    {{ $m }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-md-4 mb-2">
+                        <select name="produit" class="border rounded-lg flex py-2 items-center form-select filter w-full">
+                            <option value="">🌾 Tous les produits</option>
+                            @foreach ($produits as $p)
+                                <option value="{{ $p->id }}" {{ $produitId == $p->id ? 'selected' : '' }}>
+                                    {{ $p->nom_produit }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-md-4 mb-2">
+                        <select name="varietee" class="border rounded-lg flex py-2 items-center form-select filter w-full">
+                            <option value="">🌾 Toutes les Varietees</option>
+                            @foreach ($varietees as $v)
+                                <option value="{{ $v->id }}" {{ $varieteeId == $v->id ? 'selected' : '' }}>
+                                    {{ $v->nom_varietee }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+
+        <!-- GRAPHIQUES -->
+        <div class="row grid grid grid-cols-2 grid-rows-5 gap-4">
+            <!-- Courbe -->
+
+            <x-dashboard.graphic-container title="📅 Récoltes par Mois en Kg" icone="fas fa-chart-line"
+                chartId="recoltesParMois" />
+
+            <!-- KPI -->
+            <div class="grid grid-cols-3 gap-2">
+                <h5 class="mb-3 col-span-3">📊 Indicateurs clés</h5>
+                <x-dashboard.card-stat type="Quantite Totale Recoltee" :value="$totalRecolte" unite="Kg"
+                    icone="fas fa-calendar-day" color="green" class="bg-white mb-4" />
+
+                <x-dashboard.card-stat type="Nombre de récoltes" :value="$nbRecoltes" unite="jours"
+                    icone="fas fa-calendar-day" color="blue" class="bg-white mb-4" />
+
+                <x-dashboard.card-stat type="Moyenne de récolte" :value="$moyenneRecolte" unite="Kg"
+                    icone="fas fa-calendar-day" color="orange" class="bg-white mb-4" />
+
+                <x-dashboard.card-stat type="Chiffre d'Affaires" :value="$chiffreAffaires" unite="Francs CFA"
+                    icone="fas fa-calendar-day" color="gray" class="bg-white mb-4" />
+
+                <x-dashboard.card-stat type="Quantite Perdu" :value="$totalePertes" unite="Kg" icone="fas fa-calendar-day"
+                    color="gray" class="bg-white mb-4" />
+
+                <x-dashboard.card-stat type="Quantite Stockee" :value="$quantiteStockee" unite="Kg" icone="fas fa-calendar-day"
+                    color="gray" class="bg-white mb-4" />
+            </div>
+
+            <!-- Barres -->
+            <x-dashboard.graphic-container title="🌾 Récoltes par Produit en Kg" icone="fas fa-chart-bar"
+                chartId="recoltesParProduit" style="col-span-2" />
+            <x-dashboard.graphic-container title="💰 Variation des prix par variété" icone="fas fa-chart-line"
+                chartId="prixParVarietee" style="col-span-2" />
+
+        </div>
+    </div>
+
+
+    <script>
+        let chartPrix;
+
+        function loadDashboard() {
+            fetch('/dashboard/data')
+                .then(res => res.json())
+                .then(data => {
+
+
+                    if (chartPrix) {
+                        chartPrix.destroy();
+                        chartPrix = null;
+                    }
+
+                    const labels = [
+                        ...new Set(
+                            Object.values(data.prixParVarietee)
+                            .flat()
+                            .map(p => p.date_debut)
+                        )
+                    ];
+
+                    const datasets = Object.entries(data.prixParVarietee)
+                        .map(([varietee, valeurs], i) => ({
+                            label: varietee,
+                            data: labels.map(d => {
+                                const found = valeurs.find(v => v.date_debut === d);
+                                return found ? found.prix : null;
+                            }),
+                            borderWidth: 2,
+                            tension: 0.4
+                        }));
+
+                    chartPrix = new Chart(
+                        document.getElementById('prixParVarietee'), {
+                            type: 'line',
+                            data: {
+                                labels,
+                                datasets
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    legend: {
+                                        position: 'left',
+                                    },
+                                    labels: {
+                                        usePointStyle: true,
+                                        pointStyle: 'line'
+                                    }
+                                },
+                                scales: {
+                                    x: {
+                                        beginAtZero: true,
+                                        offset: true,
+                                        layouts: {
+                                            padding: {
+                                                left: 10,
+                                                right: 10,
+                                                top: 10,
+                                                bottom: 10
+                                            }
+                                        },
+                                        ticks: {
+                                            color: '#555',
+                                            font: {
+                                                size: 12
+                                            }
+                                        },
+                                        grid: {
+                                            color: 'rgba(0, 255, 100, 0.2)'
+                                        }
+                                    },
+                                    y: {
+                                        beginAtZero: false,
+                                        ticks: {
+                                            color: '#555'
+                                        },
+                                        grid: {
+                                            color: 'rgba(0, 255, 100, 0.2)'
+                                        }
+                                    }
+                                },
+                            }
+                        }
+                    );
+                });
+        }
+        // 🔁 Recharge automatique
+        document.querySelectorAll('.filter').forEach(el =>
+            el.addEventListener('change', loadDashboard)
+        );
+        loadDashboard();
+    </script>
+
+
+
+
+    <script>
+        const labels = @json($recoltesParProduit->pluck('nom_produit'));
+        const data = @json($recoltesParProduit->pluck('total'));
+
+        new Chart(document.getElementById('recoltesParProduit'), {
+            type: 'bar',
+
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Récoltes par Produit (kg)',
+                    data: data,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 100, 255, 0.7)',
+                        titleColor: '#000',
+                        bodyColor: '#fff',
+                        borderWidth: 1,
+                        padding: 5,
+                        FontFaceSetLoadEvent: true
+                    },
+                    legend: {
+                        position: 'bottom',
+                        usePointStyle: true,
+                        labels: {
+                            color: '#000',
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            color: '#555',
+                            font: {
+                                size: 12
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0, 255, 100, 0.2)'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            color: '#555'
+                        },
+                        grid: {
+                            color: 'rgba(0, 255, 100, 0.2)'
+                        }
+                    }
+                },
+            }
+        });
+    </script>
+
+
+    <script>
+        const mois = @json($recoltesParMois->pluck('mois'));
+        const valeursMois = @json($recoltesParMois->pluck('total'));
+        new Chart(document.getElementById('recoltesParMois'), {
+            type: 'line',
+            data: {
+                labels: mois,
+                datasets: [{
+                    label: 'Récoltes mensuelles',
+                    data: valeursMois,
+                    fill: true,
+                    backgroundColor: 'rgba(0, 255, 100, 0.3)', // remplissage
+                    pointBackgroundColor: 'green',
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 255, 100, 0.7)',
+                        titleColor: '#000',
+                        bodyColor: 'green',
+                        borderWidth: 1,
+                        padding: 5,
+                        FontFaceSetLoadEvent: true
+                    },
+                    legend: {
+                        position: 'bottom',
+                        usePointStyle: true,
+                        labels: {
+                            color: 'orange',
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            },
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            color: 'orange',
+                            font: {
+                                size: 13,
+                                weight: '100'
+                            },
+                            fontFamily: 'roboto, sans-serif'
+                        },
+                        grid: {
+                            color: 'rgba(0, 255, 100, 0.1)'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'green'
+                        },
+                        grid: {
+                            color: 'rgba(0, 255, 100, 0.1)'
+                        }
+                    }
+                },
+            }
+
+        });
+    </script>
+
+    <script>
+        document.querySelectorAll('.filter').forEach(el => {
+            el.addEventListener('change', () => {
+                document.getElementById('filtersForm').submit();
+            });
+        });
+    </script>
+
 @endsection

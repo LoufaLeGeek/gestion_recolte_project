@@ -51,4 +51,12 @@ class Varietee extends Model
     {
         return $this->hasMany(Perte::class);
     }
+
+        public function getPrixFormateAttribute()
+    {
+        if ($this->prix_actuelle) {
+            return number_format($this->prix_actuelle->prix, 2, ',', ' ') . ' FCFA';
+        }
+        return 'Non défini';
+    }
 }

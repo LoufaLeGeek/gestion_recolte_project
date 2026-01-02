@@ -6,6 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Recolte extends Model
 {
+
+    protected $table = 'RECOLTES';
+
+    public $incrementing = false;
+
+    protected $keyType = 'int';
+
     protected $fillable = [
         "date_recolte",
         "quantite_recolte",

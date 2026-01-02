@@ -4,7 +4,7 @@
 
 
 @plugin "daisyui/theme" {
-  name: "winter";
+  name: "nord";
   default: true;
   prefersdark: true;
   color-scheme: "dark";
@@ -45,7 +45,7 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif,
+    --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif,
         "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
         "Noto Color Emoji";
 }
@@ -67,6 +67,10 @@
     @apply text-xl font-medium;
   }
 
+
+  h8 {
+    @apply text-[11px] font-medium text-green-600;
+  }
   p {
     @apply text-base font-normal leading-relaxed;
   }
