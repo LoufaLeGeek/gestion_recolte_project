@@ -127,4 +127,24 @@ public function ventesData()
         'ventes' => $ventes
     ]);
 }
+
+public function ventesParVarietee()
+{
+    $ventes = DB::table('ventes')
+        ->join('varietees', 'ventes.varietee_id', '=', 'varietees.id')
+        ->select(
+            'varietees.nom_varietee as varietee',
+            DB::raw('DATE(ventes.date_vente) as date'),
+            DB::raw('SUM(ventes.montant_totale) as total')
+        )
+        ->groupBy('varietee', 'date')
+        ->orderBy('date')
+        ->get()
+        ->groupBy('varietee');
+
+    return response()->json([
+        'ventesParVarietee' => $ventes
+    ]);
+}
+
 }

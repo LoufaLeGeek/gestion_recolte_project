@@ -5,6 +5,7 @@
 
 @section('content')
 
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
 
     <div class="container">
 
@@ -95,8 +96,67 @@
             <x-dashboard.graphic-container title="💰 Variation des prix par variété" icone="fas fa-chart-line"
                 chartId="prixParVarietee" style="col-span-2" />
 
+            <x-dashboard.graphic-container title="🛒 Ventes par Variété" icone="fas fa-chart-line"
+                chartId="chartVentesVarietees"/>
+
+
         </div>
     </div>
+
+
+    <script>
+let chartVentesVarietees;
+
+function loadVentesVarietees() {
+    fetch('/dashboard/ventes-varietees')
+        .then(res => res.json())
+        .then(data => {
+
+            const datasets = Object.keys(data.ventesParVarietee).map((varietee) => ({
+                label: varietee,
+                data: data.ventesParVarietee[varietee].map(v => ({
+                    x: v.date,
+                    y: v.total
+                })),
+                borderWidth: 2,
+                tension: 0.3
+            }));
+
+            if (chartVentesVarietees) {
+                chartVentesVarietees.destroy();
+            }
+
+            chartVentesVarietees = new Chart(
+                document.getElementById('chartVentesVarietees'),
+                {
+                    type: 'line',
+                    data: { datasets },
+                    options: {
+                        parsing: false,
+                        plugins: {
+                            legend: {
+                                position: 'left'
+                            }
+                        },
+                        scales: {
+                            x: {
+                                type: 'time',
+                                time: {
+                                    unit: 'day'
+                                }
+                            },
+                            y: {
+                                beginAtZero: false
+                            }
+                        }
+                    }
+                }
+            );
+        });
+}
+
+loadVentesVarietees();
+</script>
 
 
     <script>
