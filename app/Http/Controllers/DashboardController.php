@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Recolte;
+use App\Models\Vente;
 use App\Models\PrixVarietee;
 
 class DashboardController extends Controller
@@ -111,4 +112,19 @@ class DashboardController extends Controller
             'prixParVarietee' => $prixParVarietee
         ]);
     }
+
+
+
+public function ventesData()
+{
+    $ventes = DB::table('ventes')
+        ->selectRaw('DATE(date_vente) as date, SUM(montant_totale) as total')
+        ->groupBy('date')
+        ->orderBy('date')
+        ->get();
+
+    return response()->json([
+        'ventes' => $ventes
+    ]);
+}
 }

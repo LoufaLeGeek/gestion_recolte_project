@@ -3,8 +3,6 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Vente\VenteController;
 use Illuminate\Support\Facades\Route;
-
-
 use App\Http\Controllers\ProduitController;
 use App\Http\Controllers\VarieteeController;
 use App\Http\Controllers\RecolteController;
@@ -31,3 +29,7 @@ Route::resource('recoltes', RecolteController::class);
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('/dashboard/data', [DashboardController::class, 'data'])
     ->name('dashboard.data');
+
+
+Route::get('/dashboard/ventes-data', [DashboardController::class, 'ventesData'])
+    ->name('dashboard.ventes-data');

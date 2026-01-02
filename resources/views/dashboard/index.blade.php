@@ -86,6 +86,9 @@
                     color="gray" class="bg-white mb-4" />
             </div>
 
+                        <x-dashboard.graphic-container title="🛒 Chiffre d'Affaires des Ventes" icone="fas fa-chart-line"
+                            chartId="chartVentes" style="col-span-2"/>
+
             <!-- Barres -->
             <x-dashboard.graphic-container title="🌾 Récoltes par Produit en Kg" icone="fas fa-chart-bar"
                 chartId="recoltesParProduit" style="col-span-2" />
@@ -94,6 +97,58 @@
 
         </div>
     </div>
+
+
+    <script>
+let chartVentes;
+
+function loadVentesChart() {
+    fetch('/dashboard/ventes-data')
+        .then(res => res.json())
+        .then(data => {
+
+            const labels = data.ventes.map(v => v.date);
+            const values = data.ventes.map(v => v.total);
+
+            if (chartVentes) {
+                chartVentes.destroy();
+            }
+
+            chartVentes = new Chart(
+                document.getElementById('chartVentes'),
+                {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Montant des ventes',
+                            data: values,
+                            borderWidth: 2,
+                            tension: 0.3,
+                            fill: false
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'left' // légende à gauche
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: false
+                            }
+                        }
+                    }
+                }
+            );
+        });
+}
+
+loadVentesChart();
+</script>
 
 
     <script>
