@@ -1,19 +1,19 @@
 @extends('app')
 
 @section('title', 'Gestion des Variétés')
-@section('breadcrumb')
+{{-- @section('breadcrumb')
     <li><i class="fas fa-carrot me-2 text-sm"></i> <span class="text-sm">Produits & Variétés</span></li>
     <li><i class="fas fa-leaf me-2 text-sm"></i> <span class="text-sm">Liste des variétés</span></li>
-@endsection
+@endsection --}}
 
 @section('content')
-    <div class="max-w-7xl mx-auto px-2 sm:px-4">
+    <div class="space-y-4">
         <!-- Messages de session -->
         <div id="flash-messages" class="mb-6 space-y-3">
             @if (session()->has('success'))
                 <div class="alert alert-success shadow-lg transition-all duration-300" data-auto-dismiss="5000">
                     <div class="flex items-center gap-3">
-                        <i class="fas fa-check-circle text-lg flex-shrink-0"></i>
+                        <i class="fas fa-check-circle text-lg shrink-0"></i>
                         <div class="flex-1">
                             <span class="font-medium">Succès :</span>
                             <span class="text-sm ml-1">{{ session('success') }}</span>
@@ -30,7 +30,7 @@
             @if (session()->has('error'))
                 <div class="alert alert-error shadow-lg transition-all duration-300" data-auto-dismiss="5000">
                     <div class="flex items-center gap-3">
-                        <i class="fas fa-exclamation-circle text-lg flex-shrink-0"></i>
+                        <i class="fas fa-exclamation-circle text-lg shrink-0"></i>
                         <div class="flex-1">
                             <span class="font-medium">Erreur :</span>
                             <span class="text-sm ml-1">{{ session('error') }}</span>
@@ -45,74 +45,78 @@
             @endif
         </div>
         <!-- En-tête avec bouton -->
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-6">
-            <div>
-                <h1 class="text-xl sm:text-2xl font-bold text-gray-800">Gestion des Variétés</h1>
-                <p class="text-gray-600 text-sm mt-1">Gérez les variétés de vos produits agricoles</p>
-            </div>
-            <a href="{{ route('varietees.create') }}" class="btn btn-primary btn-sm sm:btn-md gap-1">
-                <i class="fas fa-plus text-xs sm:text-sm"></i>
-                <span class="text-xs sm:text-sm">Nouvelle variété</span>
+        <div class="flex justify-between items-center">
+            <x-title-page class_icon="fas fa-leaf text-green-500" title="Gestion des variétés"
+                sub_title="Organisation et suivi des variétés par produit"></x-title-page>
+            <a href="{{ route('varietees.create') }}" class="btn btn-primary">
+                <i class="fas fa-plus"></i>
+                <span class="">Nouvelle variété</span>
             </a>
         </div>
 
         <!-- Recherche et filtres simplifiés -->
-        <div class="card bg-base-100 shadow-md mb-6 p-3 sm:p-4">
+        <div class="bg-base-100 shadow-sm p-4 space-y-4 w-fit rounded-sm">
             <!-- Formulaire de recherche -->
-            <div class="mb-4">
-                <form method="GET" action="{{ route('varietees.index') }}" class="space-y-3">
+            <div class="">
+                <form method="GET" action="{{ route('varietees.index') }}" class="flex items-end gap-4">
                     <!-- Barre de recherche principale -->
-                    <div class="flex flex-col sm:flex-row gap-3">
-                        <div class="relative flex-1">
-                            <div class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                                <i class="fas fa-search text-sm"></i>
-                            </div>
-                            <input type="text" name="search" value="{{ request('search') }}"
-                                class="input input-bordered input-sm w-full pl-10" placeholder="Rechercher une variété...">
+                    <div class="flex items-end gap-4">
+                        <div class="">
+                            <label for="" class="text-[12px] font-bold block mb-1">Nom varietee</label>
+                            <input type="text" name="search" value="{{ request('search') }}" class="input outline-none"
+                                placeholder="Rechercher une variété...">
                         </div>
 
-                        <select name="produit_id" class="select select-bordered select-sm w-full sm:w-auto">
-                            <option value="">Tous les produits</option>
-                            @foreach ($produits as $produit)
-                                <option value="{{ $produit->id }}"
-                                    {{ request('produit_id') == $produit->id ? 'selected' : '' }}>
-                                    {{ $produit->nom_produit }}
-                                </option>
-                            @endforeach
-                        </select>
+                        <div>
+                            <label for="" class="text-[12px] font-bold block mb-1">Selectionner un produit</label>
+                            <select name="produit_id" class="select outline-none w-64">
+                                <option value="">Tous les produits</option>
+                                @foreach ($produits as $produit)
+                                    <option value="{{ $produit->id }}"
+                                        {{ request('produit_id') == $produit->id ? 'selected' : '' }}>
+                                        {{ $produit->nom_produit }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
 
                     <!-- Options de tri -->
-                    <div class="flex flex-wrap gap-2 items-center text-sm">
-                        <span class="text-gray-600">Trier par :</span>
-                        <select name="sort" class="select select-bordered select-xs">
-                            <option value="created_at"
-                                {{ request('sort', 'created_at') == 'created_at' ? 'selected' : '' }}>
-                                Date
-                            </option>
-                            <option value="nom_varietee" {{ request('sort') == 'nom_varietee' ? 'selected' : '' }}>
-                                Nom
-                            </option>
-                        </select>
+                    <div class="flex items-end gap-4">
+                        <div>
+                            <label for="" class="text-[12px] font-bold block mb-1">Option de trie</label>
+                            <select name="sort" class="select outline-none w-40">
+                                <option value="created_at"
+                                    {{ request('sort', 'created_at') == 'created_at' ? 'selected' : '' }}>
+                                    Date
+                                </option>
+                                <option value="nom_varietee" {{ request('sort') == 'nom_varietee' ? 'selected' : '' }}>
+                                    Nom
+                                </option>
+                            </select>
+                        </div>
 
-                        <select name="direction" class="select select-bordered select-xs">
-                            <option value="desc" {{ request('direction') == 'desc' ? 'selected' : '' }}>
-                                ↓ Décroissant
-                            </option>
-                            <option value="asc" {{ request('direction', 'asc') == 'asc' ? 'selected' : '' }}>
-                                ↑ Croissant
-                            </option>
-                        </select>
+                        <div>
+                            <label for="" class="text-[12px] font-bold block mb-1">Croissant , decroissant</label>
+                            <select name="direction" class="select outline-none w-40">
+                                <option value="desc" {{ request('direction') == 'desc' ? 'selected' : '' }}>
+                                    ↓ Décroissant
+                                </option>
+                                <option value="asc" {{ request('direction', 'asc') == 'asc' ? 'selected' : '' }}>
+                                    ↑ Croissant
+                                </option>
+                            </select>
+                        </div>
 
                         <!-- Boutons -->
-                        <div class="ml-auto flex gap-2">
-                            <button type="submit" class="btn btn-primary btn-xs">
+                        <div class="flex items-center gap-4">
+                            <button type="submit" class="btn btn-primary">
                                 <i class="fas fa-filter text-xs"></i>
                                 Appliquer
                             </button>
 
                             @if (request()->hasAny(['search', 'produit_id', 'sort', 'direction']))
-                                <a href="{{ route('varietees.index') }}" class="btn btn-ghost btn-xs">
+                                <a href="{{ route('varietees.index') }}" class="btn btn-shoft btn-error btn-sm">
                                     <i class="fas fa-times text-xs"></i>
                                     Effacer
                                 </a>
@@ -174,8 +178,6 @@
                                 <th class="font-semibold text-xs sm:text-sm py-2 text-center">Actions</th>
                             </tr>
                         </thead>
-
-
                         <tbody>
                             @forelse($varietees as $varietee)
                                 <x-varietee.varietee-tuile :varietee="$varietee" />

@@ -12,7 +12,7 @@ use App\Http\Controllers\VarieteeController;
 use App\Http\Controllers\RecolteController;
 
 Route::get('/', function () {
-    return view('app');
+    return redirect()->route('dashboard');
 });
 
 

@@ -1,7 +1,7 @@
 <td colspan="7" class="text-center py-6">
     <div class="flex flex-col items-center justify-center gap-3">
         <div class="avatar placeholder">
-            <div class="bg-base-200 text-base-400 rounded-full w-12 h-12">
+            <div class="bg-base-200 text-base-400 rounded-full w-12 h-12 flex items-center justify-center">
                 <i class="fas fa-leaf text-lg"></i>
             </div>
         </div>

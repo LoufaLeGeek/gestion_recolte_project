@@ -3,48 +3,60 @@
 @section('title', 'Produits')
 
 @section('content')
+    <div class=" space-y-8">
+        <x-title-page class_icon="fas fa-carrot text-orange-500" title="Gestion des produits"
+            sub_title="Administration du catalogue des produits agricoles"></x-title-page>
 
-    <!-- Conteneur principal centré -->
-    <div class="max-w-7xl mx-auto px-6 py-8">
+        <div class="flex gap-8 items-center">
+            <form method="POST" action="{{ route('produits.store') }}"
+                class="bg-base-100 shadow-sm rounded-sm w-fit h-fit flex items-end  p-4 gap-4">
+                @csrf
+                <input type="hidden" name="type" value="produit">
+                <div class="w-full">
+                    <label for="" class="block mb-1 text-[12px] font-semibold">Nom produit</label>
+                    <input type="text" name="nom_produit" placeholder="Exp: Chou"
+                        class="input input-bordered w-full outline-none" required>
+                </div>
+                <div class="w-full">
+                    <label for="" class="block mb-1 text-[12px] font-semibold">Description</label>
+                    <input type="text" name="description_produit"
+                        placeholder="Exp: Produit avec divers varietee disponible"
+                        class="input input-bordered w-full outline-none" required>
+                </div>
 
-        {{-- Bloc titre --}}
-        <div>
-            <h1 class="text-xl sm:text-2xl font-bold text-gray-800">Gestion des Produits</h1>
-            <p class="text-gray-600 text-sm mt-1">Liste des produits agricoles et aperçu de leurs variétés</p>
-        </div>
-
-        {{-- Zone recherche et statistiques --}}
-        <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
-
-            <!-- Formulaire de recherche -->
-            <form method="GET" action="{{ route('produits.index') }}" class="flex gap-3 w-full md:w-auto">
-
-                <!-- Champ de recherche -->
-                <input type="text" name="search" value="{{ request('search') }}"
-                    placeholder="Rechercher un produit ou une variété" class="input input-bordered w-full md:w-64">
-
-                <!-- Bouton de soumission -->
-                <button type="submit" class="btn btn-info">
-                    Rechercher
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-plus"></i>
+                    Ajouter un produit
                 </button>
             </form>
-
-            <!-- Bloc statistiques -->
-            <div class="stats shadow">
-
-                <!-- Statistique produits -->
-                <div class="stat">
-                    <div class="stat-title">Produits</div>
-                    <div class="stat-value">{{ $total_produits }}</div>
+            <div class="flex flex-col items-start bg-base-100 p-4 rounded-sm shadow-sm gap-4">
+                <div class="flex items-center justify-center gap-4">
+                    <p class="badge badge-soft badge-primary">Nombre de produits : </p>
+                    <span class="badge badge-soft badge-primary">{{ $total_produits }}</span>
                 </div>
-
-                <!-- Statistique variétés -->
-                <div class="stat">
-                    <div class="stat-title">Variétés</div>
-                    <div class="stat-value">{{ $total_varietes }}</div>
+                <div class="flex items-center justify-center gap-4">
+                    <p class="badge badge-soft badge-accent">Nombre de varietees : </p>
+                    <span class="badge badge-soft badge-accent">{{ $total_varietes }}</span>
                 </div>
             </div>
+
         </div>
+
+        <form method="GET" action="{{ route('produits.index') }}"
+            class="flex items-end gap-4 bg-base-100 rounded-sm shadow-sm w-fit p-4">
+            <!-- Champ de recherche -->
+            <div>
+                <label for="" class="block mb-1 text-[12px] font-bold">Nom produit ou variete</label>
+                <input type="text" name="search" value="{{ request('search') }}"
+                    placeholder="Rechercher un produit ou une variété" class="input outline-none">
+            </div>
+
+            <!-- Bouton de soumission -->
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-filter"></i>
+                Rechercher
+            </button>
+        </form>
 
         {{-- Message de succès --}}
         @if (session('success'))
@@ -53,112 +65,72 @@
             </div>
         @endif
 
-        {{-- Formulaire d'ajout de produit --}}
-        <div class="card bg-base-100 shadow-md mb-10">
-            <div class="card-body">
-
-                <!-- Formulaire -->
-                <form method="POST" action="{{ route('produits.store') }}"
-                    class="flex flex-col md:flex-row gap-3 items-center">
-
-                    {{-- Protection CSRF --}}
-                    @csrf
-
-                    {{-- Type de formulaire --}}
-                    <input type="hidden" name="type" value="produit">
-
-                    <!-- Nom du produit -->
-                    <input type="text" name="nom_produit" placeholder="Nom du produit"
-                        class="input input-bordered flex-1" required>
-
-                    <!-- Description du produit -->
-                    <input type="text" name="description_produit" placeholder="Description"
-                        class="input input-bordered flex-1" required>
-
-                    <!-- Bouton ajouter -->
-                    <button type="submit" class="btn btn-primary">
-                        Ajouter
-                    </button>
-                </form>
-            </div>
-        </div>
+        {{-- Bloc titre --}}
 
         {{-- Tableau des produits --}}
-        <div class="overflow-x-auto">
-            <table class="table table-zebra w-full">
+        <div class="space-y-4">
+            <table
+                class="w-full table [&_tr]:border-0 [&_td]:border-0 [&_th]:border-0  border-separate border-spacing-y-3 bg-base-100 shadow-sm">
 
                 <!-- En-tête -->
-                <thead>
+                <thead class="[&_tr]:font-bold [&_tr]:text-base-content">
                     <tr>
-                        <th>Nom</th>
-                        <th>Description</th>
+                        <th>Produit</th>
                         <th>Variétés</th>
                         <th>Créé le</th>
-                        <th>Modifié le</th>
+                        <th>Description</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
 
                 <!-- Corps du tableau -->
-                <tbody>
-
-                    {{-- Boucle sur les produits --}}
+                <tbody class="[&_tr]:text-sm [&_tr]:hover:bg-base-content/10">
                     @forelse($produits as $produit)
-
-                        <!-- Ligne produit -->
                         <tr>
-                            <td>{{ $produit->nom_produit }}</td>
-                            <td>{{ $produit->description_produit }}</td>
-
-                            <!-- Bouton affichage variétés -->
                             <td>
-                                <button onclick="toggleVarietees({{ $produit->id }})" class="badge badge-info">
-                                    {{ $produit->varietees->count() }} variétés
-                                </button>
+                                <span class="badge bg-green-300/30">{{ $produit->nom_produit }}</span>
                             </td>
 
-                            <!-- Dates -->
-                            <td>{{ $produit->created_at->format('d/m/Y H:i') }}</td>
-                            <td>{{ $produit->updated_at->format('d/m/Y H:i') }}</td>
-
-                            <!-- Actions -->
+                            <td>
+                                <span class="badge badge-soft badge-error w-10">{{ $produit->varietees->count() }}</span>
+                            </td>
+                            <td>
+                                <span class="badge badge-soft badge-base">
+                                    {{ $produit->created_at->format('d/m/Y H:i') }}
+                                </span>
+                            </td>
+                            <td>{{ $produit->description_produit }}</td>
                             <td>
                                 <button
                                     onclick="document.getElementById('edit-produit-{{ $produit->id }}').classList.toggle('hidden')"
-                                    class="btn btn-sm btn-warning">
+                                    class="btn btn-sm btn-info">
+                                    <i class="fas fa-edit"></i>
                                     Modifier
                                 </button>
                             </td>
                         </tr>
-
-                        {{-- Formulaire de modification --}}
-                        <tr id="edit-produit-{{ $produit->id }}" class="hidden bg-base-200">
-                            <td colspan="6">
-
-                                <!-- Formulaire modification -->
+                        <tr id="edit-produit-{{ $produit->id }}" class="hidden bg-base-content/10">
+                            <td colspan="5">
                                 <form method="POST" action="{{ route('produits.update', $produit->id) }}"
-                                    class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
-
+                                    class="w-fit flex items-center gap-4">
                                     @csrf
                                     @method('PUT')
 
-                                    <input type="hidden" name="type" value="produit">
+                                    <input type="hidden" name="type" value="produit" class="input outline-none">
 
                                     <input type="text" name="nom_produit" value="{{ $produit->nom_produit }}"
-                                        class="input input-bordered w-full" required>
+                                        class="input outline-none" required>
 
                                     <input type="text" name="description_produit"
-                                        value="{{ $produit->description_produit }}" class="input input-bordered w-full"
-                                        required>
+                                        value="{{ $produit->description_produit }}" class="input outline-none" required>
 
-                                    <button class="btn btn-primary w-full">
+                                    <button class="btn btn-sm btn-primary">
+                                        <i class="fas fa-floppy-disk"></i>
                                         Sauvegarder
                                     </button>
                                 </form>
                             </td>
                         </tr>
-
-                        {{-- Liste des variétés --}}
                         <tr id="varietees-{{ $produit->id }}" class="hidden bg-base-100">
                             <td colspan="6">
 
@@ -187,10 +159,9 @@
                                 @endif
                             </td>
                         </tr>
-
                     @empty
                         <tr>
-                            <td colspan="6" class="text-center text-neutral-content">
+                            <td colspan="5" class="text-center text-neutral-content">
                                 Aucun produit enregistré.
                             </td>
                         </tr>

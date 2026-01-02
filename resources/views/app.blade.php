@@ -22,12 +22,13 @@
         <input id="my-drawer-4" type="checkbox" class="drawer-toggle" />
         <div class="drawer-content">
             <!-- Navbar -->
-            <div class="navbar bg-base-100 shadow-sm z-10 w-full bg-base-100 sticky top-0 border-b border-base-300">
+            <div class="navbar bg-base-100 shadow-sm z-10 w-full sticky top-0 border-b border-base-300">
                 <label for="my-drawer-4" aria-label="open sidebar" class="btn btn-square btn-ghost">
                     <i class="fa-solid fa-list"></i>
                 </label>
                 <div class="px-10 flex-1 items-center justify-center space-x-4">
-                    <h2 style="font-family: poppins; word-spacing: 4px;"><i class="fas fa-seedling text-xl mr-3 text-green-500"></i>SyGRA</h2>
+                    <h2 style="font-family: poppins; word-spacing: 4px;"><i
+                            class="fas fa-seedling text-xl mr-3 text-green-500"></i>SyGRA</h2>
                     <h8 class="tracking-wider">Systeme de Gestion des Ressources Agricoles</h8>
                 </div>
             </div>
@@ -43,48 +44,57 @@
             <div
                 class="flex min-h-full flex-col items-start
             bg-base-100 border-r border-base-300  is-drawer-close:w-14 is-drawer-open:w-64">
-            <div class="flex min-h-full flex-col items-start bg-base-100 border-r border-base-300 is-drawer-close:w-14 is-drawer-open:w-64">
-                <!-- Sidebar content here -->
-                <ul class="menu w-full grow gap-1">
-                    {{-- List item : Pour ajouter une route dans le href on met -> :href="route('name_route')"  --}}
-                    {{-- List item : Pour ajouter une route dans le href on met -> :href="route('name_route')"  --}}
-                    <x-menu-item href="{{ route('dashboard') }}" class_icon="fas fa-tachometer-alt text-black" content="Dashboard" />
-                    <x-menu-item href="{{ route('produits.index') }}" class_icon="fas fa-carrot text-orange-500" content="Produit" />
-                    <x-menu-item href="{{ route('varietees.index') }}" class_icon="fas fa-leaf text-green-500"
-                        content="Variété" />
+                <div
+                    class="flex min-h-full flex-col items-start bg-base-100 border-r border-base-300 is-drawer-close:w-14 is-drawer-open:w-64">
+                    <!-- Sidebar content here -->
+                    <ul class="menu w-full grow gap-1">
+                        {{-- List item : Pour ajouter une route dans le href on met -> :href="route('name_route')"  --}}
+                        {{-- List item : Pour ajouter une route dans le href on met -> :href="route('name_route')"  --}}
+                        <x-menu-item href="{{ route('dashboard') }}"
+                            class_icon="fas fa-tachometer-alt text-base-neutral" content="Dashboard" />
+                        <x-menu-item href="{{ route('produits.index') }}" class_icon="fas fa-carrot text-orange-500"
+                            content="Produit" />
+                        <x-menu-item href="{{ route('varietees.index') }}" class_icon="fas fa-leaf text-green-500"
+                            content="Variété" />
 
-                    <x-menu-item href="{{ route('recoltes.index') }}" class_icon="fas fa-seedling text-yellow-500" content="Récoltes" />
-                    <x-menu-item :href="route('gestion-vente')" class_icon="fas fa-shopping-cart text-red-900" content="Ventes" />
-                    <x-menu-item :href="route('gestion-stock')" class_icon="fa-solid fa-box text-gray-300" content="Stocks" />
-                    <x-menu-item href="" class_icon="fa-solid fa-chart-column" content="Rapports & statistique" />
-                    <x-menu-item href="" class_icon="fas fa-search" content="Recherche paramétrée" />
-                    <x-menu-item :href="route('gestion-perte')" class_icon="fas fa-exclamation-triangle text-orange-300" content="Perte et Invendue" />
+                        <x-menu-item href="{{ route('recoltes.index') }}" class_icon="fas fa-seedling text-yellow-500"
+                            content="Récoltes" />
+                        <x-menu-item :href="route('gestion-vente')" class_icon="fas fa-shopping-cart text-red-900"
+                            content="Ventes" />
+                        <x-menu-item :href="route('gestion-stock')" class_icon="fa-solid fa-box text-primary" content="Stocks" />
+                        <x-menu-item :href="route('gestion-perte')" class_icon="fas fa-exclamation-triangle text-orange-300"
+                            content="Perte et Invendue" />
 
-                    {{-- A faire a la fin du projet --}}
-                    <div class="flex-none absolute bottom-2">
-                        <a href="">
-                            <li>
-                                <button class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                                    data-tip="Ma profile">
-                                    <i class="fas fa-user"></i>
-                                    <span class="is-drawer-close:hidden">Ma profile</span>
-                                </button>
-                            </li>
-                        </a>
-                        <a href="">
-                            <li>
-                                <button class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                                    data-tip="Se déconnecter">
-                                    <i class="fas fa-sign-out-alt"></i>
-                                    <span class="is-drawer-close:hidden">Se déconnecter</span>
-                                </button>
-                            </li>
-                        </a>
-                    </div>
-                </ul>
+                        <x-menu-item href="" class_icon="fa-solid fa-chart-column"
+                            content="Rapports & statistique" />
+                        <x-menu-item href="" class_icon="fas fa-search" content="Recherche paramétrée" />
+
+
+                        {{-- A faire a la fin du projet --}}
+                        <div class="flex-none absolute bottom-2">
+                            <a href="">
+                                <li>
+                                    <button class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                                        data-tip="Ma profile">
+                                        <i class="fas fa-user"></i>
+                                        <span class="is-drawer-close:hidden">Ma profile</span>
+                                    </button>
+                                </li>
+                            </a>
+                            <a href="">
+                                <li>
+                                    <button class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                                        data-tip="Se déconnecter">
+                                        <i class="fas fa-sign-out-alt"></i>
+                                        <span class="is-drawer-close:hidden">Se déconnecter</span>
+                                    </button>
+                                </li>
+                            </a>
+                        </div>
+                    </ul>
+                </div>
             </div>
         </div>
-    </div>
 </body>
 
 </html>

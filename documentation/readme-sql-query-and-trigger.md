@@ -149,8 +149,6 @@ INSERT INTO produits (id, nom_produit, description_produit, created_at, updated_
 
 
 
-
-
 -- Insertion des variétés avec ID explicite et produit_id correspondant
 -- Riz (produit_id = 1)
 INSERT INTO varietees (id, nom_varietee, caracteristique_varietee, produit_id, created_at, updated_at)
