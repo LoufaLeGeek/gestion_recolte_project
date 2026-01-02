@@ -35,3 +35,15 @@ Route::get('/dashboard/data', [DashboardController::class, 'data'])
     ->name('dashboard.data');
 Route::get('/stocks', [StockController::class, 'index'])->name('gestion-stock');
 Route::get('/pertes', [PerteController::class, 'index'])->name('gestion-perte');
+
+
+
+Route::get('/dashboard/ventes-data', [DashboardController::class, 'ventesData'])
+    ->name('dashboard.ventes-data');
+
+
+Route::get('/dashboard/ventes-varietees', [DashboardController::class, 'ventesParVarietee']);
+
+
+Route::get('/dashboard/ventes-recoltes', [DashboardController::class, 'ventesEtRecoltes'])
+    ->name('dashboard.ventes-recoltes');
