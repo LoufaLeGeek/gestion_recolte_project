@@ -124,18 +124,18 @@
 
                     const labels = [
                         ...new Set([
-                            ...data.recoltes.map(r => r.date),
-                            ...data.ventes.map(v => v.date)
+                            ...data.recoltes.map(r => r.date_fmt),
+                            ...data.ventes.map(v => v.date_fmt)
                         ])
                     ].sort();
 
                     const recoltesData = labels.map(date => {
-                        const r = data.recoltes.find(r => r.date === date);
+                        const r = data.recoltes.find(r => r.date_fmt === date);
                         return r ? Number(r.total) : null;
                     });
 
                     const ventesData = labels.map(date => {
-                        const v = data.ventes.find(v => v.date === date);
+                        const v = data.ventes.find(v => v.date_fmt === date);
                         return v ? Number(v.total) : null;
                     });
 

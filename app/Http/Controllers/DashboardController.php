@@ -183,60 +183,71 @@ class DashboardController extends Controller
     {
         $produitId = $request->get('produit');
         $varieteeId = $request->get('varietee');
-
-        $query = DB::table('ventes')
+        $ventesQuery = DB::table('ventes')
             ->join('varietees', 'ventes.varietee_id', '=', 'varietees.id')
             ->join('produits', 'varietees.produit_id', '=', 'produits.id');
 
         if ($produitId) {
-            $query->where('produits.id', $produitId);
+            $ventesQuery->where('produits.id', $produitId);
         }
         if ($varieteeId) {
-            $query->where('varietees.id', $varieteeId);
+            $ventesQuery->where('varietees.id', $varieteeId);
         }
-
-        $ventes = $query
-            ->selectRaw("TRUNC(ventes.date_vente) as date, SUM(ventes.montant_totale) as total")
-            ->groupBy(DB::raw("TRUNC(ventes.date_vente)"))
-            ->orderBy('date')
+        $ventes = $ventesQuery
+            ->selectRaw("
+        TO_CHAR(ventes.date_vente, 'YYYY-MM-DD') AS date_vente_fmt,
+        SUM(ventes.montant_totale) AS total
+    ")
+            ->groupByRaw("TO_CHAR(ventes.date_vente, 'YYYY-MM-DD')")
+            ->orderByRaw("TO_CHAR(ventes.date_vente, 'YYYY-MM-DD')")
             ->get();
 
-        return response()->json($ventes);
+
+        return response()->json([
+            'ventes' => $ventes
+        ]);
     }
-
-
-
     public function ventesEtRecoltes(Request $request)
     {
         $produitId = $request->get('produit');
         $varieteeId = $request->get('varietee');
 
+        // =====================
+        // RÉCOLTES
+        // =====================
         $recoltes = DB::table('recoltes')
             ->join('varietees', 'recoltes.varietee_id', '=', 'varietees.id')
             ->join('produits', 'varietees.produit_id', '=', 'produits.id')
             ->when($produitId, fn($q) => $q->where('produits.id', $produitId))
             ->when($varieteeId, fn($q) => $q->where('varietees.id', $varieteeId))
-            ->selectRaw("TRUNC(recoltes.date_recolte) as date, SUM(recoltes.quantite_recolte) as total")
-            ->groupBy(DB::raw("TRUNC(recoltes.date_recolte)"))
-            ->orderBy('date')
+            ->selectRaw("
+        TO_CHAR(recoltes.date_recolte, 'YYYY-MM-DD') AS date_fmt,
+        SUM(recoltes.quantite_recolte) AS total
+    ")
+            ->groupByRaw("TO_CHAR(recoltes.date_recolte, 'YYYY-MM-DD')")
+            ->orderByRaw("TO_CHAR(recoltes.date_recolte, 'YYYY-MM-DD')")
             ->get();
 
+        // =====================
+        // VENTES
+        // =====================
         $ventes = DB::table('ventes')
             ->join('varietees', 'ventes.varietee_id', '=', 'varietees.id')
             ->join('produits', 'varietees.produit_id', '=', 'produits.id')
             ->when($produitId, fn($q) => $q->where('produits.id', $produitId))
             ->when($varieteeId, fn($q) => $q->where('varietees.id', $varieteeId))
-            ->selectRaw("TRUNC(ventes.date_vente) as date, SUM(ventes.montant_totale) as total")
-            ->groupBy(DB::raw("TRUNC(ventes.date_vente)"))
-            ->orderBy('date')
+            ->selectRaw("
+        TO_CHAR(ventes.date_vente, 'YYYY-MM-DD') AS date_fmt,
+        SUM(ventes.montant_totale) AS total
+    ")
+            ->groupByRaw("TO_CHAR(ventes.date_vente, 'YYYY-MM-DD')")
+            ->orderByRaw("TO_CHAR(ventes.date_vente, 'YYYY-MM-DD')")
             ->get();
-
         return response()->json([
             'recoltes' => $recoltes,
             'ventes' => $ventes
         ]);
     }
-
 
 
 }

@@ -67,6 +67,7 @@ Ce système utilise 3 triggers Oracle pour automatiser la gestion des stocks.
 
 -- trigger apres instersion d'une recolte
 CREATE OR REPLACE TRIGGER after_recolte_insert
+
 AFTER INSERT ON recoltes
 FOR EACH ROW
 DECLARE
