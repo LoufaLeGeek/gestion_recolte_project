@@ -54,7 +54,7 @@ class DashboardController extends Controller
             $queryVentes->where('produits.id', $produitId);
         }
 
-                // Filtre Varietee
+        // Filtre Varietee
         if ($varieteeId) {
             $query->where('varietees.id', $varieteeId);
             $queryRecolteVarieteeProduit->where('varietees.id', $varieteeId);
@@ -70,7 +70,6 @@ class DashboardController extends Controller
         $totalePertes = DB::table('pertes')->sum('quantite_perdu');
         $quantiteStockee = DB::table('stocks')->sum('quantite_actuelle');
 
-
         // Graphique par produit
         $recoltesParProduit = (clone $query)
             ->select(
@@ -80,10 +79,17 @@ class DashboardController extends Controller
             ->groupBy('produits.nom_produit')
             ->get();
 
+        // $recoltesParMois = (clone $queryRecolteVarieteeProduit)
+        //     ->selectRaw('strftime("%Y-%m", date_recolte) as mois, SUM(quantite_recolte) as total')
+        //     ->groupBy('mois')
+        //     ->orderBy('mois')
+        //     ->get();
+
+
         $recoltesParMois = (clone $queryRecolteVarieteeProduit)
-            ->selectRaw('strftime("%Y-%m", date_recolte) as mois, SUM(quantite_recolte) as total')
-            ->groupBy('mois')
-            ->orderBy('mois')
+            ->selectRaw("TO_CHAR(date_recolte, 'YYYY-MM') AS mois, SUM(quantite_recolte) AS total")
+            ->groupByRaw("TO_CHAR(date_recolte, 'YYYY-MM')")
+            ->orderByRaw("TO_CHAR(date_recolte, 'YYYY-MM')")
             ->get();
 
         // $recoltesParMois = (clone $queryRecolteVarieteeProduit)
@@ -96,10 +102,16 @@ class DashboardController extends Controller
         //     ->get();
 
         // Liste mois
+        // $moisDisponibles = DB::table('recoltes')
+        //     ->selectRaw('strftime("%Y-%m", date_recolte) as mois')
+        //     ->groupBy('mois')
+        //     ->orderBy('mois')
+        //     ->pluck('mois');
+
         $moisDisponibles = DB::table('recoltes')
-            ->selectRaw('strftime("%Y-%m", date_recolte) as mois')
-            ->groupBy('mois')
-            ->orderBy('mois')
+            ->selectRaw("TO_CHAR(date_recolte, 'YYYY-MM') AS mois")
+            ->groupByRaw("TO_CHAR(date_recolte, 'YYYY-MM')")
+            ->orderByRaw("TO_CHAR(date_recolte, 'YYYY-MM')")
             ->pluck('mois');
 
         // $moisDisponibles = DB::table('recoltes')
@@ -131,39 +143,39 @@ class DashboardController extends Controller
     }
 
 
-public function data(Request $request)
-{
-    $produitId  = $request->get('produit');
-    $varieteeId = $request->get('varietee');
+    public function data(Request $request)
+    {
+        $produitId = $request->get('produit');
+        $varieteeId = $request->get('varietee');
 
-    $query = PrixVarietee::query()
-        ->join('varietees', 'prix_varietees.varietee_id', '=', 'varietees.id')
-        ->join('produits', 'varietees.produit_id', '=', 'produits.id')
-        ->select(
-            'varietees.nom_varietee as varietee',
-            'prix_varietees.date_debut',
-            'prix_varietees.prix'
-        );
+        $query = PrixVarietee::query()
+            ->join('varietees', 'prix_varietees.varietee_id', '=', 'varietees.id')
+            ->join('produits', 'varietees.produit_id', '=', 'produits.id')
+            ->select(
+                'varietees.nom_varietee as varietee',
+                'prix_varietees.date_debut',
+                'prix_varietees.prix'
+            );
 
-    // 🔹 filtre produit
-    if ($produitId) {
-        $query->where('produits.id', $produitId);
+        // 🔹 filtre produit
+        if ($produitId) {
+            $query->where('produits.id', $produitId);
+        }
+
+        // 🔹 filtre variété
+        if ($varieteeId) {
+            $query->where('varietees.id', $varieteeId);
+        }
+
+        $prixParVarietee = $query
+            ->orderBy('prix_varietees.date_debut')
+            ->get()
+            ->groupBy('varietee');
+
+        return response()->json([
+            'prixParVarietee' => $prixParVarietee
+        ]);
     }
-
-    // 🔹 filtre variété
-    if ($varieteeId) {
-        $query->where('varietees.id', $varieteeId);
-    }
-
-    $prixParVarietee = $query
-        ->orderBy('prix_varietees.date_debut')
-        ->get()
-        ->groupBy('varietee');
-
-    return response()->json([
-        'prixParVarietee' => $prixParVarietee
-    ]);
-}
 
 
 
