@@ -183,69 +183,51 @@ class DashboardController extends Controller
     {
         $produitId = $request->get('produit');
         $varieteeId = $request->get('varietee');
-        $ventesQuery = DB::table('ventes')
+
+        $query = DB::table('ventes')
             ->join('varietees', 'ventes.varietee_id', '=', 'varietees.id')
             ->join('produits', 'varietees.produit_id', '=', 'produits.id');
 
         if ($produitId) {
-            $ventesQuery->where('produits.id', $produitId);
+            $query->where('produits.id', $produitId);
         }
         if ($varieteeId) {
-            $ventesQuery->where('varietees.id', $varieteeId);
+            $query->where('varietees.id', $varieteeId);
         }
-        $ventes = $ventesQuery
-            ->selectRaw('DATE(date_vente) as date, SUM(montant_totale) as total')
-            ->groupBy('date')
+
+        $ventes = $query
+            ->selectRaw("TRUNC(ventes.date_vente) as date, SUM(ventes.montant_totale) as total")
+            ->groupBy(DB::raw("TRUNC(ventes.date_vente)"))
             ->orderBy('date')
             ->get();
 
-        return response()->json([
-            'ventes' => $ventes
-        ]);
+        return response()->json($ventes);
     }
+
+
+
     public function ventesEtRecoltes(Request $request)
     {
         $produitId = $request->get('produit');
         $varieteeId = $request->get('varietee');
 
-        // =====================
-        // RÉCOLTES
-        // =====================
-        $recoltesQuery = DB::table('recoltes')
+        $recoltes = DB::table('recoltes')
             ->join('varietees', 'recoltes.varietee_id', '=', 'varietees.id')
-            ->join('produits', 'varietees.produit_id', '=', 'produits.id');
-
-        if ($produitId) {
-            $recoltesQuery->where('produits.id', $produitId);
-        }
-        if ($varieteeId) {
-            $recoltesQuery->where('varietees.id', $varieteeId);
-        }
-
-        $recoltes = $recoltesQuery
-            ->selectRaw('DATE(recoltes.date_recolte) as date, SUM(recoltes.quantite_recolte) as total')
-            ->groupBy('date')
+            ->join('produits', 'varietees.produit_id', '=', 'produits.id')
+            ->when($produitId, fn($q) => $q->where('produits.id', $produitId))
+            ->when($varieteeId, fn($q) => $q->where('varietees.id', $varieteeId))
+            ->selectRaw("TRUNC(recoltes.date_recolte) as date, SUM(recoltes.quantite_recolte) as total")
+            ->groupBy(DB::raw("TRUNC(recoltes.date_recolte)"))
             ->orderBy('date')
             ->get();
 
-        // =====================
-        // VENTES
-        // =====================
-        $ventesQuery = DB::table('ventes')
+        $ventes = DB::table('ventes')
             ->join('varietees', 'ventes.varietee_id', '=', 'varietees.id')
-            ->join('produits', 'varietees.produit_id', '=', 'produits.id');
-
-        if ($produitId) {
-            $ventesQuery->where('produits.id', $produitId);
-        }
-        if ($varieteeId) {
-            $ventesQuery->where('varietees.id', $varieteeId);
-        }
-
-
-        $ventes = $ventesQuery
-            ->selectRaw('DATE(ventes.date_vente) as date, SUM(ventes.montant_totale) as total')
-            ->groupBy('date')
+            ->join('produits', 'varietees.produit_id', '=', 'produits.id')
+            ->when($produitId, fn($q) => $q->where('produits.id', $produitId))
+            ->when($varieteeId, fn($q) => $q->where('varietees.id', $varieteeId))
+            ->selectRaw("TRUNC(ventes.date_vente) as date, SUM(ventes.montant_totale) as total")
+            ->groupBy(DB::raw("TRUNC(ventes.date_vente)"))
             ->orderBy('date')
             ->get();
 
@@ -254,6 +236,7 @@ class DashboardController extends Controller
             'ventes' => $ventes
         ]);
     }
+
 
 
 }
