@@ -3,15 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
-use App\Models\Recolte;
-use App\Models\Vente;
 use App\Models\PrixVarietee;
 use App\Models\Varietee;
 
 class DashboardController extends Controller
 {
-
     public function index(Request $request)
     {
         $mois = $request->get('mois');
@@ -35,17 +33,15 @@ class DashboardController extends Controller
         $queryVentes = DB::table('ventes')
             ->join('varietees', 'ventes.varietee_id', '=', 'varietees.id')
             ->join('produits', 'varietees.produit_id', '=', 'produits.id');
-        // Filtre mois (SQLite)
-        if ($mois) {
-            $query->whereRaw('strftime("%Y-%m", date_recolte) = ?', [$mois]);
-        }
 
-        // if ($mois) {
-        //     $query->whereRaw(
-        //         "TO_CHAR(date_recolte, 'YYYY-MM') = ?",
-        //         [$mois]
-        //     );
-        // }
+        if ($mois) {
+            $date = Carbon::createFromFormat('Y-m', $mois);
+
+            $query->whereBetween('date_recolte', [
+                $date->startOfMonth(),
+                $date->endOfMonth(),
+            ]);
+        }
 
         // Filtre produit
         if ($produitId) {
@@ -79,46 +75,17 @@ class DashboardController extends Controller
             ->groupBy('produits.nom_produit')
             ->get();
 
-        // $recoltesParMois = (clone $queryRecolteVarieteeProduit)
-        //     ->selectRaw('strftime("%Y-%m", date_recolte) as mois, SUM(quantite_recolte) as total')
-        //     ->groupBy('mois')
-        //     ->orderBy('mois')
-        //     ->get();
-
-
         $recoltesParMois = (clone $queryRecolteVarieteeProduit)
             ->selectRaw("TO_CHAR(date_recolte, 'YYYY-MM') AS mois, SUM(quantite_recolte) AS total")
             ->groupByRaw("TO_CHAR(date_recolte, 'YYYY-MM')")
             ->orderByRaw("TO_CHAR(date_recolte, 'YYYY-MM')")
             ->get();
 
-        // $recoltesParMois = (clone $queryRecolteVarieteeProduit)
-        //     ->selectRaw("
-        // TO_CHAR(date_recolte, 'YYYY-MM') AS mois,
-        // SUM(quantite_recolte) AS total
-        //     ")
-        //     ->groupByRaw("TO_CHAR(date_recolte, 'YYYY-MM')")
-        //     ->orderByRaw("TO_CHAR(date_recolte, 'YYYY-MM')")
-        //     ->get();
-
-        // Liste mois
-        // $moisDisponibles = DB::table('recoltes')
-        //     ->selectRaw('strftime("%Y-%m", date_recolte) as mois')
-        //     ->groupBy('mois')
-        //     ->orderBy('mois')
-        //     ->pluck('mois');
-
         $moisDisponibles = DB::table('recoltes')
             ->selectRaw("TO_CHAR(date_recolte, 'YYYY-MM') AS mois")
             ->groupByRaw("TO_CHAR(date_recolte, 'YYYY-MM')")
             ->orderByRaw("TO_CHAR(date_recolte, 'YYYY-MM')")
             ->pluck('mois');
-
-        // $moisDisponibles = DB::table('recoltes')
-        //     ->selectRaw("TO_CHAR(date_recolte, 'YYYY-MM') AS mois")
-        //     ->groupByRaw("TO_CHAR(date_recolte, 'YYYY-MM')")
-        //     ->orderByRaw("TO_CHAR(date_recolte, 'YYYY-MM')")
-        //     ->pluck('mois');
 
         // Liste produits
         $produits = DB::table('produits')->get();
@@ -187,17 +154,17 @@ class DashboardController extends Controller
             ->join('varietees', 'ventes.varietee_id', '=', 'varietees.id')
             ->join('produits', 'varietees.produit_id', '=', 'produits.id');
 
-        if ($produitId) {
+        if ($produitId != null) {
             $ventesQuery->where('produits.id', $produitId);
         }
-        if ($varieteeId) {
+        if ($varieteeId != null) {
             $ventesQuery->where('varietees.id', $varieteeId);
         }
         $ventes = $ventesQuery
             ->selectRaw("
-        TO_CHAR(ventes.date_vente, 'YYYY-MM-DD') AS date_vente_fmt,
-        SUM(ventes.montant_totale) AS total
-    ")
+                TO_CHAR(ventes.date_vente, 'YYYY-MM-DD') AS date_vente_fmt,
+                SUM(ventes.montant_totale) AS total
+            ")
             ->groupByRaw("TO_CHAR(ventes.date_vente, 'YYYY-MM-DD')")
             ->orderByRaw("TO_CHAR(ventes.date_vente, 'YYYY-MM-DD')")
             ->get();
@@ -212,9 +179,6 @@ class DashboardController extends Controller
         $produitId = $request->get('produit');
         $varieteeId = $request->get('varietee');
 
-        // =====================
-        // RÉCOLTES
-        // =====================
         $recoltes = DB::table('recoltes')
             ->join('varietees', 'recoltes.varietee_id', '=', 'varietees.id')
             ->join('produits', 'varietees.produit_id', '=', 'produits.id')
@@ -228,9 +192,6 @@ class DashboardController extends Controller
             ->orderByRaw("TO_CHAR(recoltes.date_recolte, 'YYYY-MM-DD')")
             ->get();
 
-        // =====================
-        // VENTES
-        // =====================
         $ventes = DB::table('ventes')
             ->join('varietees', 'ventes.varietee_id', '=', 'varietees.id')
             ->join('produits', 'varietees.produit_id', '=', 'produits.id')
@@ -248,6 +209,4 @@ class DashboardController extends Controller
             'ventes' => $ventes
         ]);
     }
-
-
 }

@@ -6,100 +6,87 @@
 @section('content')
 
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+    <div class="space-y-8">
+        <x-title-page class_icon="fas fa-tachometer-alt text-base-neutral" title="Tableau de bord"
+            sub_title="Vue d’ensemble des indicateurs clés et de l’activité globale"></x-title-page>
+        <div class="flex items-center gap-4">
+            <x-dashboard.card-stat type="Quantite Totale Recoltee" :value="$totalRecolte" unite="Kg" icone="fas fa-calendar-day"
+                color="green" class="bg-white mb-4" />
 
-    <div class="container">
+            <x-dashboard.card-stat type="Nombre de récoltes" :value="$nbRecoltes" unite="jours" icone="fas fa-calendar-day"
+                color="blue" class="bg-white mb-4" />
 
-        <h2 class="mb-4 border-b">📊 Dashboard des Récoltes</h2>
+            <x-dashboard.card-stat type="Moyenne de récolte" :value="$moyenneRecolte" unite="Kg" icone="fas fa-calendar-day"
+                color="orange" class="bg-white mb-4" />
 
+            <x-dashboard.card-stat type="Chiffre d'Affaires" :value="$chiffreAffaires" unite="Francs CFA"
+                icone="fas fa-calendar-day" color="gray" class="bg-white mb-4" />
 
+            <x-dashboard.card-stat type="Quantite Perdu" :value="$totalePertes" unite="Kg" icone="fas fa-calendar-day"
+                color="gray" class="bg-white mb-4" />
 
-        <!-- FILTRES  & KPI-->
-        <div class="row mb-4 gap-4">
+            <x-dashboard.card-stat type="Quantite Stockee" :value="$quantiteStockee" unite="Kg" icone="fas fa-calendar-day"
+                color="gray" class="bg-white mb-4" />
+        </div>
+        <div class="">
+            <p class="font-semibold mb-1 text-[12px]">Appliquer un filtre</p>
+            <form method="GET" id="filtersForm" class="flex items-center gap-4">
+                <div class="">
+                    <select name="mois" class="select form-select filter outline-none">
+                        <option value="">Tous les mois</option>
+                        @foreach ($moisDisponibles as $m)
+                            <option value="{{ $m }}" {{ $mois == $m ? 'selected' : '' }}>
+                                {{ $m }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
 
-            <!-- KPI -->
-            <div class="grid grid-cols-6 gap-2">
-                <h5 class="mb-3 col-span-6">📊 Indicateurs clés</h5>
-                <x-dashboard.card-stat type="Quantite Totale Recoltee" :value="$totalRecolte" unite="Kg"
-                    icone="fas fa-calendar-day" color="green" class="bg-white mb-4" />
+                <div class="">
+                    <select name="produit" class="select form-select filter outline-none">
+                        <option value="">
 
-                <x-dashboard.card-stat type="Nombre de récoltes" :value="$nbRecoltes" unite="jours"
-                    icone="fas fa-calendar-day" color="blue" class="bg-white mb-4" />
+                            Tous les produits
+                        </option>
+                        @foreach ($produits as $p)
+                            <option value="{{ $p->id }}" {{ $produitId == $p->id ? 'selected' : '' }}>
+                                {{ $p->nom_produit }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
 
-                <x-dashboard.card-stat type="Moyenne de récolte" :value="$moyenneRecolte" unite="Kg"
-                    icone="fas fa-calendar-day" color="orange" class="bg-white mb-4" />
-
-                <x-dashboard.card-stat type="Chiffre d'Affaires" :value="$chiffreAffaires" unite="Francs CFA"
-                    icone="fas fa-calendar-day" color="gray" class="bg-white mb-4" />
-
-                <x-dashboard.card-stat type="Quantite Perdu" :value="$totalePertes" unite="Kg" icone="fas fa-calendar-day"
-                    color="gray" class="bg-white mb-4" />
-
-                <x-dashboard.card-stat type="Quantite Stockee" :value="$quantiteStockee" unite="Kg" icone="fas fa-calendar-day"
-                    color="gray" class="bg-white mb-4" />
-            </div>
-
+                <div class="">
+                    <select name="varietee" class="select form-select filter outline-none">
+                        <option value="">Toutes les Varietees</option>
+                        @foreach ($varietees as $v)
+                            <option value="{{ $v->id }}" {{ $varieteeId == $v->id ? 'selected' : '' }}>
+                                {{ $v->nom_varietee }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            </form>
 
         </div>
 
+        <div class="space-y-4">
+            <x-dashboard.graphic-container title="Récoltes & Ventes (comparatif)" icone="fas fa-chart-line"
+                chartId="chartVentesRecoltes" style="col-span-5" />
 
-        <!-- GRAPHIQUES -->
-        <div class="row grid grid grid-cols-6 grid-rows-5 gap-4">
+            <div class="flex gap-4 items-center justify-center">
+                <x-dashboard.graphic-container title="Récoltes par Produit en Kg" icone="fas fa-chart-bar"
+                    chartId="recoltesParProduit" style="col-span-3" />
 
-            <!-- FILTRES -->
-            <div class="card card-body col-span-1 shadow-lg bg-success p-4 rounded-lg bg-white">
-                <h5 class="mb-3 col-span-2">🔍 Filtres</h5>
-                <form method="GET" id="filtersForm" class="grid grid-cols-1 ld:grid-cols-1 gap-2">
-                    <div class="col-md-4 mb-2">
-                        <select name="mois" class="border rounded-lg flex py-2 items-center form-select filter w-full">
-                            <option value="">📅 Tous les mois</option>
-                            @foreach ($moisDisponibles as $m)
-                                <option value="{{ $m }}" {{ $mois == $m ? 'selected' : '' }}>
-                                    {{ $m }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="col-md-4 mb-2">
-                        <select name="produit" class="border rounded-lg flex py-2 items-center form-select filter w-full">
-                            <option value="">🌾 Tous les produits</option>
-                            @foreach ($produits as $p)
-                                <option value="{{ $p->id }}" {{ $produitId == $p->id ? 'selected' : '' }}>
-                                    {{ $p->nom_produit }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="col-md-4 mb-2">
-                        <select name="varietee" class="border rounded-lg flex py-2 items-center form-select filter w-full">
-                            <option value="">🌾 Toutes les Varietees</option>
-                            @foreach ($varietees as $v)
-                                <option value="{{ $v->id }}" {{ $varieteeId == $v->id ? 'selected' : '' }}>
-                                    {{ $v->nom_varietee }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                </form>
-
+                <x-dashboard.graphic-container title="Variation des prix par variété" icone="fas fa-chart-line"
+                    chartId="prixParVarietee" style="col-span-3" />
             </div>
 
 
-            <x-dashboard.graphic-container title="📊 Récoltes & Ventes (comparatif)" icone="fas fa-chart-line"
-                chartId="chartVentesRecoltes" style="col-span-5" />
-
-
-            <x-dashboard.graphic-container title="💰 Variation des prix par variété" icone="fas fa-chart-line"
-                chartId="prixParVarietee" style="col-span-3" />
-
-
-            <x-dashboard.graphic-container title="🛒 Chiffre d'Affaires des Ventes" icone="fas fa-chart-line"
+            <x-dashboard.graphic-container title="Chiffre d'Affaires des Ventes" icone="fas fa-chart-line"
                 chartId="chartVentes" style="col-span-3" />
 
             <!-- Barres -->
-            <x-dashboard.graphic-container title="🌾 Récoltes par Produit en Kg" icone="fas fa-chart-bar"
-                chartId="recoltesParProduit" style="col-span-3" />
 
         </div>
     </div>

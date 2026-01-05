@@ -1,4 +1,4 @@
-<div class="bg-base-100 rounded-sm shadow-smp-4 w-full min-w-0 max-w-full p-4 space-y-4 {{$style }}">
+<div class="bg-base-100 rounded-sm shadow-sm w-full min-w-0 max-w-full p-4 space-y-4 {{$style }}">
     <div class="flex items-center gap-2">
         <i class="{{ $icone }}"></i>
         <p>

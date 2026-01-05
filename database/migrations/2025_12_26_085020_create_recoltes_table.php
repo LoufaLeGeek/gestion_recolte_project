@@ -13,7 +13,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('recoltes', function (Blueprint $table) {
-             $table->timestamp("date_recolte");
+            $table->id();
+            $table->timestamp("date_recolte");
             $table->decimal("quantite_recolte", 10, 3);
             $table->foreignIdFor(Varietee::class)->constrained()->cascadeOnDelete();
             $table->timestamps();
