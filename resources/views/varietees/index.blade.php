@@ -1,15 +1,9 @@
 @extends('app')
-
 @section('title', 'Gestion des Variétés')
-{{-- @section('breadcrumb')
-    <li><i class="fas fa-carrot me-2 text-sm"></i> <span class="text-sm">Produits & Variétés</span></li>
-    <li><i class="fas fa-leaf me-2 text-sm"></i> <span class="text-sm">Liste des variétés</span></li>
-@endsection --}}
-
 @section('content')
     <div class="space-y-4">
         <!-- Messages de session -->
-        <div id="flash-messages" class="mb-6 space-y-3">
+        <div id="flash-messages" class="space-y-3">
             @if (session()->has('success'))
                 <div class="alert alert-success shadow-lg transition-all duration-300" data-auto-dismiss="5000">
                     <div class="flex items-center gap-3">

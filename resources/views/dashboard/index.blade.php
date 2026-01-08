@@ -82,7 +82,7 @@
             <x-dashboard.graphic-container title="Variation des prix par variété" icone="fas fa-chart-line"
                 chartId="prixParVarietee" style="col-span-3" />
 
-            <x-dashboard.graphic-container title="Pertes par Produit en Kg" icone="fas fa-chart-bar" chartId="pertesChart"
+            <x-dashboard.graphic-container title="Pertes par variétée en Kg" icone="fas fa-chart-bar" chartId="pertesChart"
                 style="col-span-2" />
 
             <x-dashboard.graphic-container title="Chiffre d'Affaires des Ventes" icone="fas fa-chart-line"

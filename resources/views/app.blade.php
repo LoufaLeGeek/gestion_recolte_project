@@ -29,7 +29,7 @@
                 <div class="px-10 flex-1 items-center justify-center space-x-4">
                     <h2 style="font-family: poppins; word-spacing: 4px;"><i
                             class="fas fa-seedling text-xl mr-3 text-green-500"></i>SyGRA</h2>
-                    <h8 class="tracking-wider">Systeme de Gestion des Ressources Agricoles</h8>
+                    <h8 class="tracking-wider">Système de Gestion des Ressources Agricoles</h8>
                 </div>
             </div>
             <!-- CONTENUE DU PAGE -->
