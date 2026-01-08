@@ -15,6 +15,7 @@ class BandeStatistiquePerte extends Component
     public $quantite_totale = 0;
 
     #[On('refresh_component')]
+    #[On('refresh_component_perte')]
     public function refresh_data()
     {
         $this->nombre_perte = Perte::query()->count();
