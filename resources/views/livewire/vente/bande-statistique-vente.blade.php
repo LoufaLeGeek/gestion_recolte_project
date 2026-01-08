@@ -1,4 +1,4 @@
-<div class="w-full px-10 flex items-center justify-around h-40 rounded-sm gap-4 mx-auto">
+<div class="w-full px-10 flex items-center justify-around rounded-sm gap-4 mx-auto">
     <x-statistics-kpi-card text_color="text-error" :value="$nombre_totale_vente"
         text_content="Nombre total de ventes (variétées)">
     </x-statistics-kpi-card>
