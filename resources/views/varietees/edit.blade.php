@@ -167,17 +167,6 @@
                    placeholder="Ex: 1500.50"
                    value="{{ old('nouveau_prix') }}">
         </div>
-
-        <div>
-            <label class="label py-1">
-                <span class="label-text text-xs">Date d'effet</span>
-                <span class="label-text-alt text-error text-xs">Aujourd'hui par défaut</span>
-            </label>
-            <input type="date"
-                   name="date_effet"
-                   class="input input-bordered input-sm sm:input-md w-full @error('date_effet') input-error @enderror"
-                   value="{{ old('date_effet', now()->format('Y-m-d')) }}">
-        </div>
     </div>
 
     <div class="mt-1">
