@@ -4,7 +4,14 @@
     'text_content' => '',
 ])
 
-<div class="bg-base-100 flex-1 p-1 flex flex-col justify-center items-center shadow-lg hover:scale-[1.05] hover:bg-base-300/90  duration-200">
-    <h3 class="{{ $text_color }} text-center">{{ $value }} {{ $slot }}</h3>
-    <span class="font-semibold text-[12px] text-center ">{{ $text_content }}</span>
+<div class="stat bg-base-100 rounded-sm p-4 shadow-sm hover:scale-[1.05] hover:bg-base-300/90 duration-200 flex items-center justify-between">
+    <div class="flex flex-col">
+        <div class="stat-title text-xs">{{ $text_content }}</div>
+        <div class="stat-value text-lg {{ $text_color }}">
+            {{ $value }} {{ $slot }}
+        </div>
+    </div>
+    <div class="stat-figure {{ $text_color }}">
+        <i class="fas fa-leaf"></i>
+    </div>
 </div>

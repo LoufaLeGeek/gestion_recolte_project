@@ -4,12 +4,11 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Perte\PerteController;
 use App\Http\Controllers\Stock\StockController;
 use App\Http\Controllers\Vente\VenteController;
-use Illuminate\Support\Facades\Route;
-
-
 use App\Http\Controllers\ProduitController;
 use App\Http\Controllers\VarieteeController;
 use App\Http\Controllers\RecolteController;
+use Illuminate\Support\Facades\Route;
+
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
@@ -47,3 +46,8 @@ Route::get('/dashboard/ventes-varietees', [DashboardController::class, 'ventesPa
 
 Route::get('/dashboard/ventes-recoltes', [DashboardController::class, 'ventesEtRecoltes'])
     ->name('dashboard.ventes-recoltes');
+
+
+
+Route::get('/dashboard/pertes-data', [DashboardController::class, 'PertesData'])
+->name('dashboard.pertes-data');

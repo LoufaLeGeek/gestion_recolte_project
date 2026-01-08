@@ -10,8 +10,8 @@
         <x-title-page class_icon="fas fa-tachometer-alt text-base-neutral" title="Tableau de bord"
             sub_title="Vue d’ensemble des indicateurs clés et de l’activité globale"></x-title-page>
         <div class="flex items-center gap-4">
-            <x-dashboard.card-stat type="Quantite Totale Recoltee" :value="$totalRecolte" unite="Kg" icone="fas fa-calendar-day"
-                color="green" class="bg-white mb-4" />
+            <x-dashboard.card-stat type="Quantite Totale Recoltee" :value="$totalRecolte" unite="Kg"
+                icone="fas fa-calendar-day" color="green" class="bg-white mb-4" />
 
             <x-dashboard.card-stat type="Nombre de récoltes" :value="$nbRecoltes" unite="jours" icone="fas fa-calendar-day"
                 color="blue" class="bg-white mb-4" />
@@ -20,17 +20,21 @@
                 color="orange" class="bg-white mb-4" />
 
             <x-dashboard.card-stat type="Chiffre d'Affaires" :value="$chiffreAffaires" unite="Francs CFA"
-                icone="fas fa-calendar-day" color="gray" class="bg-white mb-4" />
+                icone="fas fa-calendar-day" color="grey" class="bg-white mb-4" />
 
             <x-dashboard.card-stat type="Quantite Perdu" :value="$totalePertes" unite="Kg" icone="fas fa-calendar-day"
-                color="gray" class="bg-white mb-4" />
+                color="yellow" class="bg-white mb-4" />
 
             <x-dashboard.card-stat type="Quantite Stockee" :value="$quantiteStockee" unite="Kg" icone="fas fa-calendar-day"
                 color="gray" class="bg-white mb-4" />
         </div>
-        <div class="">
-            <p class="font-semibold mb-1 text-[12px]">Appliquer un filtre</p>
-            <form method="GET" id="filtersForm" class="flex items-center gap-4">
+
+
+        <div class="space-y-4 grid grid-cols-6 gap-2">
+
+             <div class="bg-success rounded shadow-lg p-2">
+            <p class="font-semibold mb-1 text-sx text-center py-3">Appliquer un filtre</p>
+            <form method="GET" id="filtersForm" class="flex flex-col gap-4">
                 <div class="">
                     <select name="mois" class="select form-select filter outline-none">
                         <option value="">Tous les mois</option>
@@ -69,27 +73,89 @@
             </form>
 
         </div>
-
-        <div class="space-y-4">
             <x-dashboard.graphic-container title="Récoltes & Ventes (comparatif)" icone="fas fa-chart-line"
                 chartId="chartVentesRecoltes" style="col-span-5" />
 
-            <div class="flex gap-4 items-center justify-center">
+            <!-- <div class="flex gap-4 items-center justify-center"> -->
                 <x-dashboard.graphic-container title="Récoltes par Produit en Kg" icone="fas fa-chart-bar"
                     chartId="recoltesParProduit" style="col-span-3" />
 
                 <x-dashboard.graphic-container title="Variation des prix par variété" icone="fas fa-chart-line"
                     chartId="prixParVarietee" style="col-span-3" />
-            </div>
+            <!-- </div> -->
 
 
             <x-dashboard.graphic-container title="Chiffre d'Affaires des Ventes" icone="fas fa-chart-line"
-                chartId="chartVentes" style="col-span-3" />
+                chartId="chartVentes" style="col-span-4" />
 
-            <!-- Barres -->
+            <x-dashboard.graphic-container title="Pertes par Produit en Kg" icone="fas fa-chart-bar" chartId="pertesChart"
+                style="col-span-2" />
 
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+    <script>
+        let chartPertes;
+        console.log(document.getElementById('pertesChart'));
+
+
+        async function loadPertesChart() {
+            const params = new URLSearchParams(new FormData(document.getElementById('filtersForm')));
+            const response = await fetch(`/dashboard/pertes-data?${params}`);
+            const data = await response.json();
+
+            const labels = data.pertes.map(item => item.varietee);
+            const values = data.pertes.map(item => item.total);
+
+            if (chartPertes) chartPertes.destroy();
+
+            const ctx = document.getElementById('pertesChart').getContext('2d');
+            chartPertes = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Montant estimé des pertes (FCFA)',
+                        data: values,
+                        backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: { enabled: true }
+                    },
+                    scales: {
+                        x: {
+                            title: { display: true, text: 'Produit' },
+                            ticks: { color: '#555' },
+                            grid: { color: 'rgba(0, 255, 100, 0.1)' }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Montant estimé (FCFA)' },
+                            ticks: { color: '#555' },
+                            grid: { color: 'rgba(0, 255, 100, 0.1)' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Recharger le graphique à chaque changement de filtre
+        document.querySelectorAll('.filter').forEach(el => el.addEventListener('change', loadPertesChart));
+
+        // Appel initial
+        loadPertesChart();
+
+    </script>
 
 
 
@@ -135,21 +201,21 @@
                         data: {
                             labels,
                             datasets: [{
-                                    label: 'Récoltes (Kg)',
-                                    data: recoltesData,
-                                    borderColor: 'green',
-                                    backgroundColor: 'rgba(0, 255, 100, 0.2)',
-                                    yAxisID: 'yRecoltes',
-                                    tension: 0.3
-                                },
-                                {
-                                    label: 'Ventes (CFA)',
-                                    data: ventesData,
-                                    borderColor: 'blue',
-                                    backgroundColor: 'rgba(0, 100, 255, 0.2)',
-                                    yAxisID: 'yVentes',
-                                    // tension: 0.9
-                                }
+                                label: 'Récoltes (Kg)',
+                                data: recoltesData,
+                                borderColor: 'green',
+                                backgroundColor: 'rgba(0, 255, 100, 0.2)',
+                                yAxisID: 'yRecoltes',
+                                tension: 0.3
+                            },
+                            {
+                                label: 'Ventes (CFA)',
+                                data: ventesData,
+                                borderColor: 'blue',
+                                backgroundColor: 'rgba(0, 100, 255, 0.2)',
+                                yAxisID: 'yVentes',
+                                // tension: 0.9
+                            }
                             ]
                         },
                         options: {
@@ -221,32 +287,32 @@
 
                     chartVentes = new Chart(
                         document.getElementById('chartVentes'), {
-                            type: 'line',
-                            data: {
-                                labels: labels,
-                                datasets: [{
-                                    label: 'Montant des ventes',
-                                    data: values,
-                                    borderWidth: 2,
-                                    tension: 0.3,
-                                    fill: false
-                                }]
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Montant des ventes',
+                                data: values,
+                                borderWidth: 2,
+                                tension: 0.3,
+                                fill: false
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom' // légende à gauche
+                                }
                             },
-                            options: {
-                                responsive: true,
-                                maintainAspectRatio: false,
-                                plugins: {
-                                    legend: {
-                                        position: 'bottom' // légende à gauche
-                                    }
-                                },
-                                scales: {
-                                    y: {
-                                        beginAtZero: false
-                                    }
+                            scales: {
+                                y: {
+                                    beginAtZero: false
                                 }
                             }
                         }
+                    }
                     );
                 });
         }
@@ -281,8 +347,8 @@
                     const labels = [
                         ...new Set(
                             Object.values(data.prixParVarietee)
-                            .flat()
-                            .map(p => p.date_debut)
+                                .flat()
+                                .map(p => p.date_debut)
                         )
                     ];
 
@@ -299,57 +365,57 @@
 
                     chartPrix = new Chart(
                         document.getElementById('prixParVarietee'), {
-                            type: 'line',
-                            data: {
-                                labels,
-                                datasets
+                        type: 'line',
+                        data: {
+                            labels,
+                            datasets
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'left',
+                                },
+                                labels: {
+                                    usePointStyle: true,
+                                    pointStyle: 'line'
+                                }
                             },
-                            options: {
-                                responsive: true,
-                                maintainAspectRatio: false,
-                                plugins: {
-                                    legend: {
-                                        position: 'left',
-                                    },
-                                    labels: {
-                                        usePointStyle: true,
-                                        pointStyle: 'line'
-                                    }
-                                },
-                                scales: {
-                                    x: {
-                                        beginAtZero: true,
-                                        offset: true,
-                                        layouts: {
-                                            padding: {
-                                                left: 10,
-                                                right: 10,
-                                                top: 10,
-                                                bottom: 10
-                                            }
-                                        },
-                                        ticks: {
-                                            color: '#555',
-                                            font: {
-                                                size: 12
-                                            }
-                                        },
-                                        grid: {
-                                            color: 'rgba(0, 255, 100, 0.2)'
+                            scales: {
+                                x: {
+                                    beginAtZero: true,
+                                    offset: true,
+                                    layouts: {
+                                        padding: {
+                                            left: 10,
+                                            right: 10,
+                                            top: 10,
+                                            bottom: 10
                                         }
                                     },
-                                    y: {
-                                        beginAtZero: false,
-                                        ticks: {
-                                            color: '#555'
-                                        },
-                                        grid: {
-                                            color: 'rgba(0, 255, 100, 0.2)'
+                                    ticks: {
+                                        color: '#555',
+                                        font: {
+                                            size: 12
                                         }
+                                    },
+                                    grid: {
+                                        color: 'rgba(0, 255, 100, 0.2)'
                                     }
                                 },
-                            }
+                                y: {
+                                    beginAtZero: false,
+                                    ticks: {
+                                        color: '#555'
+                                    },
+                                    grid: {
+                                        color: 'rgba(0, 255, 100, 0.2)'
+                                    }
+                                }
+                            },
                         }
+                    }
                     );
                 });
         }
