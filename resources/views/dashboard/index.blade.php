@@ -32,7 +32,7 @@
 
         <div class=" grid grid-cols-6 gap-4">
 
-            <div class="bg-success rounded shadow-lg p-2">
+            <div class="bg-primary-content rounded-sm shadow-sm p-2">
                 <p class="font-semibold mb-1 text-sx text-center py-3">Appliquer un filtre</p>
                 <form method="GET" id="filtersForm" class="flex flex-col gap-4">
                     <div class="">
@@ -96,8 +96,6 @@
 
     <script>
         let chartPertes;
-        console.log(document.getElementById('pertesChart'));
-
 
         async function loadPertesChart() {
             const params = new URLSearchParams(new FormData(document.getElementById('filtersForm')));
