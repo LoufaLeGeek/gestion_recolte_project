@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\PrixVarietee;
 use App\Models\Varietee;
+use App\Models\Perte;
 
 class DashboardController extends Controller
 {
@@ -38,9 +39,9 @@ class DashboardController extends Controller
             $date = Carbon::createFromFormat('Y-m', $mois);
 
             $query->whereBetween('date_recolte', [
-            $date->startOfMonth()->toDateTimeString(),
-            $date->endOfMonth()->toDateTimeString(),
-        ]);
+                $date->startOfMonth()->toDateTimeString(),
+                $date->endOfMonth()->toDateTimeString(),
+            ]);
 
         }
 
@@ -170,8 +171,8 @@ class DashboardController extends Controller
             $ventesQuery->whereBetween('date_vente', [
                 $date->startOfMonth()->toDateTimeString(),
                 $date->endOfMonth()->toDateTimeString(),
-        ]);
-    }
+            ]);
+        }
 
         $ventes = $ventesQuery
             ->selectRaw("
@@ -223,4 +224,47 @@ class DashboardController extends Controller
             'ventes' => $ventes
         ]);
     }
+
+
+    public function pertesData(Request $request)
+    {
+        $produitId = $request->get('produit');
+        $varieteeId = $request->get('varietee');
+        $moisId = $request->get('mois');
+
+        $pertesQuery = Perte::query()
+            ->join('varietees', 'pertes.varietee_id', '=', 'varietees.id')
+            ->join('produits', 'varietees.produit_id', '=', 'produits.id')
+            ->selectRaw("
+            varietees.nom_varietee AS varietee,
+            SUM(pertes.montant_estime) AS total
+        ");
+
+        // 🔹 Filtres
+        if ($produitId) {
+            $pertesQuery->where('produits.id', $produitId);
+        }
+
+        if ($varieteeId) {
+            $pertesQuery->where('varietees.id', $varieteeId);
+        }
+
+        if ($moisId) {
+            $date = Carbon::createFromFormat('Y-m', $moisId);
+            $pertesQuery->whereBetween('pertes.date_perte', [
+                $date->startOfMonth()->toDateTimeString(),
+                $date->endOfMonth()->toDateTimeString(),
+            ]);
+        }
+
+        $pertes = $pertesQuery
+            ->groupBy('varietees.nom_varietee')
+            ->orderBy('varietees.nom_varietee')
+            ->get();
+
+        return response()->json([
+            'pertes' => $pertes
+        ]);
+    }
+
 }
