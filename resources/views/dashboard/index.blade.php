@@ -30,66 +30,63 @@
         </div>
 
 
-        <div class="space-y-4 grid grid-cols-6 gap-2">
+        <div class=" grid grid-cols-6 gap-4">
 
-             <div class="bg-success rounded shadow-lg p-2">
-            <p class="font-semibold mb-1 text-sx text-center py-3">Appliquer un filtre</p>
-            <form method="GET" id="filtersForm" class="flex flex-col gap-4">
-                <div class="">
-                    <select name="mois" class="select form-select filter outline-none">
-                        <option value="">Tous les mois</option>
-                        @foreach ($moisDisponibles as $m)
-                            <option value="{{ $m }}" {{ $mois == $m ? 'selected' : '' }}>
-                                {{ $m }}
+            <div class="bg-success rounded shadow-lg p-2">
+                <p class="font-semibold mb-1 text-sx text-center py-3">Appliquer un filtre</p>
+                <form method="GET" id="filtersForm" class="flex flex-col gap-4">
+                    <div class="">
+                        <select name="mois" class="select form-select filter outline-none">
+                            <option value="">Tous les mois</option>
+                            @foreach ($moisDisponibles as $m)
+                                <option value="{{ $m }}" {{ $mois == $m ? 'selected' : '' }}>
+                                    {{ $m }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="">
+                        <select name="produit" class="select form-select filter outline-none">
+                            <option value="">
+
+                                Tous les produits
                             </option>
-                        @endforeach
-                    </select>
-                </div>
+                            @foreach ($produits as $p)
+                                <option value="{{ $p->id }}" {{ $produitId == $p->id ? 'selected' : '' }}>
+                                    {{ $p->nom_produit }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
 
-                <div class="">
-                    <select name="produit" class="select form-select filter outline-none">
-                        <option value="">
+                    <div class="">
+                        <select name="varietee" class="select form-select filter outline-none">
+                            <option value="">Toutes les Varietees</option>
+                            @foreach ($varietees as $v)
+                                <option value="{{ $v->id }}" {{ $varieteeId == $v->id ? 'selected' : '' }}>
+                                    {{ $v->nom_varietee }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </form>
 
-                            Tous les produits
-                        </option>
-                        @foreach ($produits as $p)
-                            <option value="{{ $p->id }}" {{ $produitId == $p->id ? 'selected' : '' }}>
-                                {{ $p->nom_produit }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="">
-                    <select name="varietee" class="select form-select filter outline-none">
-                        <option value="">Toutes les Varietees</option>
-                        @foreach ($varietees as $v)
-                            <option value="{{ $v->id }}" {{ $varieteeId == $v->id ? 'selected' : '' }}>
-                                {{ $v->nom_varietee }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-            </form>
-
-        </div>
+            </div>
             <x-dashboard.graphic-container title="Récoltes & Ventes (comparatif)" icone="fas fa-chart-line"
                 chartId="chartVentesRecoltes" style="col-span-5" />
 
-            <!-- <div class="flex gap-4 items-center justify-center"> -->
-                <x-dashboard.graphic-container title="Récoltes par Produit en Kg" icone="fas fa-chart-bar"
-                    chartId="recoltesParProduit" style="col-span-3" />
+            <x-dashboard.graphic-container title="Récoltes par Produit en Kg" icone="fas fa-chart-bar"
+                chartId="recoltesParProduit" style="col-span-3" />
 
-                <x-dashboard.graphic-container title="Variation des prix par variété" icone="fas fa-chart-line"
-                    chartId="prixParVarietee" style="col-span-3" />
-            <!-- </div> -->
-
-
-            <x-dashboard.graphic-container title="Chiffre d'Affaires des Ventes" icone="fas fa-chart-line"
-                chartId="chartVentes" style="col-span-4" />
+            <x-dashboard.graphic-container title="Variation des prix par variété" icone="fas fa-chart-line"
+                chartId="prixParVarietee" style="col-span-3" />
 
             <x-dashboard.graphic-container title="Pertes par Produit en Kg" icone="fas fa-chart-bar" chartId="pertesChart"
                 style="col-span-2" />
+
+            <x-dashboard.graphic-container title="Chiffre d'Affaires des Ventes" icone="fas fa-chart-line"
+                chartId="chartVentes" style="col-span-4" />
 
         </div>
     </div>
