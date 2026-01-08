@@ -164,7 +164,7 @@ class DashboardController extends Controller
             $ventesQuery->where('varietees.id', $varieteeId);
         }
 
-        if ($moisId) {
+        if ($moisId != null) {
             $date = Carbon::createFromFormat('Y-m', $moisId);
 
             $ventesQuery->whereBetween('date_vente', [
