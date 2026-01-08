@@ -157,321 +157,100 @@
     <script>
         window.chartVentesRecoltes = null;
 
-        // function loadVentesRecoltes() {
-        //     const params = new URLSearchParams(
-        //         new FormData(document.getElementById('filtersForm'))
-        //     );
-
-        //     fetch(`/dashboard/ventes-recoltes?${params}`)
-
-        //         .then(res => res.json())
-        //         .then(data => {
-
-        //             const ctx = document.getElementById('chartVentesRecoltes');
-        //             if (!ctx) return;
-
-        //             const labels = [
-        //                 ...new Set([
-        //                     ...data.recoltes.map(r => r.date_fmt),
-        //                     ...data.ventes.map(v => v.date_fmt)
-        //                 ])
-        //             ].sort();
-
-        //             const recoltesData = labels.map(date => {
-        //                 const r = data.recoltes.find(r => r.date_fmt === date);
-        //                 return r ? Number(r.total) : null;
-        //             });
-
-        //             const ventesData = labels.map(date => {
-        //                 const v = data.ventes.find(v => v.date_fmt === date);
-        //                 return v ? Number(v.total) : null;
-        //             });
-
-        //             if (window.chartVentesRecoltes) {
-        //                 window.chartVentesRecoltes.destroy();
-        //             }
-
-        //             window.chartVentesRecoltes = new Chart(ctx, {
-        //                 type: 'line',
-        //                 data: {
-        //                     labels,
-        //                     datasets: [{
-        //                         label: 'Récoltes (Kg)',
-        //                         data: recoltesData,
-        //                         borderColor: 'green',
-        //                         backgroundColor: 'rgba(0, 255, 100, 0.2)',
-        //                         yAxisID: 'yRecoltes',
-        //                         tension: 0.3
-        //                     },
-        //                     {
-        //                         label: 'Ventes (CFA)',
-        //                         data: ventesData,
-        //                         borderColor: 'blue',
-        //                         backgroundColor: 'rgba(0, 100, 255, 0.2)',
-        //                         yAxisID: 'yVentes',
-        //                         // tension: 0.9
-        //                     }
-        //                     ]
-        //                 },
-        //                 options: {
-        //                     responsive: true,
-        //                     maintainAspectRatio: false,
-        //                     plugins: {
-        //                         legend: {
-        //                             position: 'bottom'
-        //                         }
-        //                     },
-        //                     scales: {
-        //                         x: {
-        //                             ticks: {
-        //                                 color: '#555'
-        //                             }
-        //                         },
-        //                         yRecoltes: {
-        //                             type: 'linear',
-        //                             position: 'left',
-        //                             title: {
-        //                                 display: true,
-        //                                 text: 'Kg récoltés'
-        //                             }
-        //                         },
-        //                         yVentes: {
-        //                             type: 'linear',
-        //                             position: 'right',
-        //                             grid: {
-        //                                 drawOnChartArea: false
-        //                             },
-        //                             title: {
-        //                                 display: true,
-        //                                 text: 'Montant des ventes (CFA)'
-        //                             }
-        //                         }
-        //                     }
-        //                 }
-        //             });
-        //         });
-        // }
-
-
         function loadVentesRecoltes() {
-    const params = new URLSearchParams(
-        new FormData(document.getElementById('filtersForm'))
-    );
+            const params = new URLSearchParams(
+                new FormData(document.getElementById('filtersForm'))
+            );
 
-    fetch(`/dashboard/ventes-recoltes?${params}`)
-        .then(res => res.json())
-        .then(data => {
-            const ctx = document.getElementById('chartVentesRecoltes');
-            if (!ctx) return;
+            fetch(`/dashboard/ventes-recoltes?${params}`)
 
-            const labels = [
-                ...new Set([
-                    ...data.recoltes.map(r => r.date_fmt),
-                    ...data.ventes.map(v => v.date_fmt)
-                ])
-            ].sort();
+                .then(res => res.json())
+                .then(data => {
 
-            const recoltesData = labels.map(date => {
-                const r = data.recoltes.find(r => r.date_fmt === date);
-                return r ? Number(r.total) : null;
-            });
+                    const ctx = document.getElementById('chartVentesRecoltes');
+                    if (!ctx) return;
 
-            const ventesData = labels.map(date => {
-                const v = data.ventes.find(v => v.date_fmt === date);
-                return v ? Number(v.total) : null;
-            });
+                    const labels = [
+                        ...new Set([
+                            ...data.recoltes.map(r => r.date_fmt),
+                            ...data.ventes.map(v => v.date_fmt)
+                        ])
+                    ].sort();
 
-            if (window.chartVentesRecoltes) {
-                window.chartVentesRecoltes.destroy();
-            }
+                    const recoltesData = labels.map(date => {
+                        const r = data.recoltes.find(r => r.date_fmt === date);
+                        return r ? Number(r.total) : 0;
+                    });
 
-            window.chartVentesRecoltes = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels,
-                    datasets: [{
-                        label: 'Récoltes (Kg)',
-                        data: recoltesData,
-                        borderColor: '#10b981',
-                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                        borderWidth: 3,
-                        pointBackgroundColor: '#10b981',
-                        pointBorderColor: '#fff',
-                        pointBorderWidth: 2,
-                        pointRadius: 5,
-                        pointHoverRadius: 7,
-                        pointHoverBackgroundColor: '#10b981',
-                        pointHoverBorderColor: '#fff',
-                        pointHoverBorderWidth: 3,
-                        yAxisID: 'yRecoltes',
-                        tension: 0.4,
-                        fill: true
-                    },
-                    {
-                        label: 'Ventes (CFA)',
-                        data: ventesData,
-                        borderColor: '#3b82f6',
-                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                        borderWidth: 3,
-                        pointBackgroundColor: '#3b82f6',
-                        pointBorderColor: '#fff',
-                        pointBorderWidth: 2,
-                        pointRadius: 5,
-                        pointHoverRadius: 7,
-                        pointHoverBackgroundColor: '#3b82f6',
-                        pointHoverBorderColor: '#fff',
-                        pointHoverBorderWidth: 3,
-                        yAxisID: 'yVentes',
-                        tension: 0.4,
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    interaction: {
-                        mode: 'index',
-                        intersect: false,
-                    },
-                    plugins: {
-                        legend: {
-                            position: 'bottom',
-                            labels: {
-                                padding: 20,
-                                usePointStyle: true,
-                                font: {
-                                    size: 13,
-                                    family: "'Inter', sans-serif",
-                                    weight: '500'
-                                },
-                                color: '#374151'
-                            }
-                        },
-                        tooltip: {
-                            backgroundColor: 'rgba(17, 24, 39, 0.95)',
-                            titleColor: '#f3f4f6',
-                            bodyColor: '#e5e7eb',
-                            borderColor: '#374151',
-                            borderWidth: 1,
-                            padding: 12,
-                            cornerRadius: 8,
-                            displayColors: true,
-                                                        usePointStyle: true,
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.dataset.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    if (context.parsed.y !== null) {
-                                        if (context.dataset.yAxisID === 'yVentes') {
-                                            label += new Intl.NumberFormat('fr-FR', {
-                                                style: 'currency',
-                                                currency: 'XOF',
-                                                minimumFractionDigits: 0
-                                            }).format(context.parsed.y);
-                                        } else {
-                                            label += new Intl.NumberFormat('fr-FR').format(context.parsed.y) + ' Kg';
-                                        }
-                                    }
-                                    return label;
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        x: {
-                            grid: {
-                                display: true,
-                                color: 'rgba(156, 163, 175, 0.1)',
-                                lineWidth: 1
-                            },
-                            ticks: {
-                                color: '#6b7280',
-                                font: {
-                                    size: 12,
-                                    family: "'Inter', sans-serif"
-                                },
-                                padding: 8,
-                                maxRotation: 45,
-                                minRotation: 0
-                            }
-                        },
-                        yRecoltes: {
-                            type: 'linear',
-                            position: 'left',
-                            grid: {
-                                display: true,
-                                color: 'rgba(156, 163, 175, 0.1)',
-                                lineWidth: 1
-                            },
-                            ticks: {
-                                color: '#10b981',
-                                font: {
-                                    size: 12,
-                                    weight: '500',
-                                    family: "'Inter', sans-serif"
-                                },
-                                padding: 8,
-                                callback: function(value) {
-                                    return new Intl.NumberFormat('fr-FR').format(value) + ' Kg';
-                                }
-                            },
-                            title: {
-                                display: true,
-                                text: 'Quantité récoltée (Kg)',
-                                color: '#10b981',
-                                font: {
-                                    size: 14,
-                                    weight: '600',
-                                    family: "'Inter', sans-serif"
-                                },
-                                padding: { bottom: 10 }
-                            }
-                        },
-                        yVentes: {
-                            type: 'linear',
-                            position: 'right',
-                            grid: {
-                                drawOnChartArea: false
-                            },
-                            ticks: {
-                                color: '#3b82f6',
-                                font: {
-                                    size: 12,
-                                    weight: '500',
-                                    family: "'Inter', sans-serif"
-                                },
-                                padding: 8,
-                                callback: function(value) {
-                                    return new Intl.NumberFormat('fr-FR', {
-                                        notation: 'compact',
-                                        maximumFractionDigits: 1
-                                    }).format(value) + ' CFA';
-                                }
-                            },
-                            title: {
-                                display: true,
-                                text: 'Montant des ventes (CFA)',
-                                color: '#3b82f6',
-                                font: {
-                                    size: 14,
-                                    weight: '600',
-                                    family: "'Inter', sans-serif"
-                                },
-                                padding: { bottom: 10 }
-                            }
-                        }
+                    const ventesData = labels.map(date => {
+                        const v = data.ventes.find(v => v.date_fmt === date);
+                        return v ? Number(v.total) : 0;
+                    });
+
+                    if (window.chartVentesRecoltes) {
+                        window.chartVentesRecoltes.destroy();
                     }
-                }
-            });
-        })
-        .catch(error => {
-            console.error('Erreur lors du chargement des données:', error);
-        });
-}
 
-
+                    window.chartVentesRecoltes = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels,
+                            datasets: [{
+                                label: 'Récoltes (Kg)',
+                                data: recoltesData,
+                                borderColor: 'green',
+                                backgroundColor: 'rgba(0, 255, 100, 0.2)',
+                                yAxisID: 'yRecoltes',
+                                tension: 0.3
+                            },
+                            {
+                                label: 'Ventes (CFA)',
+                                data: ventesData,
+                                borderColor: 'blue',
+                                backgroundColor: 'rgba(0, 100, 255, 0.2)',
+                                yAxisID: 'yVentes',
+                                // tension: 0.9
+                            }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom'
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    ticks: {
+                                        color: '#555'
+                                    }
+                                },
+                                yRecoltes: {
+                                    type: 'linear',
+                                    position: 'left',
+                                    title: {
+                                        display: true,
+                                        text: 'Kg récoltés'
+                                    }
+                                },
+                                yVentes: {
+                                    type: 'linear',
+                                    position: 'right',
+                                    grid: {
+                                        drawOnChartArea: false
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: 'Montant des ventes (CFA)'
+                                    }
+                                }
+                            }
+                        }
+                    });
+                });
+        }
         document.querySelectorAll('.filter').forEach(el => {
             el.addEventListener('change', loadVentesRecoltes);
         });
