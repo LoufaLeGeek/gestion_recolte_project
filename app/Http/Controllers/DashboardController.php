@@ -38,9 +38,10 @@ class DashboardController extends Controller
             $date = Carbon::createFromFormat('Y-m', $mois);
 
             $query->whereBetween('date_recolte', [
-                $date->startOfMonth(),
-                $date->endOfMonth(),
-            ]);
+            $date->startOfMonth()->toDateTimeString(),
+            $date->endOfMonth()->toDateTimeString(),
+        ]);
+
         }
 
         // Filtre produit
@@ -150,6 +151,8 @@ class DashboardController extends Controller
     {
         $produitId = $request->get('produit');
         $varieteeId = $request->get('varietee');
+        $moisId = $request->get('mois');
+
         $ventesQuery = DB::table('ventes')
             ->join('varietees', 'ventes.varietee_id', '=', 'varietees.id')
             ->join('produits', 'varietees.produit_id', '=', 'produits.id');
@@ -160,6 +163,16 @@ class DashboardController extends Controller
         if ($varieteeId != null) {
             $ventesQuery->where('varietees.id', $varieteeId);
         }
+
+        if ($moisId) {
+            $date = Carbon::createFromFormat('Y-m', $moisId);
+
+            $ventesQuery->whereBetween('date_vente', [
+                $date->startOfMonth()->toDateTimeString(),
+                $date->endOfMonth()->toDateTimeString(),
+        ]);
+    }
+
         $ventes = $ventesQuery
             ->selectRaw("
                 TO_CHAR(ventes.date_vente, 'YYYY-MM-DD') AS date_vente_fmt,
@@ -174,6 +187,7 @@ class DashboardController extends Controller
             'ventes' => $ventes
         ]);
     }
+
     public function ventesEtRecoltes(Request $request)
     {
         $produitId = $request->get('produit');

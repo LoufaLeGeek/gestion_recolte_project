@@ -14,6 +14,6 @@ class VenteTable extends Component
 
     public function render()
     {
-        return view('livewire.vente.vente-table', ["ventes" => Vente::with("varietee.produit")->orderBy("created_at", "DESC")->paginate(10)]);
+        return view('livewire.vente.vente-table', ["ventes" => Vente::with("varietee.produit")->orderBy("id", "asc")->paginate(10)]);
     }
 }

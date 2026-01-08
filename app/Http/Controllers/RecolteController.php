@@ -22,7 +22,7 @@ class RecolteController extends Controller
             ->get();
         $recoltes = Recolte::with(['varietee.produit'])
             ->when($request->varietee_id, fn($q) => $q->where('varietee_id', $request->varietee_id))
-            ->orderBy('date_recolte', 'desc')
+            ->orderBy('id', 'asc')
             ->paginate(15);
 
         $statistiques = Recolte::selectRaw('varietee_id, SUM(quantite_recolte) as total_quantite')

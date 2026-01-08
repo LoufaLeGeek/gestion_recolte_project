@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Varietee;
 use App\Models\Produit;
+use App\Services\ChangerPrixService;
 use Illuminate\Http\Request;
 
 class VarieteeController extends Controller
@@ -25,10 +26,10 @@ class VarieteeController extends Controller
             $search = $request->search;
             $query->where(function($q) use ($search) {
                 $q->where('nom_varietee', 'LIKE', "%{$search}%")
-                  ->orWhere('caracteristique_varietee', 'LIKE', "%{$search}%")
-                  ->orWhereHas('produit', function($q) use ($search) {
-                      $q->where('nom_produit', 'LIKE', "%{$search}%");
-                  });
+                ->orWhere('caracteristique_varietee', 'LIKE', "%{$search}%")
+                ->orWhereHas('produit', function($q) use ($search) {
+                    $q->where('nom_produit', 'LIKE', "%{$search}%");
+                });
             });
         }
 
@@ -99,6 +100,11 @@ class VarieteeController extends Controller
      */
 public function update(Request $request, Varietee $varietee)
 {
+
+
+    $change_price = new ChangerPrixService();
+
+
     $validated = $request->validate([
         'nom_varietee' => 'required|string|max:255',
         'caracteristique_varietee' => 'required|string',
@@ -114,29 +120,36 @@ public function update(Request $request, Varietee $varietee)
         'produit_id' => $validated['produit_id'],
     ]);
 
-    // Gestion du prix si fourni
-    if ($request->has('changer_prix') && $request->filled('nouveau_prix')) {
+
         $nouveauPrix = $request->input('nouveau_prix');
-        $dateEffet = $request->input('date_effet', now()->toDateString());
 
-        // 1. Mettre à jour la date_fin de l'ancien prix s'il existe
-        if ($varietee->prix_actuelle) {
-            $varietee->prix_actuelle->update([
-                'date_fin' => $dateEffet
-            ]);
-        }
 
-        // 2. Créer le nouveau prix
-        $varietee->prix_varietees()->create([
-            'prix' => $nouveauPrix,
-            'date_debut' => $dateEffet,
-            'date_fin' => null // Prix actuel
-        ]);
+    // Gestion du prix si fourni
+    // if ($request->has('changer_prix') && $request->filled('nouveau_prix')) {
+    //     $nouveauPrix = $request->input('nouveau_prix');
+    //     $dateEffet = $request->input('date_effet', now()->toDateString());
 
-        // Message de succès spécifique
-        return redirect()->route('varietees.index', $varietee)
-            ->with('success', 'Variété et prix mis à jour avec succès!');
-    }
+    //     // 1. Mettre à jour la date_fin de l'ancien prix s'il existe
+    //     if ($varietee->prix_actuelle) {
+    //         $varietee->prix_actuelle->update([
+    //             'date_fin' => $dateEffet
+    //         ]);
+    //     }
+
+    //     // 2. Créer le nouveau prix
+    //     $varietee->prix_varietees()->create([
+    //         'prix' => $nouveauPrix,
+    //         'date_debut' => $dateEffet,
+    //         'date_fin' => null // Prix actuel
+    //     ]);
+
+    //     // Message de succès spécifique
+    //     return redirect()->route('varietees.index', $varietee)
+    //         ->with('success', 'Variété et prix mis à jour avec succès!');
+    // }
+
+
+    $change_price->executer($varietee->id, $nouveauPrix);
 
     return redirect()->route('varietees.index', $varietee)
         ->with('success', 'Variété mise à jour avec succès!');

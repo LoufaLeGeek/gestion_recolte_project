@@ -94,6 +94,7 @@
                 class="w-full table [&_tr]:border-0 [&_td]:border-0 [&_th]:border-0  border-separate border-spacing-y-3 bg-base-100 shadow-sm">
                 <thead class="[&_tr]:font-bold [&_tr]:text-base-content">
                     <tr>
+                        <th>id</th>
                         <th>Produit</th>
                         <th>Variété</th>
                         <th>Date récolte</th>
@@ -104,6 +105,11 @@
                 <tbody class="[&_tr]:text-sm [&_tr]:hover:bg-base-content/10">
                     @forelse($recoltes as $recolte)
                         <tr>
+                            <td>
+                                <span>
+                                    #{{ $recolte->id }}
+                                </span>
+                            </td>
                             <td>
                                 <span class="badge bg-green-300/30">
                                     {{ $recolte->varietee->produit->nom_produit }}

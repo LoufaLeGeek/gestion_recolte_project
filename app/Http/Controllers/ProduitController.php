@@ -108,7 +108,7 @@ class ProduitController extends Controller
     }
 
     /* =====================================================
-       SUPPRESSION D'UN PRODUIT OU D'UNE VARIÉTÉ
+    SUPPRESSION D'UN PRODUIT OU D'UNE VARIÉTÉ
        ===================================================== */
     public function destroy(Request $request, $id)
     {

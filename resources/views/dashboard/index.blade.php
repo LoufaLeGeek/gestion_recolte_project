@@ -212,7 +212,7 @@
                 .then(res => res.json())
                 .then(data => {
 
-                    const labels = data.ventes.map(v => v.date);
+                    const labels = data.ventes.map(v => v.date_vente_fmt);
                     const values = data.ventes.map(v => v.total);
 
                     if (chartVentes) {

@@ -75,6 +75,7 @@
                 <!-- En-tête -->
                 <thead class="[&_tr]:font-bold [&_tr]:text-base-content">
                     <tr>
+                        <th>Id</th>
                         <th>Produit</th>
                         <th>Variétés</th>
                         <th>Créé le</th>
@@ -87,6 +88,10 @@
                 <tbody class="[&_tr]:text-sm [&_tr]:hover:bg-base-content/10">
                     @forelse($produits as $produit)
                         <tr>
+                            <td>
+                                <span>#{{ $produit->id }}</span>
+                            </td>
+
                             <td>
                                 <span class="badge bg-green-300/30">{{ $produit->nom_produit }}</span>
                             </td>
