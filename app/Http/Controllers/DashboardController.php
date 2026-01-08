@@ -214,7 +214,7 @@ class DashboardController extends Controller
             ->when($varieteeId, fn($q) => $q->where('varietees.id', $varieteeId))
             ->selectRaw("
         TO_CHAR(ventes.date_vente, 'YYYY-MM-DD') AS date_fmt,
-        SUM(ventes.montant_totale) AS total
+        SUM(ventes.quantite_vendu) AS total
     ")
             ->groupByRaw("TO_CHAR(ventes.date_vente, 'YYYY-MM-DD')")
             ->orderByRaw("TO_CHAR(ventes.date_vente, 'YYYY-MM-DD')")

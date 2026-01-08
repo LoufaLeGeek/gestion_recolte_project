@@ -196,20 +196,20 @@
                         data: {
                             labels,
                             datasets: [{
-                                label: 'Récoltes (Kg)',
+                                label: 'Quantite Récoltés (Kg)',
                                 data: recoltesData,
                                 borderColor: 'green',
                                 backgroundColor: 'rgba(0, 255, 100, 0.2)',
-                                yAxisID: 'yRecoltes',
+                                // yAxisID: 'yRecoltes',
                                 tension: 0.3
                             },
                             {
-                                label: 'Ventes (CFA)',
+                                label: 'Quantite Ventes (Kg)',
                                 data: ventesData,
                                 borderColor: 'blue',
                                 backgroundColor: 'rgba(0, 100, 255, 0.2)',
-                                yAxisID: 'yVentes',
-                                // tension: 0.9
+                                // yAxisID: 'yVentes',
+                                tension: 0.3
                             }
                             ]
                         },
@@ -227,25 +227,6 @@
                                         color: '#555'
                                     }
                                 },
-                                yRecoltes: {
-                                    type: 'linear',
-                                    position: 'left',
-                                    title: {
-                                        display: true,
-                                        text: 'Kg récoltés'
-                                    }
-                                },
-                                yVentes: {
-                                    type: 'linear',
-                                    position: 'right',
-                                    grid: {
-                                        drawOnChartArea: false
-                                    },
-                                    title: {
-                                        display: true,
-                                        text: 'Montant des ventes (CFA)'
-                                    }
-                                }
                             }
                         }
                     });
